@@ -18,10 +18,10 @@ class Employees(models.Model):
     Tasks = models.ManyToManyField(Tasks)
     dept = models.CharField(max_length=255)
     Employee_id = models.IntegerField()
-    Shifts = models.OneToManyField(Shift)
+    #Shifts = models.OneToManyField(Shift)
     isManager = models.BooleanField()
-    Days_request_off = models.OneToManyField(Request_off)
-    Availability = OneToMany(avilable_time)
+    #Days_request_off = models.OneToManyField(Request_off)
+    #Availability = OneToMany(avilable_time)
 
 class Tasks(models.Model):
     task_name = models.CharField(max_length=255)
