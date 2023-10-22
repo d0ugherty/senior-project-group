@@ -18,6 +18,7 @@ def list_tasks(request):
         due_date = request.POST.get('due_date')
         status = request.POST.get('status')
 
+
        # print(task_name)
        # print(project_name)
        # print(due_date)
