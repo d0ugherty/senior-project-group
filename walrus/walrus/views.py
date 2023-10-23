@@ -7,11 +7,11 @@ from .models import *
 from .forms import taskSearchForm
 from .util import *
 def list_tasks(request):
-    try:
-        tasks = Task.objects.all()
-    except: 
-        raise Http404('No Tasks Found')
-    
+   # try:
+        #tasks = Task.objects.all()
+    #except: 
+    #    raise Http404('No Tasks Found')
+    tasks = None
 
 
     if request.method == "POST":
