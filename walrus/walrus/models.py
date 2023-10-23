@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
@@ -22,6 +23,7 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
+    due_date = models.DateField(blank=True, default=date.today())
 """
   #  Updates = models.OneToMany(Task_Updates)
     date_created = models.DateTimeField()

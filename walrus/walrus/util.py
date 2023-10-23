@@ -19,7 +19,8 @@ def find_tasks(task_name, project_name, due_date, status):
     fields ={
                     'task_name': task_name,
                     'project': project_object,
-                    'is_complete': status
+                    'is_complete': status,
+                    'due_date': due_date
             }
          #print(fields)
          
