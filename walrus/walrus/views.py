@@ -19,8 +19,8 @@ def list_tasks(request):
         project_name = request.POST.get('project_name')
         status = request.POST.get('status')
         due_date = request.POST.get('date')
-        print(due_date)
-        print(Task.objects.filter(due_date=due_date))
+       # print(due_date)
+       # print(Task.objects.filter(due_date=due_date))
 
         
         tasks = find_tasks(task_name, project_name, due_date, status)
