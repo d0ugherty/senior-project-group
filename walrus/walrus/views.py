@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from .models import *
 from .forms import taskSearchForm
+from .util import *
 def list_tasks(request):
     try:
         tasks = Task.objects.all()
@@ -19,36 +20,8 @@ def list_tasks(request):
         due_date = request.POST.get('due_date')
         status = request.POST.get('status')
 
-        if status == "complete":
-           status = True
-        elif status == "incomplete":
-           status = False
-        else: 
-            status = ""
-
-
-        if (Project.objects.filter(project_name=project_name).exists()):
-         project_object = Project.objects.get(project_name=project_name)
-        else: project_object = ""
-         
-        fields ={
-                    'task_name': task_name,
-                    'project': project_object,
-                    'is_complete': status
-            }
-         #print(fields)
-         
-        nonEmptyFields = {}
-        for x in fields:
-         if fields[x] != "":
-          nonEmptyFields.update({x : fields[x]})
         
-         
-
-         #print(fields)
-        print(nonEmptyFields)
-        print(Task.objects.filter(**nonEmptyFields))
-        Task.objects.filter(**nonEmptyFields)
+        tasks = find_tasks(task_name, project_name, due_date, status)
          #print(Task.objects.filter(project=project_object))
        # print(task_name)
        # print(project_name)
