@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 
-from .models import Tasks
+from .models import Task
 from .forms import taskSearchForm
 def list_tasks(request):
     try:
@@ -15,12 +15,8 @@ def list_tasks(request):
         project_name = request.POST.get('project_name')
         due_date = request.POST.get('due_date')
         status = request.POST.get('status')
-<<<<<<< HEAD
 
 
-=======
-        
->>>>>>> 65114e3279ba6d19dfa54df832bc88c4e60449a5
        # print(task_name)
        # print(project_name)
        # print(due_date)
