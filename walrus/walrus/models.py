@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Project(models.Model):
-    project_name = models.CharField(max_length=255)
+    project_name = models.CharField(max_length=255 )
     
 """
 
@@ -19,9 +19,9 @@ class Task_Update(models.Model):
 
 class Task(models.Model):
     task_name = models.CharField(max_length=255)
-    task_description = models.CharField(max_length=255)
+    task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
 """
   #  Updates = models.OneToMany(Task_Updates)
     date_created = models.DateTimeField()
@@ -42,7 +42,7 @@ class Employee(models.Model):
 
     user = models.OneToOneField(User,
     on_delete=models.CASCADE, null=True, blank=True)
-    Tasks = models.ManyToManyField(Task)
+    Tasks = models.ManyToManyField(Task, blank=True)
 """
     dept = models.CharField(max_length=255)
     Employee_id = models.IntegerField()
