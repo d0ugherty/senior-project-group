@@ -28,8 +28,7 @@ def find_tasks(task_name, project_name, due_date, status):
     for x in fields:
         if fields[x] != "":
           nonEmptyFields.update({x : fields[x]})
-        
-         
+        #this is a test
 
          #print(fields)
     print(nonEmptyFields)
