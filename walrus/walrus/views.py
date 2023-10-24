@@ -1,9 +1,14 @@
+
 from django import forms
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
+import datetime
+from datetime import datetime
+from calendar import month_name
+from calendar import HTMLCalendar
 
-from .models import *
+from .models import Task
 from .forms import taskSearchForm
 from .util import *
 def list_tasks(request):
@@ -39,4 +44,12 @@ def list_tasks(request):
     
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
+    })
+
+def calendar(request):
+    curMonth = datetime.now().month
+    curYear = datetime.now().year
+    curCalen =  HTMLCalendar().formatmonth(curYear, curMonth)
+    return render(request, 'calendar.html', {
+        'curCalen': curCalen,
     })

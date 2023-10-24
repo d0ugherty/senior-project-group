@@ -20,5 +20,6 @@ from walrus import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('list_tasks/', views.list_tasks, name='list_tasks')
+    path('list_tasks/', views.list_tasks, name='list_tasks'),
+    path('calendar/', views.calendar, name='calendar')
 ]
