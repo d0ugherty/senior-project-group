@@ -83,3 +83,6 @@ def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return HttpResponseRedirect(reverse('calendar'))
+
+def load_manager_home(request):
+    return render(request, 'manager_home.html')
