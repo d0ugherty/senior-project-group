@@ -3,18 +3,45 @@
     .center {
         text-align: center;
     }
+
     fieldset {
-        border: 1px solid rgb(0, 0, 0);
+        border: 2px solid rgb(0, 0, 0);
         width: 400px;
         margin:auto;
+    }
+
+    .button {
+        padding: 6px 12px;
+    }
+
+    .button1 {
+        float: left;
+    }
+
+    .button2 {
+        float: right;
     }
 </style>
 
 
 
 <div id="form">
-    <fieldset>
-        <legend>Task 1</legend>
+    <fieldset> <!--TASK #-->
+        <legend><b>Task 1</b></legend>
+
+        <fieldset> <!--TASK DESCRIPTION-->
+            <legend><b>Task Description</b></legend>
+        </fieldset> <br>
+        
+        <fieldset> <!--TASK INFO-->
+            <legend><b>Task Info</b></legend>
+            <a>Project Name:</a>
+            <h1>{{ "" }}</h1> <!--blank space-->
+            <a>Assigned To:</a>
+        </fieldset> <br>
+
+        <button class="button button1">Edit Task</button>
+        <button class="button button2">Go Back</button>
     </fieldset>
 </div>
 
