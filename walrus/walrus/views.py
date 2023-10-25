@@ -1,7 +1,7 @@
 
 from django import forms
 from django.shortcuts import render
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 import datetime
 from datetime import datetime, timedelta
@@ -99,4 +99,10 @@ def load_manager_home(request):
 """
 def manager_home_redirect(request):
     destination = request.POST.get('destination')
-    return HttpResponseRedirect(destination)
+    match destination:
+        case "/add_task/":
+            return HttpResponseRedirect(destination)
+        case "/list_tasks/":
+            return HttpResponseRedirect(destination)
+        case _:
+            return HttpResponse("Invalid destination", status=400)
