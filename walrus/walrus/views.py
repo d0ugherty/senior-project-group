@@ -96,6 +96,8 @@ def load_manager_home(request):
     on the Manager Home page and 
     Redirects the user to the appropriate page 
     according to the 'destionation' string
+
+    TO DO: Add more redirects as project progresses
 """
 def manager_home_redirect(request):
     destination = request.POST.get('destination')
