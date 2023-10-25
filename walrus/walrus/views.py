@@ -40,3 +40,14 @@ def list_tasks(request):
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
     })
+
+def task_detail (request, task_id):
+    form = taskSearchForm()
+    task = None
+
+    #check if the task_id matches a project id
+
+    return render (request, 'task_detail.html', {
+        'task': task,
+        'form' : form,
+    })
