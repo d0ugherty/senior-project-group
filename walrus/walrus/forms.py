@@ -18,3 +18,7 @@ class taskSearchForm(forms.Form):
     date = forms.DateField(label="Due Date", widget=DateInput, required=False)
     #Change Due_date to be a calander selection at some point
     status = forms.ChoiceField(choices=STATUS_CHOICES)
+
+class addTask(forms.Form):
+    task_name = forms.CharField(max_length=100)
+    description = forms.CharField(max_length=250)
