@@ -13,11 +13,10 @@ from .forms import taskSearchForm, addTask
 from .util import *
 
 def list_tasks(request):
-   # try:
-        #tasks = Task.objects.all()
-    #except: 
-    #    raise Http404('No Tasks Found')
-    tasks = None
+    try:
+        tasks = Task.objects.all()
+    except: 
+        raise Http404('No Tasks Found')
 
 
     if request.method == "POST":

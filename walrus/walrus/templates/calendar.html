@@ -37,6 +37,7 @@
         <font size=3>Name: {{ task.task_name|capfirst }}</font> <br>
         <font size=3>Description: {{ task.task_description|capfirst }}</font> <br>
         <font size=3>Done: {{ task.is_complete }}</font> <br>
+        <font size=3>Created: {{ task.date_created }}</font> <br>
         <a href='{% url "delete_task" task.id %}'> Delete </a>
         <p> -------------- </p>
     {% endfor %}
