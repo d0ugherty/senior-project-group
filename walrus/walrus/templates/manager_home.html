@@ -4,10 +4,11 @@
 <h3>Manager Home</h3>
 
 <div>
-    <form action="{% url 'add_task' %}" method="post">
+    <form action="{% url 'manager_home_redirect' %}" method="post">
         {% csrf_token %}
-        <button action="{% url 'add_task' %}" method="post" type="submit" class="btn btn-primary">Add Tasks</button>
-    </form>
+        <button type="submit" name="destination" value="/add_task/">Add Tasks</button>
+        <button type="submit" name="destination" value="/list_tasks/">View All Tasks</button>
+      </form>
       
 
 

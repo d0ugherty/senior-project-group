@@ -84,5 +84,19 @@ def delete_task(request, task_id):
     task.delete()
     return HttpResponseRedirect(reverse('calendar'))
 
+"""
+    Loads the manager home page
+    TO DO: Check for user type
+"""
 def load_manager_home(request):
     return render(request, 'manager_home.html')
+
+"""
+    Retrieves the 'destination' name of a button
+    on the Manager Home page and 
+    Redirects the user to the appropriate page 
+    according to the 'destionation' string
+"""
+def manager_home_redirect(request):
+    destination = request.POST.get('destination')
+    return HttpResponseRedirect(destination)
