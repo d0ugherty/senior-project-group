@@ -45,11 +45,18 @@ class Employee(models.Model):
     user = models.OneToOneField(User,
     on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
+    is_manager = models.CharField(
+        max_length=6,
+        choices=[('Yes', 'Yes'),('No', 'No')]
+    )
+
+    def __str__(self):
+        return self.user.username
+
 """
     dept = models.CharField(max_length=255)
     Employee_id = models.IntegerField()
     #Shifts = models.OneToManyField(Shift)
-    isManager = models.BooleanField()
     #Days_request_off = models.OneToManyField(Request_off)
     #Availability = OneToMany(avilable_time)
 """
