@@ -22,7 +22,7 @@ class Task(models.Model):
     task_name = models.CharField(max_length=255)
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
+    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
     due_date = models.DateField(blank=True, default=date.today())
     #date_created = models.DateTimeField(default=date.today)
 """
