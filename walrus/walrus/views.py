@@ -49,6 +49,7 @@ def home_page(request):
 
     todays_date = datetime.date.today() # todays date
     todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
-    todays_date=date.today().weekday() # week day as an int
+    # todays_date=date.today().weekday() # week day as an int
+    todays_date=todays_date.weekday()
     return render(request, 'home_page.html',{'date':todays_date} )
 
