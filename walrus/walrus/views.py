@@ -97,6 +97,8 @@ def load_manager_home(request):
     Redirects the user to the appropriate page 
     according to the 'destionation' string
 
+    Currently, the un-implemented pages will default to "invalid destination"
+
     TO DO: Add more redirects as project progresses
 """
 def manager_home_redirect(request):
