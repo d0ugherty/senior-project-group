@@ -6,6 +6,8 @@ from django.urls import reverse
 from .models import *
 from .forms import taskSearchForm
 from .util import *
+
+import datetime
 def list_tasks(request):
    # try:
         #tasks = Task.objects.all()
@@ -44,5 +46,9 @@ def list_tasks(request):
 def home_page(request):
 
 
-        return render(request, 'home_page.html',{} )
+
+    todays_date = datetime.date.today() # todays date
+    todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
+    todays_date=date.today().weekday() # week day as an int
+    return render(request, 'home_page.html',{'date':todays_date} )
 
