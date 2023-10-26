@@ -40,3 +40,9 @@ def list_tasks(request):
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
     })
+
+def home_page(request):
+
+
+        return render(request, 'home_page.html',{} )
+
