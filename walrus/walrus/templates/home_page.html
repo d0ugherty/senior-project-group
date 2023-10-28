@@ -8,7 +8,7 @@
 <br>
 tasks:
 {% for x in tasks %}
-<br> {{x.task_name}} <a href="task_update/{{ x.pk }}">Update </a> <br>
+<br> {{x.task_name}} <a href="{%url 'list_tasks' %}/{{x.task_name}}">Update </a> <br>
 
 <a href="task_detail/{{ x.pk }}">Description </a>
 <br><br>
