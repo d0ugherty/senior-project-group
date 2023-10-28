@@ -91,7 +91,8 @@ def update_task_status(request,task_id):
         task = Task.objects.get(pk=task_id)
         print(task)
         print(description)
-
+        update = Task_Update(description=description,task=task)
+        update.save()
 
 
     form = updateTask()
