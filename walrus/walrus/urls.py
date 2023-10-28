@@ -25,5 +25,6 @@ urlpatterns = [
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task'),
     path('manager_home/', views.load_manager_home, name='manager_home'),
-    path('manager_home/manager_home_redirect', views.manager_home_redirect, name='manager_home_redirect')
+    path('manager_home/manager_home_redirect', views.manager_home_redirect, name='manager_home_redirect'),
+    path('employee_stats/', views.employee_stats, name='employee_stats')
 ]

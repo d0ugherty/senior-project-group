@@ -108,5 +108,7 @@ def manager_home_redirect(request):
             return HttpResponseRedirect(destination)
         case "/list_tasks/":
             return HttpResponseRedirect(destination)
+        case "/employee_stats/":
+            return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)

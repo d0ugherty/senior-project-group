@@ -22,3 +22,6 @@ class taskSearchForm(forms.Form):
 class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=250)
+
+class employeeIdSearch(forms.Form):
+    employee_id = forms.IntegerField(label="Employee ID Number", required=False)
