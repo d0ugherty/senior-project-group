@@ -36,3 +36,13 @@ def find_tasks(task_name, project_name, due_date, status):
     print(Task.objects.filter(**nonEmptyFields))
     tasks = Task.objects.filter(**nonEmptyFields)
     return tasks
+"""
+     IDs are being input as CharFields, this will
+     just help to make sure that data entered is valid
+"""
+def validate_id(input_id, form):
+     id_str = input_id.strip()
+     if id_str.isdigit():
+          return int(id_str)
+     else:
+          form.add_error('employee_id', 'Please enter a valid ID')
