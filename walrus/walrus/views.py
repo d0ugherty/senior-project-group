@@ -117,13 +117,18 @@ def manager_home_redirect(request):
     View for the loading employee stats page
 
     search_input is a CharField form and employee_id is an integer type
-    in the database. this might cause a problem in the future
+    in the database. so validate_id checks if the input is a digit and if so 
+    casts the input as an integer
 """
 def employee_stats(request):
     if request.method == 'POST':
         form = employeeIdSearch(request.POST)
         if form.is_valid():
-            employee_id = form.cleaned_data['employee_id']
+            employee_id = form.cleaned_data['employee_id'].strip()
+            validate_id(employee_id, form)
+            print("id has been submitted")
+            return HttpResponseRedirect('employee_stats', employee=employee_id)
     else:
-        search_input = employeeIdSearch()
-    return render(request, 'employee_stats.html', {'search_input' : search_input })
+        form = employeeIdSearch()
+
+    return render(request, 'employee_stats.html', {'form' : form })
