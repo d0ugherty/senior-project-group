@@ -12,8 +12,7 @@ class Project(models.Model):
     date_completed = models.DateTimeField()
    # tasks = models.ManyToOne()
 """
-class Task_Update(models.Model):
-    Description = models.CharField(max_length=255)
+
    # Image = models.ImageField()
 
 
