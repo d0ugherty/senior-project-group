@@ -9,7 +9,7 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask
+from .forms import taskSearchForm, addTask, employeeIdSearch
 from .util import *
 
 def list_tasks(request):
@@ -112,3 +112,18 @@ def manager_home_redirect(request):
             return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
+
+"""
+    View for the loading employee stats page
+
+    search_input is a CharField form and employee_id is an integer type
+    in the database. this might cause a problem in the future
+"""
+def employee_stats(request):
+    if request.method == 'POST':
+        form = employeeIdSearch(request.POST)
+        if form.is_valid():
+            employee_id = form.cleaned_data['employee_id']
+    else:
+        search_input = employeeIdSearch()
+    return render(request, 'employee_stats.html', {'search_input' : search_input })
