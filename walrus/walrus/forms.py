@@ -22,3 +22,7 @@ class taskSearchForm(forms.Form):
 class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=250)
+
+
+class updateTask(forms.Form):
+    description = forms.CharField(max_length=250)

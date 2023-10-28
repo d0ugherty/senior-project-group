@@ -9,7 +9,7 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask
+from .forms import taskSearchForm, addTask, updateTask
 from .util import *
 
 def list_tasks(request):
@@ -83,3 +83,16 @@ def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return HttpResponseRedirect(reverse('calendar'))
+
+def update_task_status(request,task_id):
+    if request.method == "POST":
+        description = request.POST.get('description')
+        print(task_id)
+        task = Task.objects.get(pk=task_id)
+        print(task)
+        print(description)
+
+
+
+    form = updateTask()
+    return render(request, 'update_task_status.html', {'form':form})
