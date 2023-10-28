@@ -26,3 +26,4 @@ class addTask(forms.Form):
 
 class updateTask(forms.Form):
     description = forms.CharField(max_length=250)
+    image = forms.ImageField(label="image",required=False)

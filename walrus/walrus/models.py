@@ -29,6 +29,7 @@ class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)
     #image
     task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True, null=True)
+    venue_image = models.ImageField(null=True, blank=True, upload_to="images/")
 """
   #  Updates = models.OneToMany(Task_Updates)
     date_created = models.DateTimeField()

@@ -86,13 +86,17 @@ def delete_task(request, task_id):
 
 def update_task_status(request,task_id):
     if request.method == "POST":
-        description = request.POST.get('description')
-        print(task_id)
-        task = Task.objects.get(pk=task_id)
-        print(task)
-        print(description)
-        update = Task_Update(description=description,task=task)
-        update.save()
+        form = updateTask(request.POST, request.FILES)
+        if form.is_valid():
+            description = request.POST.get('description')
+            image = form.cleaned_data.get('image')
+            print(task_id)
+            task = Task.objects.get(pk=task_id)
+            print(task)
+            print(description)
+            # print(image)
+            update = Task_Update(description=description,task=task, venue_image=image)
+            update.save()
 
 
     form = updateTask()

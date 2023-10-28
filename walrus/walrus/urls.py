@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 from walrus import views
 
 urlpatterns = [
@@ -26,4 +29,5 @@ urlpatterns = [
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task'),
     path('update_task_status/<int:task_id>', views.update_task_status, name='update_task_status'),
 
-]
+
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
