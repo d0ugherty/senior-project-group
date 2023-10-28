@@ -1,5 +1,14 @@
 <h3> Hello  {{ date }} </h3>
 
 {% csrf_token %}
+<br>
+<a href="calendar/">Calendar </a>
+<br><br>
+tasks:
+{% for x in tasks %}
+<br> {{x.task_name}}<br>
+<a href="task_detail/{{ x.pk }}">Description </a>
+<br><br>
+{% endfor %}
 
 <br><button> Submit </button>

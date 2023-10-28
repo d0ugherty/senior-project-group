@@ -43,7 +43,7 @@ def list_tasks(request):
         'tasks': tasks, 'form':form, 
     })
 
-def home_page(request):
+def home_page(request, employee_id):
 
 
 
@@ -51,5 +51,11 @@ def home_page(request):
     todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
     # todays_date=date.today().weekday() # week day as an int
     todays_date=todays_date.weekday()
-    return render(request, 'home_page.html',{'date':todays_date} )
+
+    employee = Employee.objects.get(pk=employee_id)
+    tasks =  employee.Tasks.filter()
+    print(employee)
+    print(tasks)
+  
+    return render(request, 'home_page.html',{'date':todays_date, 'employee':employee, 'tasks':tasks})
 
