@@ -56,6 +56,6 @@ def home_page(request, employee_id):
     tasks =  employee.Tasks.filter()
     print(employee)
     print(tasks)
-  
-    return render(request, 'home_page.html',{'date':todays_date, 'employee':employee, 'tasks':tasks})
+    test = 1
+    return render(request, 'home_page.html',{'date':todays_date, 'employee':employee, 'tasks':tasks, 'test':test})
 

@@ -3,12 +3,16 @@
 {% csrf_token %}
 <br>
 <a href="calendar/">Calendar </a>
-<br><br>
+<br>
+<a href="calendar/"> RTO/Avilability </a>
+<br>
 tasks:
 {% for x in tasks %}
-<br> {{x.task_name}}<br>
+<br> {{x.task_name}} <a href="task_update/{{ x.pk }}">Update </a> <br>
+
 <a href="task_detail/{{ x.pk }}">Description </a>
 <br><br>
 {% endfor %}
+var sum = 1+2
 
 <br><button> Submit </button>
