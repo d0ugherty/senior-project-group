@@ -22,7 +22,7 @@ class Task(models.Model):
     task_name = models.CharField(max_length=255)
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     due_date = models.DateField(blank=True, default=date.today())
 """
   #  Updates = models.OneToMany(Task_Updates)
@@ -53,3 +53,11 @@ class Employee(models.Model):
     #Days_request_off = models.OneToManyField(Request_off)
     #Availability = OneToMany(avilable_time)
 """
+
+
+class Time_Spent(models.Model):
+        task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
+        employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
+        in_progress = models.BooleanField(default=False)
+        total_time = models.DurationField()
+        last_clock_in = models.DateTimeField()

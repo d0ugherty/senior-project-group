@@ -1,4 +1,5 @@
 <h3> Hello  {{ date }} </h3>
+<form method="POST">
 
 {% csrf_token %}
 <br>
@@ -12,7 +13,7 @@ tasks:
 
 <a href="task_detail/{{ x.pk }}">Description </a>
 <br><br>
+<br><button type="submit" name="{{x}}"> Submit </button>
 {% endfor %}
 var sum = 1+2
-
-<br><button> Submit </button>
+</form>

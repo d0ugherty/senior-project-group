@@ -54,8 +54,15 @@ def home_page(request, employee_id):
 
     employee = Employee.objects.get(pk=employee_id)
     tasks =  employee.Tasks.filter()
-    print(employee)
-    print(tasks)
+   #print(employee)
+   # print(tasks)
     test = 1
+    if request.method == 'POST':
+
+        for x in tasks:
+
+            if str(x) in request.POST:
+                print('found2')
+                print(x)
     return render(request, 'home_page.html',{'date':todays_date, 'employee':employee, 'tasks':tasks, 'test':test})
 
