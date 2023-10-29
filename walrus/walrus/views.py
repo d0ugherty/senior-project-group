@@ -58,7 +58,7 @@ def home_page(request, employee_id):
    # print(tasks)
     test = 1
     if request.method == 'POST':
-
+        # go through the tasks and find the object that was selected and clock in or out
         for x in tasks:
 
             if str(x) in request.POST:
