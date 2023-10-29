@@ -90,11 +90,9 @@ def update_task_status(request,task_id):
         if form.is_valid():
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
-            print(task_id)
+            
             task = Task.objects.get(pk=task_id)
-            print(task)
-            print(description)
-            # print(image)
+            
             update = Task_Update(description=description,task=task, venue_image=image)
             update.save()
 
