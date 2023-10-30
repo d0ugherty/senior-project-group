@@ -21,9 +21,10 @@ class Task_Update(models.Model):
 class Task(models.Model):
     task_name = models.CharField(max_length=255)
     task_description = models.CharField(max_length=255, blank=True)
-    is_complete = models.BooleanField()
+    is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
     due_date = models.DateField(blank=True, default=date.today())
+    #date_created = models.DateTimeField(default=date.today)
 """
   #  Updates = models.OneToMany(Task_Updates)
     date_created = models.DateTimeField()

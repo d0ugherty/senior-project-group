@@ -1,0 +1,43 @@
+{% block content %}
+<div>
+    <center> {{curCalen|safe}} </center>
+        <style>
+            .month{
+            text-align: center;
+            font-size: 40px;
+            }
+            .mon{
+            padding-left:15px;
+            }
+            .tue{
+            padding-left:15px;
+            }
+            .wed{
+            padding-left:15px;
+            }
+            .thu{
+            padding-left:15px;
+            }
+            .fri{
+            padding-left:15px;
+            }
+            .sat{
+            padding-left:15px;
+            }
+            .sun{
+            padding-left:15px;
+            }
+          </style>
+
+          
+</div>
+
+<h2> Tasks for Month </h2>
+    {% for task in tasks %}
+        <font size=3>Name: {{ task.task_name|capfirst }}</font> <br>
+        <font size=3>Description: {{ task.task_description|capfirst }}</font> <br>
+        <font size=3>Done: {{ task.is_complete }}</font> <br>
+        <a href='{% url "delete_task" task.id %}'> Delete </a>
+        <p> -------------- </p>
+    {% endfor %}
+{% endblock %}

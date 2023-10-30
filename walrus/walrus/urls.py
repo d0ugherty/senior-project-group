@@ -23,5 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
-    path('list_tasks/', views.list_tasks, name='list_tasks')
+    path('list_tasks/', views.list_tasks, name='list_tasks'),
+    path('calendar/', views.calendar, name='calendar'),
+    path('add_task/', views.add_task, name='add_task'),
+    path('delete_task/<int:task_id>', views.delete_task, name='delete_task')
 ]
