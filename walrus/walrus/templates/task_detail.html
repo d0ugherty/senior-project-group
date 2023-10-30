@@ -30,14 +30,14 @@
         <legend><b>Task 1</b></legend>
 
         <fieldset> <!--TASK DESCRIPTION-->
-            <legend><b>Task Description</b></legend>
+            <legend><b>{{ task.task_description }}</b></legend>
         </fieldset> <br>
         
         <fieldset> <!--TASK INFO-->
             <legend><b>Task Info</b></legend>
-            <a>Project Name:</a>
+            <a>Project Name: {{ task.task_Name }}</a>
             <h1>{{ "" }}</h1> <!--blank space-->
-            <a>Assigned To:</a>
+            <a>Assigned To: {{task.Assigned_emp }}</a>
         </fieldset> <br>
 
         <button class="button button1">Edit Task</button>

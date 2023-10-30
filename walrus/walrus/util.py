@@ -1,4 +1,15 @@
 from .models import * 
+"""
+def find_task(task_id):
+     task = None
+
+     if (task_id != None and Project.object.filter(project_id=task_id).exists()==False):
+          return task
+     if (Project.objects.filter(project_id=task_id).exists()):
+          task = Project.objects.get(project_id=task_id)
+
+     return task
+"""
 
 def find_tasks(task_name, project_name, due_date, status):
     if status == "complete":

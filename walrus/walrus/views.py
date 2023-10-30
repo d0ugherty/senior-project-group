@@ -7,9 +7,6 @@ from .models import *
 from .forms import taskSearchForm
 from .util import *
 
-def home(request):
-    return render(request, 'home.html')
-
 def list_tasks(request):
    # try:
         #tasks = Task.objects.all()
@@ -49,6 +46,16 @@ def task_detail (request, task_id):
     form = taskSearchForm()
     task = None
 
+    task = task_id
+
+    task_name="a"
+    project_name="b"
+    due_date="1"
+    status="completed"
+
+    #task = find_tasks(task_name, project_name, due_date, status)
+
+    
     #check if the task_id matches a project id
 
     return render (request, 'task_detail.html', {
