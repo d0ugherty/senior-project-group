@@ -27,9 +27,7 @@ class Task(models.Model):
     date_created = models.DateTimeField(default=date.today)
 """
   #  Updates = models.OneToMany(Task_Updates)
-    date_created = models.DateTimeField()
     Date_assigned_to = models.DateTimeField() # when the employee is supposed to start working on it
-    due_date = models.DateTimeField()
     date_completed = models.DateTimeField()
    # Project_id = models.ForeignKey(Projects)
    # Assigned_emp = models.ManyToManyRel(User)

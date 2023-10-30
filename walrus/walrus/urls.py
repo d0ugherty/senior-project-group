@@ -21,7 +21,7 @@ from walrus import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list_tasks/', views.list_tasks, name='list_tasks'),
-    path('calendar/', views.calendar, name='calendar'),
+    path('calendar/', views.CalendarView.as_view(), name='calendar'),
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task')
 ]
