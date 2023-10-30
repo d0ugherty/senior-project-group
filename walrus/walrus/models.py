@@ -47,6 +47,7 @@ class Employee(models.Model):
     Tasks = models.ManyToManyField(Task, blank=True)
     is_manager = models.CharField(
         max_length=6,
+        default='No',
         choices=[('Yes', 'Yes'),('No', 'No')]
     )
 
