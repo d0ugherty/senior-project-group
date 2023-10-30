@@ -58,6 +58,6 @@ class Employee(models.Model):
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
-        in_progress = models.BooleanField(default=False)
-        total_time = models.DurationField()
-        last_clock_in = models.DateTimeField()
+        in_progress = models.BooleanField(default=False, null=True)
+        total_time = models.DurationField(null=True, blank=True)
+        last_clock_in = models.DateTimeField(null=True)
