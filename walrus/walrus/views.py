@@ -6,6 +6,10 @@ from django.urls import reverse
 from .models import *
 from .forms import taskSearchForm
 from .util import *
+
+def home(request):
+    return render(request, 'home.html')
+
 def list_tasks(request):
    # try:
         #tasks = Task.objects.all()
