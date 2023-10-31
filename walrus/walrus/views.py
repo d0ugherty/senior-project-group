@@ -46,23 +46,32 @@ def list_tasks(request):
 def home_page(request, employee_id):
 
 
-
+    '''
     todays_date = datetime.date.today() # todays date
     todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
     # todays_date=date.today().weekday() # week day as an int
     todays_date=todays_date.weekday()
-
+    '''
     employee = Employee.objects.get(pk=employee_id)
+
+    # should filter all tasks that have not been completed
     tasks =  employee.Tasks.filter()
    #print(employee)
    # print(tasks)
     test = 1
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
+        # I just have the buttons named as the task object they are associated with
         for x in tasks:
 
             if str(x) in request.POST:
                 print('found2')
                 print(x)
-    return render(request, 'home_page.html',{'date':todays_date, 'employee':employee, 'tasks':tasks, 'test':test})
+                if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
+                    print("object exists")
+                else:
+                    print("need to create object")
+
+
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})
 

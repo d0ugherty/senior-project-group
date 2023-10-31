@@ -6,14 +6,13 @@
 <a href="calendar/">Calendar </a>
 <br>
 <a href="calendar/"> RTO/Avilability </a>
-<br>
-tasks:
+
+<h3>My Tasks:</h3>
 {% for x in tasks %}
-<br> {{x.task_name}} <a href="{%url 'list_tasks' %}/{{x.task_name}}">Update </a> <br>
+{{x.task_name}} <a href="{%url 'list_tasks' %}/{{x.task_name}}">Update </a> <br>
 
 <a href="task_detail/{{ x.pk }}">Description </a>
-<br><br>
-<br><button type="submit" name="{{x}}"> Submit </button>
+<br>
+<button type="submit" name="{{x}}"> Clock-in </button> <br><br>
 {% endfor %}
-var sum = 1+2
 </form>
