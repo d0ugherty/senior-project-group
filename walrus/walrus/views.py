@@ -7,7 +7,7 @@ from .models import *
 from .forms import taskSearchForm
 from .util import *
 
-import datetime
+from datetime import datetime,timezone
 def list_tasks(request):
    # try:
         #tasks = Task.objects.all()
@@ -62,15 +62,31 @@ def home_page(request, employee_id):
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
         # I just have the buttons named as the task object they are associated with
+        #print(request.POST)
+       
         for x in tasks:
+            #print (str(x) + "complete")
 
             if str(x) in request.POST:
-                print('found2')
-                print(x)
+              
+                #Getting the Time_spent object associated with the task and employee
                 if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
-                    print("object exists")
-                else:
-                    print("need to create object")
+                    time_record = Time_Spent.objects.get(employee=employee_id,task=x.pk)
+           
+                    # When employee clocks in 
+                    if (time_record.in_progress == False):
+                        time_record.in_progress=True
+                        time_record.last_clock_in = datetime.now()
+                        time_record.last_clock_in = datetime.now(timezone.utc)
+                        time_record.save()
+                    else:
+                    # When employee clocks out 
+
+                        additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
+                        time_record.total_time = time_record.total_time + additionalTime
+                       
+                        time_record.in_progress = False
+                        time_record.save()
 
 
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})
