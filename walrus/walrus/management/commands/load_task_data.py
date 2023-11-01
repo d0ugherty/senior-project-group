@@ -17,7 +17,7 @@ database with tables"""
 
 class Command(BaseCommand):
     # Show this when the user types help
-    help = "Loads data from event_data.csv into our Pet mode"
+    help = "Loads data from task.csv into our Task model"
 
     def handle(self, *args, **options):
         if Tasks.objects.exists():

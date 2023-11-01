@@ -16,5 +16,12 @@ class taskSearchForm(forms.Form):
     project_name = forms.CharField(label="Project name", max_length=100, required=False)
     
     date = forms.DateField(label="Due Date", widget=DateInput, required=False)
-    #Change Due_date to be a calender selection at some point
+    #Change Due_date to be a calander selection at some point
     status = forms.ChoiceField(choices=STATUS_CHOICES)
+
+class addTask(forms.Form):
+    task_name = forms.CharField(max_length=100)
+    description = forms.CharField(max_length=250)
+
+class employeeIdSearch(forms.Form):
+    employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)

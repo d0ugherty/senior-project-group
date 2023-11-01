@@ -1,0 +1,26 @@
+Models:
+    Task
+    Employee
+    Project
+
+Forms:
+    Task Search
+    Search by Project
+    Search by date
+    Search by completion status
+
+Templates:
+    Search bar and button
+    Table for displaying tasks
+
+Views:
+    Search for tasks
+    GET request for retrieving tasks from database
+
+Endpoints:
+    Task search
+    Task details
+
+Database:
+    Create tables for Task, Project, and Employee
+    Enter dummy data into db
