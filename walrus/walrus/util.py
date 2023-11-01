@@ -30,16 +30,15 @@ def find_tasks(task_name, project_name, due_date, status):
     for x in fields:
         if fields[x] != "":
           nonEmptyFields.update({x : fields[x]})
-        
-         
+        #this is a test
 
          #print(fields)
     print(nonEmptyFields)
     print(Task.objects.filter(**nonEmptyFields))
     tasks = Task.objects.filter(**nonEmptyFields)
     return tasks
-
-class Calendar(HTMLCalendar):
+  
+  class Calendar(HTMLCalendar):
 	def __init__(self, year=None, month=None):
 		self.year = year
 		self.month = month
@@ -75,3 +74,15 @@ class Calendar(HTMLCalendar):
 		for week in self.monthdays2calendar(self.year, self.month):
 			cal += f'{self.formatweek(week, tasks)}\n'
 		return cal
+=======
+"""
+     IDs are being input as CharFields, this will
+     just help to make sure that data entered is valid
+"""
+def validate_id(input_id, form):
+     id_str = input_id.strip()
+     if id_str.isdigit():
+          return int(id_str)
+     else:
+          form.add_error('employee_id', 'Please enter a valid ID')
+
