@@ -71,7 +71,7 @@ def get_date(req_day):
         year, month = (int(x) for x in req_day.split('-'))
         return date(year, month, day=1)
     return datetime.today()
-=======
+
 """
     Loads the manager home page
     TO DO: Check for user type

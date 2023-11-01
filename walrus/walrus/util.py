@@ -38,7 +38,7 @@ def find_tasks(task_name, project_name, due_date, status):
     tasks = Task.objects.filter(**nonEmptyFields)
     return tasks
   
-  class Calendar(HTMLCalendar):
+class Calendar(HTMLCalendar):
 	def __init__(self, year=None, month=None):
 		self.year = year
 		self.month = month
@@ -74,7 +74,7 @@ def find_tasks(task_name, project_name, due_date, status):
 		for week in self.monthdays2calendar(self.year, self.month):
 			cal += f'{self.formatweek(week, tasks)}\n'
 		return cal
-=======
+
 """
      IDs are being input as CharFields, this will
      just help to make sure that data entered is valid
