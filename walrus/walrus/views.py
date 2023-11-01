@@ -96,6 +96,8 @@ def home_page(request, employee_id):
                     time_record.save()
                     adjust_clock_in(time_record)
 
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})
+
 class CalendarView(generic.ListView):
     model = Task
     template_name = 'calendar.html'
