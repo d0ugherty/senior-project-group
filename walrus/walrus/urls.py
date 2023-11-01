@@ -24,8 +24,8 @@ urlpatterns = [
     path('calendar/', views.calendar, name='calendar'),
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task'),
-    path('manager_home/', views.load_manager_home, name='manager_home'),
-    path('manager_home/manager_home_redirect', views.manager_home_redirect, name='manager_home_redirect'),
+    path('manager_tools/', views.load_manager_tools, name='manager_tools'),
+    path('manager_tools/manager_tools_redirect', views.manager_tools_redirect, name='manager_tools_redirect'),
     path('employee_stats/', views.employee_stats, name='employee_stats'),
     #path('employee_stats/<int:employee_id>', views.get_stats, name="get_stats")
 ]

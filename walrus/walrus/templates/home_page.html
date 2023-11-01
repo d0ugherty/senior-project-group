@@ -1,0 +1,29 @@
+{% block content %}
+{% if user.is_authenticated %}
+
+<h3> Home Page   </h3>
+
+Hi {{ user.first_name }}! 
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+  <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
+  {% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+<br>
+<a href="{%url 'calendar' %}">Calendar </a>
+<br>
+<a href="{% url 'manager_tools' %}">Manager Tools</a>
+<a > RTO/Avilability </a>
+
+<h3>My Tasks:</h3>
+{% for x in tasks %}
+{{x.task_name}} <a href= {% url 'update_task_status' task_id=x.pk %}>Update </a> <br>
+
+<a>Description </a>
+<br>
+<button type="submit" name="{{x}}"> Clock-in </button> <br><br>
+{% endfor %}
+</form>
+{% endblock %}
