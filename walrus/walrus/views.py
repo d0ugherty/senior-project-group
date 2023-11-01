@@ -123,11 +123,11 @@ def get_date(req_day):
     return datetime.today()
 
 """
-    Loads the manager home page
+    Loads the manager tools page
     TO DO: Check for user type
 """
-def load_manager_home(request):
-    return render(request, 'manager_home.html')
+def load_manager_tools(request):
+    return render(request, 'manager_tools.html')
 
 """
     Retrieves the 'destination' name of a button
@@ -139,7 +139,7 @@ def load_manager_home(request):
 
     TO DO: Add more redirects as project progresses
 """
-def manager_home_redirect(request):
+def manager_tools_redirect(request):
     destination = request.POST.get('destination')
     match destination:
         case "/add_task/":
