@@ -1,4 +1,13 @@
+{% block content %}
+{% if user.is_authenticated %}
+
 <h3> Home Page   </h3>
+
+Hi {{ user.username }}! 
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+  <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
+  {% endif %}
+
 <form method="POST">
 
 {% csrf_token %}
@@ -16,3 +25,4 @@
 <button type="submit" name="{{x}}"> Clock-in </button> <br><br>
 {% endfor %}
 </form>
+{% endblock %}

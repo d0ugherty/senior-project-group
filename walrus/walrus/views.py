@@ -1,6 +1,6 @@
 
 from django import forms
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 import datetime
@@ -13,6 +13,16 @@ from .forms import taskSearchForm, addTask, employeeIdSearch
 from .util import *
 
 from datetime import datetime,timezone
+
+# after user logs in this redirects them to home page
+def home_redirect(request):
+    user=request.user
+    if user.is_authenticated:
+        url = 'home/' + str(user.employee.pk)
+        return redirect(url)
+    return render(request, 'home.html')
+
+
 def list_tasks(request):
    # try:
         #tasks = Task.objects.all()
