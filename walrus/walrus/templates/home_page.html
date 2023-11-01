@@ -18,7 +18,7 @@ Hi {{ user.username }}!
 
 <h3>My Tasks:</h3>
 {% for x in tasks %}
-{{x.task_name}} <a href="{%url 'list_tasks' %}{{x.pk}}">Update </a> <br>
+{{x.task_name}} <a href= {% url 'update_task_status' task_id=x.pk %}>Update </a> <br>
 
 <a href="task_detail/{{ x.pk }}">Description </a>
 <br>
