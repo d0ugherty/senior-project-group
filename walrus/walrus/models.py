@@ -31,8 +31,7 @@ class Task(models.Model):
     Date_assigned_to = models.DateTimeField() # when the employee is supposed to start working on it
     due_date = models.DateTimeField()
     date_completed = models.DateTimeField()
-    Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
-    Assigned_emp = models.ManyToManyRel(User)
+    #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     Time_spent_min = None
     Time_spent_hour = None
     if is_complete == True:
