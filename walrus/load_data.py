@@ -7,7 +7,9 @@ django.setup()
 #from walrus.views import *
 #from .models import Employee
 from django.contrib.auth.models import User
-from walrus.models import Employee, Task, Project
+from walrus.models import Employee, Task, Project, Task_Update, Time_Spent
+Time_Spent.objects.all().delete()
+Task_Update.objects.all().delete()
 Employee.objects.all().delete()
 User.objects.all().delete()
 Project.objects.all().delete()
@@ -20,7 +22,7 @@ project.save()
 # Task 1
 task = Task()
 task.task_name="clean"
-task.project = project
+task.ref_project = project
 task.save()
 
 

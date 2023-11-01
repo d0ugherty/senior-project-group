@@ -26,7 +26,7 @@ class Task(models.Model):
     due_date = models.DateField(blank=True, default=date.today())
     date_created = models.DateTimeField(default=date.today)
 
-    updates = models.ForeignKey(Task_Update, on_delete=models.CASCADE)
+    updates = models.ForeignKey(Task_Update, on_delete=models.CASCADE,blank=True, null=True)
     date_created = models.DateTimeField()
     Date_assigned_to = models.DateTimeField() # when the employee is supposed to start working on it
     due_date = models.DateTimeField()
@@ -53,7 +53,7 @@ class Employee(models.Model):
     def __str__(self):
         return self.user.username
 
-    employee_id = models.IntegerField()
+    employee_id = models.IntegerField(null=True, blank=True)
 
     dept = models.CharField(max_length=255)
     #Shifts = models.OneToManyField(Shift)
