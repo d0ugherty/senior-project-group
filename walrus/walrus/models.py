@@ -12,8 +12,7 @@ class Project(models.Model):
     date_completed = models.DateTimeField()
    # tasks = models.ManyToOne()
 """
-class Task_Update(models.Model):
-    Description = models.CharField(max_length=255)
+
    # Image = models.ImageField()
 
 
@@ -23,8 +22,15 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     due_date = models.DateField(blank=True, default=date.today())
     date_created = models.DateTimeField(default=date.today)
+
+class Task_Update(models.Model):
+    description = models.CharField(max_length=255, blank=True)
+    #image
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True, null=True)
+    venue_image = models.ImageField(null=True, blank=True, upload_to="images/")
 
     updates = models.ForeignKey(Task_Update, on_delete=models.CASCADE,blank=True, null=True)
     date_created = models.DateTimeField(blank=True, null=True)

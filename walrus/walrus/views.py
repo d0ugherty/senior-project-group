@@ -9,7 +9,7 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch
+from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask
 from .util import *
 
 from datetime import datetime,timezone
@@ -186,3 +186,19 @@ def employee_stats(request):
         form = employeeIdSearch()
 
     return render(request, 'employee_stats.html', {'form' : form })
+
+def update_task_status(request,task_id):
+    if request.method == "POST":
+        form = updateTask(request.POST, request.FILES)
+        if form.is_valid():
+            description = request.POST.get('description')
+            image = form.cleaned_data.get('image')
+            
+            task = Task.objects.get(pk=task_id)
+            
+            update = Task_Update(description=description,task=task, venue_image=image)
+            update.save()
+
+
+    form = updateTask()
+    return render(request, 'update_task_status.html', {'form':form})
