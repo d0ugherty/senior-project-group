@@ -2,7 +2,7 @@
 from django import forms
 from django.views import generic
 from django.utils.safestring import mark_safe
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 import datetime
@@ -11,8 +11,19 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch
+from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask
 from .util import *
+
+from datetime import datetime,timezone
+
+# after user logs in this redirects them to home page
+def home_redirect(request):
+    user=request.user
+    if user.is_authenticated:
+        url = 'home/' + str(user.employee.pk)
+        return redirect(url)
+    return render(request, 'home.html')
+
 
 def list_tasks(request):
     try:
@@ -47,6 +58,43 @@ def list_tasks(request):
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
     })
+
+def home_page(request, employee_id):
+
+
+    '''
+    todays_date = datetime.date.today() # todays date
+    todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
+    # todays_date=date.today().weekday() # week day as an int
+    todays_date=todays_date.weekday()
+    '''
+    employee = Employee.objects.get(pk=employee_id)
+
+    # should filter all tasks that have not been completed
+    tasks =  employee.Tasks.filter()
+   #print(employee)
+   # print(tasks)
+    test = 1
+    if request.method == 'POST':
+        # go through the tasks and find the object that was selected and clock in or out
+        # I just have the buttons named as the task object they are associated with
+        #print(request.POST)
+       
+        for x in tasks:
+            #print (str(x) + "complete")
+
+            if str(x) in request.POST:
+                print(str(employee_id))
+                #Getting the Time_spent object associated with the task and employee
+                if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
+                    time_record = Time_Spent.objects.get(employee=employee_id,task=x.pk)
+                   
+                    adjust_clock_in(time_record)
+                #if we need to create a new time object
+                else:
+                    time_record = Time_Spent(employee=employee, task=x)
+                    time_record.save()
+                    adjust_clock_in(time_record)
 
 class CalendarView(generic.ListView):
     model = Task
@@ -147,4 +195,21 @@ def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return HttpResponseRedirect(reverse('calendar'))
+
+
+def update_task_status(request,task_id):
+    if request.method == "POST":
+        form = updateTask(request.POST, request.FILES)
+        if form.is_valid():
+            description = request.POST.get('description')
+            image = form.cleaned_data.get('image')
+            
+            task = Task.objects.get(pk=task_id)
+            
+            update = Task_Update(description=description,task=task, venue_image=image)
+            update.save()
+
+
+    form = updateTask()
+    return render(request, 'update_task_status.html', {'form':form})
 

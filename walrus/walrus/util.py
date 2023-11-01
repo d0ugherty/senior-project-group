@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from .models import *
+from .models import * 
+import datetime
+from datetime import datetime,timezone, timedelta
 
 def find_tasks(task_name, project_name, due_date, status):
     if status == "complete":
@@ -85,4 +87,25 @@ def validate_id(input_id, form):
           return int(id_str)
      else:
           form.add_error('employee_id', 'Please enter a valid ID')
+
+
+def adjust_clock_in(time_record):
+                    print("boo")
+                    # When employee clocks in 
+                    if (time_record.in_progress == False):
+                        time_record.in_progress=True
+                        time_record.last_clock_in = datetime.now()
+                        time_record.last_clock_in = datetime.now(timezone.utc)
+                        time_record.save()
+                        print("clock")
+                    else:
+                    # When employee clocks out 
+
+                        additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
+                        print(additionalTime)
+                        time_record.total_time = time_record.total_time + additionalTime
+                       
+                        time_record.in_progress = False
+                        time_record.save()
+                        print("clock2")
 
