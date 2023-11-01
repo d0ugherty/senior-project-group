@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 from walrus import views
 
 urlpatterns = [
@@ -24,13 +27,15 @@ urlpatterns = [
     path('list_tasks/', views.list_tasks, name='list_tasks'),
     path('home/task_detail/<task_id>', views.task_detail, name='task'),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("", views.home_redirect, name="home"),
     path('list_tasks/', views.list_tasks, name='list_tasks'),
-    path('calendar/', views.calendar, name='calendar'),
+    path('calendar/', views.CalendarView.as_view(), name='calendar'),
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task'),
     path('manager_home/', views.load_manager_home, name='manager_home'),
     path('manager_home/manager_home_redirect', views.manager_home_redirect, name='manager_home_redirect'),
     path('employee_stats/', views.employee_stats, name='employee_stats'),
+    path('home/<int:employee_id>/', views.home_page, name='home_page'),
     #path('employee_stats/<int:employee_id>', views.get_stats, name="get_stats")
-]
+    path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

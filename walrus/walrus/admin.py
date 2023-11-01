@@ -8,6 +8,8 @@ from .models import *
 # Register your models here
 admin.site.register(Project)
 admin.site.register(Task)
+admin.site.register(Time_Spent)
+admin.site.register(Task_Update)
 
 class EmployeeInLine(admin.StackedInline):
     model = Employee

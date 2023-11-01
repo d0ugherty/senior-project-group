@@ -1,5 +1,8 @@
+from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from .models import * 
+import datetime
+from datetime import datetime,timezone, timedelta
 
 def find_tasks(task_name, project_name, due_date, status):
     if status == "complete":
@@ -36,6 +39,44 @@ def find_tasks(task_name, project_name, due_date, status):
     print(Task.objects.filter(**nonEmptyFields))
     tasks = Task.objects.filter(**nonEmptyFields)
     return tasks
+  
+class Calendar(HTMLCalendar):
+	def __init__(self, year=None, month=None):
+		self.year = year
+		self.month = month
+		super(Calendar, self).__init__()
+
+	# formats a day as a td
+	# filter tasks by day
+	def formatday(self, day, tasks):
+		tasks_per_day = tasks.filter(date_created__day=day)
+		d = ''
+		for task in tasks_per_day:
+			d += f'<li> {task.task_name} </li>'
+
+		if day != 0:
+			return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
+		return '<td></td>'
+
+	# formats a week as a tr 
+	def formatweek(self, theweek, tasks):
+		week = ''
+		for d, weekday in theweek:
+			week += self.formatday(d, tasks)
+		return f'<tr> {week} </tr>'
+
+	# formats a month as a table
+	# filter tasks by year and month
+	def formatmonth(self, withyear=True):
+		tasks = Task.objects.filter(date_created__year=self.year, date_created__month=self.month)
+
+		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
+		cal += f'{self.formatweekheader()}\n'
+		for week in self.monthdays2calendar(self.year, self.month):
+			cal += f'{self.formatweek(week, tasks)}\n'
+		return cal
+
 """
      IDs are being input as CharFields, this will
      just help to make sure that data entered is valid
@@ -46,3 +87,25 @@ def validate_id(input_id, form):
           return int(id_str)
      else:
           form.add_error('employee_id', 'Please enter a valid ID')
+
+
+def adjust_clock_in(time_record):
+                    print("boo")
+                    # When employee clocks in 
+                    if (time_record.in_progress == False):
+                        time_record.in_progress=True
+                        time_record.last_clock_in = datetime.now()
+                        time_record.last_clock_in = datetime.now(timezone.utc)
+                        time_record.save()
+                        print("clock")
+                    else:
+                    # When employee clocks out 
+
+                        additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
+                        print(additionalTime)
+                        time_record.total_time = time_record.total_time + additionalTime
+                       
+                        time_record.in_progress = False
+                        time_record.save()
+                        print("clock2")
+

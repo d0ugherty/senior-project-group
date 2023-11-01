@@ -25,3 +25,8 @@ class addTask(forms.Form):
 
 class employeeIdSearch(forms.Form):
     employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)
+
+
+class updateTask(forms.Form):
+    description = forms.CharField(max_length=250)
+    image = forms.ImageField(label="image",required=False)
