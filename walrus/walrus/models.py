@@ -22,7 +22,7 @@ class Task(models.Model):
     task_name = models.CharField(max_length=255)
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     due_date = models.DateField(blank=True, default=date.today())
     #date_created = models.DateTimeField(default=date.today)
 """
@@ -46,11 +46,19 @@ class Employee(models.Model):
     user = models.OneToOneField(User,
     on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
+    is_manager = models.CharField(
+        max_length=6,
+        default='No',
+        choices=[('Yes', 'Yes'),('No', 'No')]
+    )
+
+    def __str__(self):
+        return self.user.username
+
 """
     dept = models.CharField(max_length=255)
     Employee_id = models.IntegerField()
     #Shifts = models.OneToManyField(Shift)
-    isManager = models.BooleanField()
     #Days_request_off = models.OneToManyField(Request_off)
     #Availability = OneToMany(avilable_time)
 """
