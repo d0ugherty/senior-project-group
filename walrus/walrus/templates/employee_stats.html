@@ -1,0 +1,13 @@
+{% block content %}
+<title>Employee Statistics</title>
+<h3>Let's do some micromanaging!</h3>
+
+<form method="post" action="{% url 'employee_stats' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit" name="id_search" value="submit">Search</button>
+</form>
+<div name="tasks-div">
+  <!-- Tasks should go here -->
+</div>
+{% endblock %}
