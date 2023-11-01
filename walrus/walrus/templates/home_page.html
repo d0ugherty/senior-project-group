@@ -22,7 +22,7 @@ Hi {{ user.first_name }}!
 {% for x in tasks %}
 {{x.task_name}} <a href= {% url 'update_task_status' task_id=x.pk %}>Update </a> <br>
 
-<a>Description </a>
+<a href = "/task_detail/{{ x.pk }}">Description </a>
 <br>
 <button type="submit" name="{{x}}"> Clock-in </button> <br><br>
 {% endfor %}

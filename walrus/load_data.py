@@ -22,6 +22,7 @@ project.save()
 # Task 1
 task = Task()
 task.task_name="set up entrance display"
+task.task_description="At the entrance of the store, prepare the new seasonal display."
 task.project = project
 task.save()
 

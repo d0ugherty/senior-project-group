@@ -27,17 +27,18 @@
 
 <div id="form">
     <fieldset> <!--TASK #-->
-        <legend><b>Task 1</b></legend>
+        <legend><b>Task {{ task.pk }}</b></legend>
 
         <fieldset> <!--TASK DESCRIPTION-->
-            <legend><b>{{ task.task_description }}</b></legend>
+            <legend><b>Description</b></legend>
+            <a>{{ task.task_description }}</a>
         </fieldset> <br>
         
         <fieldset> <!--TASK INFO-->
             <legend><b>Task Info</b></legend>
-            <a>Project Name: {{ task.task_Name }}</a>
+            <a>Project Name: {{ task.task_name }}</a>
             <h1>{{ "" }}</h1> <!--blank space-->
-            <a>Assigned To: {{ }}</a>
+            <a>Assigned To: {{ task.assigned_emp }} </a>
         </fieldset> <br>
 
         <button class="button button1">Edit Task</button>
