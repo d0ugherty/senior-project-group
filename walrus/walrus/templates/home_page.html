@@ -3,9 +3,9 @@
 
 {% csrf_token %}
 <br>
-<a href="calendar/">Calendar </a>
+<a href="{%url 'calendar' %}">Calendar </a>
 <br>
-<a href="calendar/"> RTO/Avilability </a>
+<a > RTO/Avilability </a>
 
 <h3>My Tasks:</h3>
 {% for x in tasks %}
