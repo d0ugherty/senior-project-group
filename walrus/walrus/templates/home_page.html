@@ -3,7 +3,7 @@
 
 <h3> Home Page   </h3>
 
-Hi {{ user.username }}! 
+Hi {{ user.first_name }}! 
   <p><a href="{% url 'logout' %}">Log Out</a></p>
   <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
   {% endif %}

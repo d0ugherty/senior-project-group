@@ -21,20 +21,25 @@ project.save()
 
 # Task 1
 task = Task()
-task.task_name="clean"
-task.ref_project = project
+task.task_name="set up entrance display"
+task.project = project
 task.save()
 
+# Task 2
+task2 = Task()
+task2.task_name="unload Truck"
+task2.save()
 
 # User/Employee 1
 user = User.objects.create_user(username="test", email="oconno65@students.rowan.edu", password="test", is_staff=True)
-user.first_name = "Mark"
-user.last_name = "OConnor"
+user.first_name = "John"
+user.last_name = "Smith"
 user.is_superuser = True
 user.save()
 e = Employee(user=user)
 e.save()
 e.Tasks.add(task)
+e.Tasks.add(task2)
 
 # User/Employee 2
 user = User.objects.create_user(username="john", email="lennon@thebeatles.com", password="johnpassword", is_staff=True)
