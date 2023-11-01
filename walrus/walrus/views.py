@@ -73,25 +73,18 @@ def home_page(request, employee_id):
             #print (str(x) + "complete")
 
             if str(x) in request.POST:
-              
+                print(str(employee_id))
                 #Getting the Time_spent object associated with the task and employee
                 if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
                     time_record = Time_Spent.objects.get(employee=employee_id,task=x.pk)
-           
-                    # When employee clocks in 
-                    if (time_record.in_progress == False):
-                        time_record.in_progress=True
-                        time_record.last_clock_in = datetime.now()
-                        time_record.last_clock_in = datetime.now(timezone.utc)
-                        time_record.save()
-                    else:
-                    # When employee clocks out 
+                   
+                    adjust_clock_in(time_record)
+                #if we need to create a new time object
+                else:
+                    time_record = Time_Spent(employee=employee, task=x)
+                    time_record.save()
+                    adjust_clock_in(time_record)
 
-                        additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
-                        time_record.total_time = time_record.total_time + additionalTime
-                       
-                        time_record.in_progress = False
-                        time_record.save()
 
 
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})

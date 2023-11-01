@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date
+from datetime import date, timedelta
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
@@ -61,5 +61,5 @@ class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
         in_progress = models.BooleanField(default=False, null=True)
-        total_time = models.DurationField(null=True, blank=True)
+        total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
