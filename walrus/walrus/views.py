@@ -173,6 +173,8 @@ def manager_home_redirect(request):
     search_input is a CharField form and employee_id is an integer type
     in the database. so validate_id checks if the input is a digit and if so 
     casts the input as an integer
+
+    TO DO: Add task & employee data so this can be tested
 """
 def employee_stats(request):
     if request.method == 'POST':
@@ -180,6 +182,7 @@ def employee_stats(request):
         if form.is_valid():
             employee_id = form.cleaned_data['employee_id'].strip()
             validate_id(employee_id, form)
+            # This works, but now it has to  actually retrieve data from the database
             print("id has been submitted")
             return HttpResponseRedirect('employee_stats', employee=employee_id)
     else:
