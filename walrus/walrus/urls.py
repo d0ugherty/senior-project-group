@@ -22,7 +22,7 @@ from walrus import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list_tasks/', views.list_tasks, name='list_tasks'),
-    path('home/task_detail/<task>', views.task_detail, name='task'),
+    path('home/task_detail/<task_id>', views.task_detail, name='task'),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path('list_tasks/', views.list_tasks, name='list_tasks'),

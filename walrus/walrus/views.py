@@ -48,8 +48,10 @@ def list_tasks(request):
         'tasks': tasks, 'form':form, 
     })
 
-def task_detail (request, task):
+def task_detail (request, task_id):
     form = taskSearchForm()
+
+    task = Task.objects.get(id=task_id)
 
     return render (request, 'task_detail.html', {
         'task': task,
