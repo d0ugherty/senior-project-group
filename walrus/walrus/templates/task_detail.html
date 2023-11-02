@@ -40,9 +40,9 @@
             <a>Project Name: {{ task.task_name }}</a>
             <h1>{{ "" }}</h1> <!--blank space-->
             <a>Assigned To: {{ user.first_name }} {{" "}} {{ user.last_name }} </a>
+            <!--Fix later this week; won't display correct name when user is an admin-->
         </fieldset> <br>
 
-        <h1>{{ user.pk }}</h1>
         <button class="button button1">Edit Task</button>
         <button class="button button2">
             <a href="{% url 'home' %}">Go Back</a>
