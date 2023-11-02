@@ -39,7 +39,7 @@
             <legend><b>Task Info</b></legend>
             <a>Project Name: {{ task.task_name }}</a>
             <h1>{{ "" }}</h1> <!--blank space-->
-            <a>Assigned To: {{ task.assigned_emp }} </a>
+            <a>Assigned To: {{ user.first_name }} {{" "}} {{ user.last_name }} </a>
         </fieldset> <br>
 
         <h1>{{ user.pk }}</h1>
