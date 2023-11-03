@@ -11,7 +11,7 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, availabilityForm
+from .forms import *
 from .util import *
 
 from datetime import datetime,timezone
@@ -242,4 +242,5 @@ def schedule_employee(request):
         print(avil)
 
     search_form = employeeIdSearch()
-    return render(request, 'schedule_employee.html', {'search_form':search_form, 'avil':avil})
+    schedule_form = scheduleEmployee()
+    return render(request, 'schedule_employee.html', {'search_form':search_form, 'avil':avil, 'schedule_form':schedule_form})
