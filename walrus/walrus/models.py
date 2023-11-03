@@ -60,7 +60,7 @@ class Employee(models.Model):
     employee_id = models.IntegerField(null=True, blank=True)
 
     dept = models.CharField(max_length=255, blank=True, null=True)
-    #Shifts = models.OneToManyField(Shift)
+    Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     #Days_request_off = models.OneToManyField(Request_off)
     #Availability = OneToMany(avilable_time)
 

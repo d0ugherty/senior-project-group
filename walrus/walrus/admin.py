@@ -10,6 +10,8 @@ admin.site.register(Project)
 admin.site.register(Task)
 admin.site.register(Time_Spent)
 admin.site.register(Task_Update)
+admin.site.register(Shift)
+
 
 class EmployeeInLine(admin.StackedInline):
     model = Employee
