@@ -22,7 +22,7 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, default=date.today())
     Date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
@@ -37,8 +37,12 @@ class Task_Update(models.Model):
 
     
     #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
-  
 
+class Shift(models.Model):
+     date = models.DateField(null=True)
+     start = models.CharField(max_length=255, blank=True, null=True)  
+     end = models.CharField(max_length=255, blank=True, null=True)  
+     to_be_taken = models.BooleanField(default=False)
 
 class Employee(models.Model):
 
@@ -56,7 +60,7 @@ class Employee(models.Model):
     employee_id = models.IntegerField(null=True, blank=True)
 
     dept = models.CharField(max_length=255, blank=True, null=True)
-    #Shifts = models.OneToManyField(Shift)
+    Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     #Days_request_off = models.OneToManyField(Request_off)
     #Availability = OneToMany(avilable_time)
 

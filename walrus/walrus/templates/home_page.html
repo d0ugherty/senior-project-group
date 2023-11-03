@@ -16,6 +16,8 @@ Hi {{ user.first_name }}!
 <br>
 <a href="{% url 'manager_tools' %}">Manager Tools</a>
 <a > RTO/Avilability </a>
+<br>
+<a href="{%url 'list_tasks' %}">All Tasks </a>
 
 <h3>My Tasks:</h3>
 {% for x in tasks %}
