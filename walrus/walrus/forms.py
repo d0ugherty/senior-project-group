@@ -38,6 +38,7 @@ class availabilityForm(forms.Form):
     saturday_end = forms.ChoiceField(choices=TIME_CHOICES)
 
 
+
 class DateInput(forms.DateInput):
     input_type = 'date'
 STATUS_CHOICES = (

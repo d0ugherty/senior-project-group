@@ -1,0 +1,10 @@
+<form method="POST">
+    <h3>enter employee id</h3>
+
+    {% csrf_token %}
+{{ search_form.as_p }}
+<button> Submit </button>
+</form>
+
+<h3>Employees avilabilty</h3>
+    {{ avil.sunday_start }} - {{avil.sunday_end}}

@@ -232,3 +232,14 @@ def update_task_status(request,task_id):
     form = updateTask()
     return render(request, 'update_task_status.html', {'form':form})
 
+def schedule_employee(request):
+    avil = None
+    if request.method == "POST":
+        id = request.POST.get('employee_id')
+        employee = Employee.objects.get(pk=id)
+        print(employee)
+        avil = employee.availability
+        print(avil)
+
+    search_form = employeeIdSearch()
+    return render(request, 'schedule_employee.html', {'search_form':search_form, 'avil':avil})
