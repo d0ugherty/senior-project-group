@@ -11,10 +11,27 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask
+from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, availabilityForm
 from .util import *
 
 from datetime import datetime,timezone
+
+def availability(request, employee_id):
+    print("hello")
+
+    if request.method == "POST":
+        employee = Employee.objects.get(pk=employee_id)
+        if employee.availability == None:
+                #print("does not")
+                availability = Availability()
+                availability.save()
+                employee.availability = availability
+                employee.save()
+        set_availability(request, employee)
+        
+    form = availabilityForm()
+    return render(request, 'availability.html', {'form':form})
+
 
 # after user logs in this redirects them to home page
 def home_redirect(request):

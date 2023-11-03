@@ -34,6 +34,9 @@ urlpatterns = [
     path('manager_home/manager_home_redirect', views.manager_home_redirect, name='manager_home_redirect'),
     path('employee_stats/', views.employee_stats, name='employee_stats'),
     path('home/<int:employee_id>/', views.home_page, name='home_page'),
+    path('home/<int:employee_id>/availability', views.availability, name='availability'),
+
     #path('employee_stats/<int:employee_id>', views.get_stats, name="get_stats")
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
