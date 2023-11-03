@@ -37,8 +37,12 @@ class Task_Update(models.Model):
 
     
     #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
-  
 
+class Shift(models.Model):
+     date = models.DateField(null=True)
+     start = models.CharField(max_length=255, blank=True, null=True)  
+     end = models.CharField(max_length=255, blank=True, null=True)  
+     to_be_taken = models.BooleanField(default=False)
 
 class Employee(models.Model):
 
