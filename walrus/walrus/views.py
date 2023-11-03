@@ -235,12 +235,23 @@ def update_task_status(request,task_id):
 def schedule_employee(request):
     avil = None
     if request.method == "POST":
-        id = request.POST.get('employee_id')
-        employee = Employee.objects.get(pk=id)
-        print(employee)
-        avil = employee.availability
-        print(avil)
-
+        if "search" in request.POST:
+           
+            id = request.POST.get('employee_id')
+            employee = Employee.objects.get(pk=id)
+            print(employee)
+            avil = employee.availability
+            print(avil)
+        if "save_shift" in request.POST:
+            employee_pk = request.POST.get('employee')
+            employee = Employee.objects.get(pk=employee_pk)
+            date = request.POST.get('date')
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+            print(employee)
+            shift = Shift(date=date, start=start_time, end=end_time)
+            shift.save()
+            employee.shifts.add(shift)
     search_form = employeeIdSearch()
     schedule_form = scheduleEmployee()
     return render(request, 'schedule_employee.html', {'search_form':search_form, 'avil':avil, 'schedule_form':schedule_form})

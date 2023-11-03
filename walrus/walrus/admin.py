@@ -11,6 +11,8 @@ admin.site.register(Task)
 admin.site.register(Time_Spent)
 admin.site.register(Task_Update)
 admin.site.register(Availability)
+admin.site.register(Shift)
+
 class EmployeeInLine(admin.StackedInline):
     model = Employee
     can_delete = False #can't delete an Employee without deleting the corresponding User
