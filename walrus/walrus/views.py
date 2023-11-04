@@ -201,6 +201,9 @@ def add_task(request):
 Employee will need to be changed to allow for multiple employees to appear
 '''
 
+from walrus.admin import SendNotificationForm
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 def edit_task(request, task_id):
 
@@ -218,7 +221,28 @@ def edit_task(request, task_id):
         else:
             task.project = None
         task.save()
-        messages.success(request, "good message")
+        
+        
+        #
+        # n = Notifications(message="MESSAGE")
+        #n.save()
+        #f2 = SendNotificationForm()
+        #f2.message = "test"
+        message = "hello"
+
+        
+        notification = Notifications.objects.create(message=message)
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+                    "notifications", {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
+
+
+
+        #messages.success(request, "good message")
 
 
 

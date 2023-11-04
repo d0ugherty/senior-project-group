@@ -74,3 +74,10 @@ class Time_Spent(models.Model):
         in_progress = models.BooleanField(default=False, null=True)
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
+
+class Notifications (models.Model):
+     message = models.TextField()
+     created_at = models.DateTimeField(auto_now_add=True)
+
+     def __str(self):
+          return self.message

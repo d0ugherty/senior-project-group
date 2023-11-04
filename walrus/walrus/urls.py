@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 
 from walrus import views
 
+from walrus.consumer import NotificationConsumer
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
@@ -38,3 +40,8 @@ urlpatterns = [
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
     path('manager_home/edit_task/<int:task_id>', views.edit_task, name='edit_task'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+websocket_urlpatterns = [
+    path("ws/notifications/", NotificationConsumer.as_asgi())
+
+]
