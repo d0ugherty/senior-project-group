@@ -22,11 +22,12 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, default=date.today())
-    Date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
+    
+    date_created = models.DateTimeField(blank=True, auto_now_add=True)
+    date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
-
+    
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)

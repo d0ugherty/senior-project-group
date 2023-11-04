@@ -23,6 +23,13 @@ class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=250)
 
+class editTask(forms.Form):
+    task_name = forms.CharField(max_length=100)
+    description = forms.CharField(max_length=250)
+    project = forms.ModelChoiceField(queryset=Project.objects.all())
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all())
+
+
 class employeeIdSearch(forms.Form):
     employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)
 

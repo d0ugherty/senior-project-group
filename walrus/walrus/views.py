@@ -11,7 +11,7 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask
+from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, editTask
 from .util import *
 
 from datetime import datetime,timezone
@@ -192,6 +192,14 @@ def add_task(request):
     'add_task.html',
     {'form': form}
     )
+
+def edit_task(request, task_id):
+
+    task = Task.objects.get(pk=task_id) 
+    project = Project.objects.get(pk=task.project.pk)
+
+    form = editTask(initial={'task_name':task.task_name,'description': task.task_description, 'project':task.project.pk})
+    return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
