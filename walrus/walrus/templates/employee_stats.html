@@ -8,7 +8,7 @@
   <button type="submit" name="id_search" value="submit">Search</button>
 </form>
 <div name="tasks-div">
-  <p> Showing tasks for: {{ employee.first_name }} {{employe.last_name}}</p>
+  <p> Showing tasks for: {{ employee_name }}</p>
   
     {% for task in tasks %}
       {% include 'task_card.html' with task=task %}
