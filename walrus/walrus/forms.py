@@ -24,7 +24,7 @@ class addTask(forms.Form):
     description = forms.CharField(max_length=250)
 
 class editTask(forms.Form):
-    task_name = forms.CharField(max_length=100,required=False)
+    task_name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=250,required=False)
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
