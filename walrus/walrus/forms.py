@@ -28,7 +28,8 @@ class editTask(forms.Form):
     description = forms.CharField(max_length=250)
     project = forms.ModelChoiceField(queryset=Project.objects.all())
     employee = forms.ModelChoiceField(queryset=Employee.objects.all())
-
+    def __str__(self):
+        return self.project 
 
 class employeeIdSearch(forms.Form):
     employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)
