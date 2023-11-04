@@ -31,35 +31,36 @@
 
 <br><br>
 {% endfor %}
-
-     <thead>
-        <tr>Task Name</tr>
-        <tr>Project Name</tr>
-        <tr>Due Date</tr>
-        <tr>Status</tr>
-        <tr>Employees</tr>
-    </thead>
-
-    <tbody>
-    {% for t in tasks %}
+    <table>
         <tr>
-            <td>{{ t.task_name }}</td> 
-            <td>{{t.project.project_name}}</td>
-            <td>{{ t.due_date }}
-                {% if t.is_complete %}
-                    Complete
-                {% else %}
-                    Incomplete
-                {% endif %}
-            </td>
-            <td>{% for emp in t.employee_set.all %} 
-                {{ emp.user.first_name }} {{ emp.user.last_name }} &nbsp
-                {% endfor %}
-            </td>  
+        <thead>
+            <tr>Task Name</tr>
+            <tr>Project Name</tr>
+            <tr>Due Date</tr>
+            <tr>Status</tr>
+            <tr>Employees</tr>
+        </thead>
         </tr>
-    {% endfor %}
-
-
+        <tbody>
+        {% for t in tasks %}
+            <tr>
+                <td>{{ t.task_name }}</td> 
+                <td>{{t.project.project_name}}</td>
+                <td>{{ t.due_date }}
+                    {% if t.is_complete %}
+                        Complete
+                    {% else %}
+                        Incomplete
+                    {% endif %}
+                </td>
+                <td>{% for emp in t.employee_set.all %} 
+                    {{ emp.user.first_name }} {{ emp.user.last_name }} &nbsp
+                    {% endfor %}
+                </td>  
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 
 

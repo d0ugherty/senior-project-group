@@ -1,45 +1,51 @@
 {% block content %}
 <div id="task_card">
 {{ task.task_name }} : {{ task.description }}
-    <thead>
-        <tr>Status</tr>
-        <tr>Date Assigned</tr>
-        <tr>Date Due</tr>
-        <tr>Date Completed</tr>
-        <tr>Time On Task</tr>
-    </thead>
-    <tbody>
-        <tr>
-            <!-- Task Status -->
-            <td>
-                {% if task.is_complete %}
-                    Complete
-                {% else %}
-                    Incomplete
-                {% endif %}
-            </td>
-            <!-- Date Task Was Assigned -->
-            <td>
-                {{ task.Date_assigned_to }}
-            </td>
-            <!-- Due date for the task -->
-            <td>
-                {{ task.due_date }}
-            </td>
-            <!-- Date task was completed -->
-            <td>
-                {% if task.is_complete %}
-                    {{ task.date_completed }}
-                {% else %}
-                    N/A
-                {% endif %}
-            </td>
-            <!-- Time spent on the task -->
-            <td>
-                To be determined
-            </td>
-        </tr>
-    </tbody>
-</div>
+    <br>
+    <table>
+        <thead>
+            
+                <th>Status</th>
+                <th>Date Assigned</th>
+                <th>Date Due</th>
+                <th>Date Completed</th>
+                <th>Time On Task</th>
+            
+        </thead>
 
+        <tbody>
+            <tr>
+                <!-- Task Status -->
+                <td>
+                    {% if task.is_complete %}
+                        Complete
+                    {% else %}
+                        Incomplete
+                    {% endif %}
+                </td>
+                <!-- Date Task Was Assigned -->
+                <td>
+                    {{ task.Date_assigned_to }}
+                </td>
+                <!-- Due date for the task -->
+                <td>
+                    {{ task.due_date }}
+                </td>
+                <!-- Date task was completed -->
+                <td>
+                    {% if task.is_complete %}
+                        {{ task.date_completed }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <!-- Time spent on the task -->
+                <td>
+                    To be determined
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
 {% endblock %}
