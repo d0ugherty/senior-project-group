@@ -16,6 +16,9 @@ from .util import *
 
 from datetime import datetime,timezone
 
+from django.contrib import messages
+
+
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
@@ -214,7 +217,9 @@ def edit_task(request, task_id):
             task.project = project
         else:
             task.project = None
-    task.save()
+        task.save()
+        messages.success(request, "good message")
+
 
 
 

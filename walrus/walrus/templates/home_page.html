@@ -8,6 +8,22 @@ Hi {{ user.first_name }}!
   <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
   {% endif %}
 
+
+  <br> <br>
+  {% for message in messages %}
+  
+  {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+  
+  {{ message }}
+  
+  {% endif %}
+  
+  {% endfor %}
+  <br><br>
+
+
+
+
 <form method="POST">
 
 {% csrf_token %}
