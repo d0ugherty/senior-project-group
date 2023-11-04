@@ -15,6 +15,7 @@ User.objects.all().delete()
 Project.objects.all().delete()
 Task.objects.all().delete()
 
+
 # Project 1
 project = Project(project_name="Truck")
 project.save()
@@ -30,20 +31,67 @@ task2 = Task()
 task2.task_name="unload Truck"
 task2.save()
 
+
+"""
+    These tasks can be part of the same Project
+
+"""
+
+# Task 3
+task3 = Task()
+task3.task_name = "Setup Christmas light display"
+task3.is_complete = True
+task3.save()
+
+#Task 4
+task4 = Task()
+task4.task_name = "Setup reindeer display"
+task4.is_complete = False
+task4.save()
+
+#Task 5
+task5 = Task()
+task5.task_name = "Setup Santa Clause display"
+task5.is_complete = False
+task5.save()
+
+
 # User/Employee 1
-user = User.objects.create_user(username="test", email="oconno65@students.rowan.edu", password="test", is_staff=True)
+user = User.objects.create_user(username="test", 
+                                email="oconno65@students.rowan.edu", 
+                                password="test", 
+                                is_staff=True)
 user.first_name = "John"
 user.last_name = "Smith"
 user.is_superuser = True
 user.save()
-e = Employee(user=user)
+e = Employee(user=user, employee_id = 1)
 e.save()
 e.Tasks.add(task)
 e.Tasks.add(task2)
 
 # User/Employee 2
-user = User.objects.create_user(username="john", email="lennon@thebeatles.com", password="johnpassword", is_staff=True)
+user = User.objects.create_user(username="john", 
+                                email="lennon@thebeatles.com", 
+                                password="johnpassword", 
+                                is_staff=True)
 user.is_superuser = True
 user.save()
-e = Employee(user=user)
+e = Employee(user=user, employee_id = 2)
 e.save()
+
+# User/Employee 3
+
+user = User.objects.create_user(username="walker", 
+                                email="doughe38@students.rowan.edu", 
+                                password = "password",
+                                is_staff=True)
+user.first_name = "Walker"
+user.last_name = "Texas Ranger"
+user.is_superuser = True
+user.save()
+e = Employee(user=user, employee_id = 3)
+e.save()
+e.Tasks.add(task3)
+e.Tasks.add(task4)
+e.Tasks.add(task5)

@@ -160,27 +160,30 @@ def manager_tools_redirect(request):
 
     TO DO: Add task & employee data so this can be tested
 """
+
 def employee_stats(request):
     if request.method == 'POST':
+        
         form = employeeIdSearch(request.POST)
+        
         if form.is_valid():
-            employee_id = form.cleaned_data['employee_id'].strip()
-            validate_id(employee_id, form)
+            input_id = form.cleaned_data['employee_id'].strip()
+            validate_id(input_id, form)
             # This works, but now it has to  actually retrieve data from the database
-            print(f'ID: {employee_id} was submitted')
-            return HttpResponseRedirect('employee_stats', employee=employee_id)
+            print(f'ID: {input_id} was submitted')
+            # get tasks
+            employee = Employee.objects.get(employee_id=input_id)
+            tasks = employee.Tasks.filter()
+
+            print(tasks)
+
+            return HttpResponseRedirect('employee_stats', employee=input_id)
     else:
         form = employeeIdSearch()
 
     return render(request, 'employee_stats.html', {'form' : form })
 
-"""
-    View for retrieving and displaying the employee statistics
 
-"""
-def get_employee_stats(request, emp_id):
-    if request.method == 'POST':
-        pass
 
 
 """
