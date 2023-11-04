@@ -8,10 +8,10 @@
   <button type="submit" name="id_search" value="submit">Search</button>
 </form>
 <div name="tasks-div">
-  <p> {{ employee.first_name }}</p>
-  <!-- Tasks should go here -->
-  {% for task in tasks %}
-    {% include 'stat_card.html' with task=task %}
-  {% endfor %}
+  <p> Showing tasks for: {{ employee.first_name }} {{employe.last_name}}</p>
+  
+    {% for task in tasks %}
+      {% include 'task_card.html' with task=task %}
+    {% endfor %}
 </div>
 {% endblock %}

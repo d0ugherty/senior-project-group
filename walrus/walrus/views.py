@@ -155,10 +155,11 @@ def manager_tools_redirect(request):
     View for the loading employee stats page
 
     search_input is a CharField form and employee_id is an integer type
-    in the database. so validate_id checks if the input is a digit and if so 
+    in the database.
+    
+    validate_id checks if the input is a digit and if so 
     casts the input as an integer
 
-    TO DO: Add task & employee data so this can be tested
 """
 
 def employee_stats(request):

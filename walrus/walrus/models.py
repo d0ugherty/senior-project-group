@@ -27,6 +27,7 @@ class Task(models.Model):
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
 
+    
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)
