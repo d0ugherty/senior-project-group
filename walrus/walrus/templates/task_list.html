@@ -3,57 +3,38 @@
      {{ form.as_p }}
      
 
-     <button> Submit </button> <br><br>
-     <h3>task name &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
-        Project Name &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
-        Due Date &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        Status &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        Employees </h3> <br>
-
-
-{% for t in tasks %}
-
-    {{ t.task_name }}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
-    {{t.project.project_name}}  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-    
-    {{ t.due_date }} 
-    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-    {% if t.is_complete %}
-    Complete
-    {% else %}
-    Incomplete
-    {% endif %}
-    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-    {% for emp in t.employee_set.all %} 
-    {{ emp.user.first_name }} {{ emp.user.last_name }} &nbsp
-    {% endfor %}  
-
 
 <br><br>
-{% endfor %}
+
     <table>
-        <tr>
         <thead>
-            <tr>Task Name</tr>
-            <tr>Project Name</tr>
-            <tr>Due Date</tr>
-            <tr>Status</tr>
-            <tr>Employees</tr>
+            <th>Task Name</th>
+            <th>Project Name</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Employees</th>
         </thead>
         </tr>
         <tbody>
         {% for t in tasks %}
             <tr>
+                <!-- Task Name -->
                 <td>{{ t.task_name }}</td> 
+                <!-- Project Name -->
                 <td>{{t.project.project_name}}</td>
-                <td>{{ t.due_date }}
+                <!-- Due Date -->
+                <td>{{ t.due_date }} </td>
+                <!-- Task Status -->
+                <td>
                     {% if t.is_complete %}
                         Complete
                     {% else %}
                         Incomplete
                     {% endif %}
                 </td>
-                <td>{% for emp in t.employee_set.all %} 
+                <!-- Assigned Employees -->
+                <td>
+                    {% for emp in t.employee_set.all %} 
                     {{ emp.user.first_name }} {{ emp.user.last_name }} &nbsp
                     {% endfor %}
                 </td>  
