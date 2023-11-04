@@ -167,22 +167,20 @@ def employee_stats(request):
         form = employeeIdSearch(request.POST)
         
         if form.is_valid():
+           
             input_id = form.cleaned_data['employee_id'].strip()
             validate_id(input_id, form)
-            # This works, but now it has to  actually retrieve data from the database
-            print(f'ID: {input_id} was submitted')
             # get tasks
             employee = Employee.objects.get(employee_id=input_id)
-            tasks = employee.Tasks.filter()
+            tasks = employee.Tasks.all()
 
-            print(tasks)
-
-            return HttpResponseRedirect('employee_stats', employee=input_id)
+            return render(request, 'employee_stats.html', {'form': form, 
+                                                           'tasks': tasks, 
+                                                           'employee': employee})
     else:
         form = employeeIdSearch()
 
     return render(request, 'employee_stats.html', {'form' : form })
-
 
 
 
