@@ -174,10 +174,11 @@ def employee_stats(request):
             # get tasks
             employee = Employee.objects.get(employee_id=input_id)
             tasks = employee.Tasks.all()
-
+            name = f'{employee.user.first_name} {employee.user.last_name}' 
             return render(request, 'employee_stats.html', {'form': form, 
                                                            'tasks': tasks, 
-                                                           'employee': employee})
+                                                           'employee': employee,
+                                                           'employee_name': name})
     else:
         form = employeeIdSearch()
 
