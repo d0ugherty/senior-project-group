@@ -167,12 +167,25 @@ def employee_stats(request):
             employee_id = form.cleaned_data['employee_id'].strip()
             validate_id(employee_id, form)
             # This works, but now it has to  actually retrieve data from the database
-            print("id has been submitted")
+            print(f'ID: {employee_id} was submitted')
             return HttpResponseRedirect('employee_stats', employee=employee_id)
     else:
         form = employeeIdSearch()
 
     return render(request, 'employee_stats.html', {'form' : form })
+
+"""
+    View for retrieving and displaying the employee statistics
+
+"""
+def get_employee_stats(request, emp_id):
+    if request.method == 'POST':
+        pass
+
+
+"""
+    Add Task
+"""
 
 def add_task(request):
     if request.method=='POST':

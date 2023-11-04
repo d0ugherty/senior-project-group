@@ -23,8 +23,13 @@ class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=250)
 
+"""
+    Employee ID Input Field
+
+    Used for getting employee stats
+"""
 class employeeIdSearch(forms.Form):
-    employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)
+    employee_id = forms.CharField(label="Enter Employee ID Number",max_length=100, required=False)
 
 
 class updateTask(forms.Form):
