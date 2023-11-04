@@ -206,10 +206,15 @@ def edit_task(request, task_id):
     if request.method=='POST':
         task.task_name = request.POST.get('task_name')
         task.task_description = request.POST.get('description')
+       
         project = request.POST.get('project')
-        project = Project.objects.get(pk=project)
-        task.project = project
-        task.save()
+        print(project)
+        if project != '':
+            project = Project.objects.get(pk=project)
+            task.project = project
+        else:
+            task.project = None
+    task.save()
 
 
 

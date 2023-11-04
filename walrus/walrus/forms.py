@@ -24,12 +24,11 @@ class addTask(forms.Form):
     description = forms.CharField(max_length=250)
 
 class editTask(forms.Form):
-    task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250)
-    project = forms.ModelChoiceField(queryset=Project.objects.all())
-    employee = forms.ModelChoiceField(queryset=Employee.objects.all())
-    def __str__(self):
-        return self.project 
+    task_name = forms.CharField(max_length=100,required=False)
+    description = forms.CharField(max_length=250,required=False)
+    project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
+     
 
 class employeeIdSearch(forms.Form):
     employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)
