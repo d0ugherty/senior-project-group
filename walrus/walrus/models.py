@@ -28,17 +28,15 @@ class Task(models.Model):
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
 
-    # May or may not be used
+    # Calculates how long an employee has spend on a task
+    # Might use the time_spent model instead
     def time_on_task(self):
         if self.Date_assigned_to == None:
             return None
-        # cannot subtract naive and aware datetimes
-        #date_assigned = timezone.make_naive(self.Date_assigned_to, timezone=timezone.utc)
         if self.is_complete:
             return self.date_completed - self.Date_assigned_to
         elif self.Date_assigned_to != None and self.date_completed == None:
             return datetime.now(timezone.utc) - self.Date_assigned_to
-
     
 
 class Task_Update(models.Model):

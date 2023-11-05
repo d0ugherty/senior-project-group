@@ -170,7 +170,10 @@ def employee_stats(request):
         if form.is_valid():
            
             input_id = form.cleaned_data['employee_id'].strip()
-            validate_id(input_id, form)
+            if (not is_valid_id(input_id)):
+                return render(request, 'employee_stats.html', {'form' : form,
+                                                                'show_error': True})
+
 
             # get tasks
             employee = Employee.objects.get(employee_id=input_id)
