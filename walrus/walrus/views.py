@@ -20,8 +20,15 @@ from datetime import datetime,timezone
 def home_redirect(request):
     user=request.user
     if user.is_authenticated:
-        url = 'home/' + str(user.employee.pk)
-        return redirect(url)
+       today = datetime.today()
+
+       
+
+    url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
+       
+
+
+    return redirect(url)
     return render(request, 'home.html')
 
 
@@ -59,7 +66,7 @@ def list_tasks(request):
         'tasks': tasks, 'form':form, 
     })
 
-def home_page(request, employee_id):
+def home_page(request, employee_id, day, month, year):
 
 
     '''
