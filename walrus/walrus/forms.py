@@ -9,8 +9,7 @@ class DateInput(forms.DateInput):
 STATUS_CHOICES = (
 ('n/a', 'n/a'),
 ('incomplete', 'incomplete'),
-('complete', 'complete'),
-('In Progress', 'In Progress'))
+('complete', 'complete'),)
 
 class taskSearchForm(forms.Form):
     task_name = forms.CharField(label="Task name", max_length=100, required=False)

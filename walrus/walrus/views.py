@@ -171,6 +171,7 @@ def employee_stats(request):
            
             input_id = form.cleaned_data['employee_id'].strip()
             validate_id(input_id, form)
+
             # get tasks
             employee = Employee.objects.get(employee_id=input_id)
             tasks = employee.Tasks.all()

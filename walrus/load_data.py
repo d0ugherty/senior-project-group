@@ -38,20 +38,34 @@ task2.save()
 """
 
 # Task 3
+# This task is complete 
 task3 = Task()
 task3.task_name = "Setup Christmas light display"
 task3.is_complete = True
+task3.date_created = '2023-10-24 11:25:20'
+task3.Date_assigned_to = '2023-10-25 09:30:59'
+task3.due_date = '2023-10-26 23:59:59'
+task3.date_completed = '2023-10-25 14:13:27'
 task3.save()
 
-#Task 4
+# Task 4
+# This task is in progress
 task4 = Task()
 task4.task_name = "Setup reindeer display"
+task4.date_created = '2023-10-24 11:25:20'
+task4.Date_assigned_to = '2023-10-25 09:30:59'
+task4.due_date = '2023-10-26 23:59:59'
+task4.date_completed = None
 task4.is_complete = False
 task4.save()
 
 #Task 5
 task5 = Task()
 task5.task_name = "Setup Santa Clause display"
+task5.date_created = '2023-10-24 11:25:20'
+task5.Date_assigned_to = '2023-10-25 09:30:59'
+task5.due_date = '2023-10-26 23:59:59'
+task5.date_completed = None
 task5.is_complete = False
 task5.save()
 

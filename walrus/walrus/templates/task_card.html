@@ -24,13 +24,9 @@
                     {% endif %}
                 </td>
                 <!-- Date Task Was Assigned -->
-                <td>
-                    {{ task.Date_assigned_to }}
-                </td>
+                <td> {{ task.Date_assigned_to }} </td>
                 <!-- Due date for the task -->
-                <td>
-                    {{ task.due_date }}
-                </td>
+                <td> {{ task.due_date }} </td>
                 <!-- Date task was completed -->
                 <td>
                     {% if task.is_complete %}
@@ -40,9 +36,7 @@
                     {% endif %}
                 </td>
                 <!-- Time spent on the task -->
-                <td>
-                    To be determined
-                </td>
+                <td> {{ task.time_on_task }}</td>
             </tr>
         </tbody>
     </table>

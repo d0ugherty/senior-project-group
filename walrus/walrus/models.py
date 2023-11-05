@@ -1,6 +1,7 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
@@ -26,6 +27,17 @@ class Task(models.Model):
     Date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
+
+    # May or may not be used
+    def time_on_task(self):
+        if self.Date_assigned_to == None:
+            return None
+        # cannot subtract naive and aware datetimes
+        #date_assigned = timezone.make_naive(self.Date_assigned_to, timezone=timezone.utc)
+        if self.is_complete:
+            return self.date_completed - self.Date_assigned_to
+        elif self.Date_assigned_to != None and self.date_completed == None:
+            return datetime.now(timezone.utc) - self.Date_assigned_to
 
     
 
