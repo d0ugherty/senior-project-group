@@ -239,6 +239,7 @@ def edit_task(request, task_id):
                         "message": message
                     }
                 )
+        return render(request, 'manager_home.html')
 
 
 
