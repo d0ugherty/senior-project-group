@@ -240,9 +240,16 @@ def update_task_status(request,task_id):
 
 def shift_switch(request,employee_id):
     employee = Employee.objects.get(pk=employee_id)
-    tasks = employee.Tasks.filter()
+    eShifts = employee.Shifts.filter()
 
     shifts = Shift.filter(to_be_taken=True)
+
+    for e in eShifts:
+        for s in shifts:
+            #check for shift discrepancies
+            #dont show shifts employees can't take
+            if e.start == s.start or e.end == s.end:
+                shifts.remove(s) #I will not be able to test this very well until we have a lot of data
 
 
     return render(request, 'shift_switch.html', {
@@ -250,3 +257,11 @@ def shift_switch(request,employee_id):
         'shifts' : shifts
     })
 
+def swap_shifts(request, employee_id, shift_id):
+    employee = Employee.objects.get(pk=employee_id)
+    shift = Shift.objects.get(pk=shift_id)
+
+    #add the shift to the current employee
+    employee.Shift.append(shift)
+
+    return home_redirect
