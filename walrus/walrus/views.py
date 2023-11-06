@@ -40,8 +40,10 @@ def availability(request, employee_id):
              }
     else:
         dict = {}
-    page = 'home/' + str(request.user.pk)
+#    page = 'home/' + str(request.user.pk)
     #redirect('page')
+
+
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
@@ -249,12 +251,13 @@ def schedule_employee(request):
     avil = None
     if request.method == "POST":
         if "search" in request.POST:
-           
-            id = request.POST.get('employee_id')
-            employee = Employee.objects.get(pk=id)
-            print(employee)
-            avil = employee.availability
-            print(avil)
+            form = employeeDropdownSearch(request.POST)
+            if form.is_valid():
+                employee = form.cleaned_data['employee']
+               
+                print(employee.pk)
+                avil = employee.availability
+                print(avil)
         if "save_shift" in request.POST:
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
@@ -268,7 +271,7 @@ def schedule_employee(request):
 
     
 
-    search_form = employeeIdSearch()
+    search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
 
 
