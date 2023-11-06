@@ -201,14 +201,32 @@ def add_task(request):
             due_date = form.cleaned_data['due_date']
             assign_date = form.cleaned_data['assign_date']
 
-            project = Project.objects.get(project)
-            print(project)
-            newTask = Task(
-                task_name = task_name,
-                task_description = task_description,
-            )
+            #project = Project.objects.get(project)
+          #  newTask = Task(
+           #     task_name = task_name,
+            #    task_description = task_description,
+             #   project = project
+           # )
 
+            fields ={
+                    'task_name': task_name,
+                    'task_description': task_description,
+                    'project': project,
+                    'employee': employee,
+                    'due_date': due_date,
+                    'Date_assigned_to' : assign_date
+            }
+         #print(fields)
+         
+            nonEmptyFields = {}
+            for x in fields:
+                if fields[x] != "":
+                    nonEmptyFields.update({x : fields[x]})
+            print(nonEmptyFields)
+            #newTask.save()
+            newTask = Task(**nonEmptyFields)
             newTask.save()
+           
             return HttpResponseRedirect('/calendar')
     else:
         form = addTask()
