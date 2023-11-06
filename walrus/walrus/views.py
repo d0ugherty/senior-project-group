@@ -238,3 +238,15 @@ def update_task_status(request,task_id):
     form = updateTask()
     return render(request, 'update_task_status.html', {'form':form})
 
+def shift_switch(request,employee_id):
+    employee = Employee.objects.get(pk=employee_id)
+    tasks = employee.Tasks.filter()
+
+    shifts = Shift.filter(to_be_taken=True)
+
+
+    return render(request, 'shift_switch.html', {
+        'employee' : employee,
+        'shifts' : shifts
+    })
+

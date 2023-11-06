@@ -1,0 +1,36 @@
+{% block content %}
+
+<style>
+    .center {
+        text-align: center;
+    }
+
+    fieldset {
+        border: 2px solid rgb(0, 0, 0);
+        width: 400px;
+        margin:auto;
+    }
+
+    .button {
+        padding: 6px 12px;
+    }
+
+    .button1 {
+        float: left;
+    }
+
+    .button2 {
+        float: right;
+    }
+</style>
+
+<body>
+    <div id="form">
+        <h3>Shifts Available:</h3>
+        {% for s in shifts %}
+            <fieldset>
+                
+            </fieldset>
+        {% endfor %}
+    </div>
+</body>
