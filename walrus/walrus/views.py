@@ -165,6 +165,8 @@ def manager_home_redirect(request):
             return HttpResponseRedirect(destination)
         case "/employee_stats/":
             return HttpResponseRedirect(destination)
+        case "/create_project/":
+            return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
 
