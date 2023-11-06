@@ -40,7 +40,8 @@ def availability(request, employee_id):
              }
     else:
         dict = {}
-
+    page = 'home/' + str(request.user.pk)
+    #redirect('page')
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
