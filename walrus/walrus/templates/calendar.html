@@ -1,4 +1,30 @@
 {% block content %}
+
+<div class="clearfix">
+	<a class="btn btn-info left" href="{% url 'calendar' %}?{{ prev_month }}"> Previous Month </a>
+	<a class="btn btn-info right" href="{% url 'calendar' %}?{{ next_month }}"> Next Month </a>
+</div>
+<style>
+  .left {
+    float: left;
+  }
+  
+  .right {
+    float: right;
+  }
+  
+  .btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+  }
+  
+  .clearfix {
+    margin: 15px;
+  }
+</style>
+
 {{ calendar }}
 <style>
     .calendar {
