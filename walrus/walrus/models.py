@@ -1,6 +1,7 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
@@ -30,6 +31,16 @@ class Task(models.Model):
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
 
+    # Calculates how long an employee has spend on a task
+    # Might use the time_spent model instead
+    def time_on_task(self):
+        if self.Date_assigned_to == None:
+            return None
+        if self.is_complete:
+            return self.date_completed - self.Date_assigned_to
+        elif self.Date_assigned_to != None and self.date_completed == None:
+            return datetime.now(timezone.utc) - self.Date_assigned_to
+    
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)

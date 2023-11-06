@@ -141,11 +141,11 @@ def get_date(req_day):
     return datetime.today()
 
 """
-    Loads the manager home page
+    Loads the manager tools page
     TO DO: Check for user type
 """
-def load_manager_home(request):
-    return render(request, 'manager_home.html')
+def load_manager_tools(request):
+    return render(request, 'manager_tools.html')
 
 """
     Retrieves the 'destination' name of a button
@@ -157,7 +157,7 @@ def load_manager_home(request):
 
     TO DO: Add more redirects as project progresses
 """
-def manager_home_redirect(request):
+def manager_tools_redirect(request):
     destination = request.POST.get('destination')
     match destination:
         case "/add_task/":
@@ -175,21 +175,44 @@ def manager_home_redirect(request):
     View for the loading employee stats page
 
     search_input is a CharField form and employee_id is an integer type
-    in the database. so validate_id checks if the input is a digit and if so 
+    in the database.
+    
+    validate_id checks if the input is a digit and if so 
     casts the input as an integer
+
 """
+
 def employee_stats(request):
     if request.method == 'POST':
+        
         form = employeeIdSearch(request.POST)
+        
         if form.is_valid():
-            employee_id = form.cleaned_data['employee_id'].strip()
-            validate_id(employee_id, form)
-            print("id has been submitted")
-            return HttpResponseRedirect('employee_stats', employee=employee_id)
+           
+            input_id = form.cleaned_data['employee_id'].strip()
+            if (not is_valid_id(input_id)):
+                return render(request, 'employee_stats.html', {'form' : form,
+                                                                'show_error': True})
+
+
+            # get tasks
+            employee = Employee.objects.get(employee_id=input_id)
+            tasks = employee.Tasks.all()
+            name = f'{employee.user.first_name} {employee.user.last_name}' 
+            return render(request, 'employee_stats.html', {'form': form, 
+                                                           'tasks': tasks, 
+                                                           'employee': employee,
+                                                           'employee_name': name})
     else:
         form = employeeIdSearch()
 
     return render(request, 'employee_stats.html', {'form' : form })
+
+
+
+"""
+    Add Task
+"""
 
 def add_task(request):
     if request.method=='POST':

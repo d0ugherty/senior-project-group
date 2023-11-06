@@ -30,11 +30,10 @@ urlpatterns = [
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task'),
-    path('manager_home/', views.load_manager_home, name='manager_home'),
-    path('manager_home/manager_home_redirect', views.manager_home_redirect, name='manager_home_redirect'),
-    path('employee_stats/', views.employee_stats, name='employee_stats'),
+    path('manager_tools/', views.load_manager_tools, name='manager_tools'),
+    path('manager_tools/manager_tools_redirect', views.manager_tools_redirect, name='manager_tools_redirect'),
     path('home/<int:employee_id>/', views.home_page, name='home_page'),
-    #path('employee_stats/<int:employee_id>', views.get_stats, name="get_stats")
+    path('employee_stats/', views.employee_stats, name='employee_stats'),
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
     path('create_project/', views.create_project, name='create_project'),
 

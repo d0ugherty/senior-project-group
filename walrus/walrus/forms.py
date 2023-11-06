@@ -28,7 +28,7 @@ class addTask(forms.Form):
     assign_date = forms.DateField(label="Assignment Date", widget=DateInput, required=False)
     
 class employeeIdSearch(forms.Form):
-    employee_id = forms.CharField(label="Employee ID Number",max_length=100, required=False)
+    employee_id = forms.CharField(label="Enter Employee ID Number",max_length=100, required=False)
 
 
 class updateTask(forms.Form):
