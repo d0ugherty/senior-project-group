@@ -1,3 +1,7 @@
+<html>
+<body>
+{% include 'notification.html' %}
+
 {% block content %}
 {% if user.is_authenticated %}
 
@@ -7,22 +11,6 @@ Hi {{ user.first_name }}!
   <p><a href="{% url 'logout' %}">Log Out</a></p>
   <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
   {% endif %}
-
-
-  <br> <br>
-  {% for message in messages %}
-  
-  {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-  
-  {{ message }}
-  
-  {% endif %}
-  
-  {% endfor %}
-  <br><br>
-
-
-
 
 <form method="POST">
 
@@ -45,3 +33,7 @@ Hi {{ user.first_name }}!
 {% endfor %}
 </form>
 {% endblock %}
+
+</body>
+</html>
+
