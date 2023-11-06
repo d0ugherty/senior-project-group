@@ -69,6 +69,7 @@ def create_project(request):
         else:
             project = Project(project_name=name,due_date=date)        
         project.save()
+        return HttpResponseRedirect('/manager_home')
 
 
 
@@ -201,33 +202,30 @@ def add_task(request):
             due_date = form.cleaned_data['due_date']
             assign_date = form.cleaned_data['assign_date']
 
-            #project = Project.objects.get(project)
-          #  newTask = Task(
-           #     task_name = task_name,
-            #    task_description = task_description,
-             #   project = project
-           # )
-
+       
+            # Going to loop through each field to make sure its not empty
             fields ={
                     'task_name': task_name,
                     'task_description': task_description,
                     'project': project,
-                    'employee': employee,
                     'due_date': due_date,
                     'Date_assigned_to' : assign_date
             }
-         #print(fields)
-         
             nonEmptyFields = {}
             for x in fields:
                 if fields[x] != "":
                     nonEmptyFields.update({x : fields[x]})
             print(nonEmptyFields)
-            #newTask.save()
+
             newTask = Task(**nonEmptyFields)
             newTask.save()
-           
-            return HttpResponseRedirect('/calendar')
+
+        
+            if employee != "":
+                employee.Tasks.add(newTask)
+
+
+            return HttpResponseRedirect('/manager_home')
     else:
         form = addTask()
 
