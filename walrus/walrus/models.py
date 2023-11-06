@@ -4,6 +4,7 @@ from datetime import date, timedelta
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
+    due_date = models.DateTimeField(blank=True, null=True)
     
 """
 

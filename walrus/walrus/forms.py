@@ -30,3 +30,8 @@ class employeeIdSearch(forms.Form):
 class updateTask(forms.Form):
     description = forms.CharField(max_length=250)
     image = forms.ImageField(label="image",required=False)
+
+
+class projectForm(forms.Form):
+    name = forms.CharField(label="Project Name",max_length=250)
+    due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)

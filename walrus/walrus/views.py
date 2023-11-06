@@ -11,7 +11,7 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask
+from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, projectForm
 from .util import *
 
 from datetime import datetime,timezone
@@ -58,6 +58,23 @@ def list_tasks(request):
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
     })
+
+def create_project(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        date = request.POST.get('due_date')
+        print(date)
+        if date == "":
+            project = Project(project_name=name)
+        else:
+            project = Project(project_name=name,due_date=date)        
+        project.save()
+
+
+
+    form = projectForm()
+    return render(request, 'create_project.html', {'form':form})
+
 
 def home_page(request, employee_id):
 
