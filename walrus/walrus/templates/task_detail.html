@@ -24,8 +24,17 @@
     }
 </style>
 
+<script language="javascript">
+    function hideEdit() {
+        if (user.is_superuser) {
+            document.getElementById("btn1").style.visibility="hidden"
+        }
+    }
+</script>
 
 
+
+<body onload="hideEdit()">
 <div id="form">
     <fieldset> <!--TASK #-->
         <legend><b>Task {{ task.pk }}</b></legend>
@@ -43,11 +52,13 @@
             <!--Fix later this week; won't display correct name when user is an admin-->
         </fieldset> <br>
 
-        <button class="button button1">Edit Task</button>
+        <h1>{{ user.is_superuser }}</h1>
+        
+        <button class="button button1" id="btn1">Edit Task</button>
         <button class="button button2">
             <a href="{% url 'home' %}">Go Back</a>
         </button>
     </fieldset>
 </div>
-
+</body>
 {% endblock %}
