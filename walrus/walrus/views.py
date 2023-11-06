@@ -196,6 +196,13 @@ def add_task(request):
         if form.is_valid():
             task_name = form.cleaned_data['task_name']
             task_description = form.cleaned_data['description']
+            project = form.cleaned_data['project']
+            employee = form.cleaned_data['employee']
+            due_date = form.cleaned_data['due_date']
+            assign_date = form.cleaned_data['assign_date']
+
+            project = Project.objects.get(project)
+            print(project)
             newTask = Task(
                 task_name = task_name,
                 task_description = task_description,
