@@ -306,24 +306,14 @@ def edit_task(request, task_id):
 
          
       
-        return render(request, 'manager_home.html')
-
-
-
-        #messages.success(request, "good message")
-
-
-
-
-
+        return HttpResponseRedirect('/manager_tools')
    
     #print(task.project)
     if task.project != None :
             project = Project.objects.get(pk=task.project.pk)
     else:
         project = ''
-   
-   
+      
     temp = task.employee_set.all()
    
     if temp:

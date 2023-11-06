@@ -37,7 +37,7 @@ urlpatterns = [
     path('home/<int:employee_id>/', views.home_page, name='home_page'),
     path('employee_stats/', views.employee_stats, name='employee_stats'),
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
-    path('manager_home/edit_task/<int:task_id>', views.edit_task, name='edit_task'),
+    path('manager_tools/edit_task/<int:task_id>', views.edit_task, name='edit_task'),
     path('create_project/', views.create_project, name='create_project'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

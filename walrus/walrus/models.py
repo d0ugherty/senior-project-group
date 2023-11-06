@@ -35,12 +35,12 @@ class Task(models.Model):
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
     def time_on_task(self):
-        if self.Date_assigned_to == None:
+        if self.date_assigned_to == None:
             return None
         if self.is_complete:
-            return self.date_completed - self.Date_assigned_to
-        elif self.Date_assigned_to != None and self.date_completed == None:
-            return datetime.now(timezone.utc) - self.Date_assigned_to
+            return self.date_completed - self.date_assigned_to
+        elif self.date_assigned_to != None and self.date_completed == None:
+            return datetime.now(timezone.utc) - self.date_assigned_to
         
 
 class Task_Update(models.Model):
