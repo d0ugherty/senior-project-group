@@ -268,11 +268,67 @@ def schedule_employee(request):
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
             employee.shifts.add(shift)
+        if "select_week_form" in request.POST:
+            form = selectWeek(request.POST)
+            if form.is_valid():
+                date = form.cleaned_data['date']
+                print(date.weekday())
+                
+                start_date = None
+                end_date = None
+                if (date.weekday() == 0):
+                    start_date = date-timedelta(1)
+                    end_date = date + timedelta(5)
 
-    
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 1):
+                    start_date = date-timedelta(2)
+                    end_date = date + timedelta(4)
+
+                    print(start_date)
+                    print(end_date)
+
+                if (date.weekday() == 2):
+                    start_date = date-timedelta(3)
+                    end_date = date + timedelta(3)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 3):
+                    start_date = date-timedelta(4)
+                    end_date = date + timedelta(2)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 4):
+                    start_date = date-timedelta(5)
+                    end_date = date + timedelta(1)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 5):
+                    start_date = date-timedelta(6)
+                    end_date = date 
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 6):
+                    start_date = date
+                    end_date = date + timedelta(6)
+
+
+
+                    print(start_date)
+                    print(end_date)
+            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1))))
+
+            print(shifts)
 
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
+    select_week_form = selectWeek()
 
-
-    return render(request, 'schedule_employee.html', {'search_form':search_form, 'avil':avil, 'schedule_form':schedule_form})
+    return render(request, 'schedule_employee.html', 
+                  {'search_form':search_form, 'avil':avil, 
+                   'schedule_form':schedule_form, 'select_week_form':select_week_form,
+                   'select_week_form':select_week_form })

@@ -21,3 +21,13 @@
     {{ schedule_form.as_p }}
     <button name="save_shift"> Submit </button>
     </form>
+
+
+    <form method="POST">
+
+        <h3>Select a week</h3>
+    
+        {% csrf_token %}
+    {{ select_week_form.as_p }}
+    <button name="select_week_form"> Submit </button>
+    </form>

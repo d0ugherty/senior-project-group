@@ -73,3 +73,7 @@ class scheduleEmployee(forms.Form):
     date = forms.DateField(label="Date", widget=DateInput, required=False)
     start_time = forms.ChoiceField(choices=TIME_CHOICES)
     end_time = forms.ChoiceField(choices=TIME_CHOICES)
+
+
+class selectWeek(forms.Form):
+    date = forms.DateField(label="Due Date", widget=DateInput, required=False)
