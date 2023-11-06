@@ -69,7 +69,7 @@ def create_project(request):
         else:
             project = Project(project_name=name,due_date=date)        
         project.save()
-        return HttpResponseRedirect('/manager_home')
+        return HttpResponseRedirect('/manager_tools')
 
 
 
@@ -243,12 +243,12 @@ def add_task(request):
             newTask = Task(**nonEmptyFields)
             newTask.save()
 
-        
-            if employee != "":
+            print(employee)
+            if employee != None:
                 employee.Tasks.add(newTask)
 
 
-            return HttpResponseRedirect('/manager_home')
+            return HttpResponseRedirect('/manager_tools')
     else:
         form = addTask()
 
