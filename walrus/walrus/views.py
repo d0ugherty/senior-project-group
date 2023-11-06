@@ -17,6 +17,11 @@ from .util import *
 from datetime import datetime,timezone
 
 from django.contrib import messages
+# Imports for notifications
+from walrus.admin import SendNotificationForm
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 
 
 # after user logs in this redirects them to home page
@@ -201,9 +206,7 @@ def add_task(request):
 Employee will need to be changed to allow for multiple employees to appear
 '''
 
-from walrus.admin import SendNotificationForm
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+
 
 
 def edit_task(request, task_id):
@@ -222,43 +225,21 @@ def edit_task(request, task_id):
         else:
             task.project = None
         task.save()
-        
-        
-        #
-        # n = Notifications(message="MESSAGE")
-        #n.save()
-        # f2 = SendNotificationForm()
-        #f2.message = "test"
+
+    # Used for notifications
+
         message = "hello"
-
-        '''
-        notification = Notifications.objects.create(message=message)
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-                    "notifications", {
-                        "type": "send_notification",
-                        "message": message
-                    }
-                )
-
-
-        '''
-
-
         channel_layer = get_channel_layer()
         # Trigger message sent to group
         async_to_sync(channel_layer.group_send)(
-            str(1),
+            str(1), # uses an employees primary key
             {
                 "type": "send_notification",
                 "message": message
             }
         )
 
-        
-
-
-       
+         
       
         return render(request, 'manager_home.html')
 
