@@ -29,7 +29,8 @@ Hi {{ user.first_name }}!
 
 <a>Description </a>
 <br>
-<button type="submit" name="{{x}}"> Clock-in </button> <br><br>
+<button type="submit" name="{{x}} clock"> Clock-in </button> <button type="submit" name="{{x}} complete"> Task complete </button> <br><br>
+<br><br>
 {% endfor %}
 </form>
 {% endblock %}

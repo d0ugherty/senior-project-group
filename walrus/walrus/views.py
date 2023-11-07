@@ -104,19 +104,26 @@ def home_page(request, employee_id, day, month, year):
     employee = Employee.objects.get(pk=employee_id)
 
     # should filter all tasks that have not been completed
-    tasks =  employee.Tasks.filter()
+
+    # date from url
+    screen_date = date(year,month,day)
+    print(screen_date)
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
    #print(employee)
    # print(tasks)
-    test = 1
+    print(datetime.today())
+    print(datetime.min)
+
+
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
         # I just have the buttons named as the task object they are associated with
-        #print(request.POST)
+        print(request.POST)
        
         for x in tasks:
-            #print (str(x) + "complete")
-
-            if str(x) in request.POST:
+            # print(str(x) + " complete")            
+            # each button is labeled with either clock or complete so we know what to do
+            if str(x) + " clock" in request.POST:
                 print(str(employee_id))
                 #Getting the Time_spent object associated with the task and employee
                 if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
@@ -128,8 +135,12 @@ def home_page(request, employee_id, day, month, year):
                     time_record = Time_Spent(employee=employee, task=x)
                     time_record.save()
                     adjust_clock_in(time_record)
+            
+            elif str(x) + " complete" in request.POST:
+                x.is_complete = True
+                x.save()
 
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks})
 
 class CalendarView(generic.ListView):
     model = Task
