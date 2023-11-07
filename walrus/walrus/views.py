@@ -11,10 +11,18 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, projectForm
+from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, editTask, projectForm
 from .util import *
 
 from datetime import datetime,timezone
+
+from django.contrib import messages
+# Imports for notifications
+from walrus.admin import SendNotificationForm
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+
 
 # after user logs in this redirects them to home page
 def home_redirect(request):
@@ -241,7 +249,7 @@ def add_task(request):
                     'task_description': task_description,
                     'project': project,
                     'due_date': due_date,
-                    'Date_assigned_to' : assign_date
+                    'date_assigned_to' : assign_date
             }
             nonEmptyFields = {}
             for x in fields:
@@ -255,7 +263,16 @@ def add_task(request):
             print(employee)
             if employee != None:
                 employee.Tasks.add(newTask)
-
+                message = "You have been assigned a new task: " + str(newTask.task_name)
+                channel_layer = get_channel_layer()
+                # Trigger message sent to group
+                async_to_sync(channel_layer.group_send)(
+                    str(employee.pk), # uses an employees primary key
+                    {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
 
             return HttpResponseRedirect('/manager_tools')
     else:
@@ -266,6 +283,74 @@ def add_task(request):
     'add_task.html',
     {'form': form}
     )
+
+
+'''
+Employee will need to be changed to allow for multiple employees to appear
+'''
+
+
+
+
+def edit_task(request, task_id):
+
+    task = Task.objects.get(pk=task_id) 
+    if request.method=='POST':
+        form = addTask(request.POST)
+        if form.is_valid():
+            task.task_name = form.cleaned_data['task_name']
+            task.task_description = form.cleaned_data['description']
+            task.project = form.cleaned_data['project']
+            employee = form.cleaned_data['employee']
+            task.due_date = form.cleaned_data['due_date']
+            task.date_assigned_to = form.cleaned_data['assign_date']
+
+            if employee == None:
+                task.employee_set.clear()
+            else:
+                employee.Tasks.add(task)
+
+            # Used for notifications
+                message = "Your task '" + str(task.task_name) + "' has been edited"
+                channel_layer = get_channel_layer()
+                # Trigger message sent to group
+                async_to_sync(channel_layer.group_send)(
+                    str(employee.pk), # uses an employees primary key
+                    {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
+
+            task.save()
+            # Going to loop through each field to make sure its not empty
+            
+
+        return HttpResponseRedirect('/manager_tools')
+   
+    # employee will need to be fixed later when we allow for multiple employees
+    employees = task.employee_set.all()
+   
+    fields ={
+                    'task_name': task.task_name,
+                    'description': task.task_description,
+                    'project': task.project,
+                    'due_date': task.due_date,
+                    'assign_date' : task.date_assigned_to,
+                    
+            }
+    if employees.count() != 0:
+        fields['employee'] = employees[0]
+
+    nonEmptyFields = {}
+    for x in fields:
+        if fields[x] != "":
+            nonEmptyFields.update({x : fields[x]})
+    print(nonEmptyFields)
+
+    #employee = task.Employee
+    form = addTask(initial=nonEmptyFields)
+    return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)

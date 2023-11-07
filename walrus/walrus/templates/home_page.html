@@ -1,3 +1,7 @@
+<html>
+<body>
+{% include 'notification.html' %}
+
 {% block content %}
 {% if user.is_authenticated %}
 
@@ -29,3 +33,7 @@ Hi {{ user.first_name }}!
 {% endfor %}
 </form>
 {% endblock %}
+
+</body>
+</html>
+
