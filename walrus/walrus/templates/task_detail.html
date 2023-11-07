@@ -12,14 +12,22 @@
     }
 
     .button {
-        padding: 6px 12px;
+        font: 16px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 6px 12px 6px 12px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
     }
 
-    .button1 {
+    .buttonED {
         float: left;
     }
 
-    .button2 {
+    .buttonGB {
         float: right;
     }
 </style>
@@ -50,14 +58,14 @@
             <h1>{{ "" }}</h1> <!--blank space-->
             <a>Assigned To: {{ user.first_name }} {{" "}} {{ user.last_name }} </a>
             <!--Fix later this week; won't display correct name when user is an admin-->
-        </fieldset> <br>
+        </fieldset> <br> <br>
 
-        <h1>{{ user.is_superuser }}</h1>
+        <!--hides button if user is not a superuser-->
+        {% if user.is_superuser %}
+            <button class="button buttonED" id="btn1">Edit Task</button>
+        {% endif %}
         
-        <button class="button button1" id="btn1">Edit Task</button>
-        <button class="button button2">
-            <a href="{% url 'home' %}">Go Back</a>
-        </button>
+        <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
     </fieldset>
 </div>
 </body>
