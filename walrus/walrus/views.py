@@ -94,17 +94,8 @@ def create_project(request):
 
 def home_page(request, employee_id, day, month, year):
 
-
-    '''
-    todays_date = datetime.date.today() # todays date
-    todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
-    # todays_date=date.today().weekday() # week day as an int
-    todays_date=todays_date.weekday()
-    '''
     employee = Employee.objects.get(pk=employee_id)
-
     # should filter all tasks that have not been completed
-
     # date from url
     screen_date = date(year,month,day)
     print(screen_date)
@@ -113,7 +104,6 @@ def home_page(request, employee_id, day, month, year):
    # print(tasks)
     print(datetime.today())
     print(datetime.min)
-
 
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
@@ -314,7 +304,7 @@ def edit_task(request, task_id):
 
     task = Task.objects.get(pk=task_id) 
     if request.method=='POST':
-        form = addTask(request.POST)
+        form = editTask(request.POST)
         if form.is_valid():
             task.task_name = form.cleaned_data['task_name']
             task.task_description = form.cleaned_data['description']
@@ -322,7 +312,13 @@ def edit_task(request, task_id):
             employee = form.cleaned_data['employee']
             task.due_date = form.cleaned_data['due_date']
             task.date_assigned_to = form.cleaned_data['assign_date']
-
+            status = form.cleaned_data['status']
+           # adjusting status
+            if status == 'complete':
+                task.is_complete = True
+            else:
+                task.is_complete = False
+            # removing or adding employees to task
             if employee == None:
                 task.employee_set.clear()
             else:
@@ -348,13 +344,17 @@ def edit_task(request, task_id):
    
     # employee will need to be fixed later when we allow for multiple employees
     employees = task.employee_set.all()
-   
+    if task.is_complete == False:
+        status = 'incomplete'
+    else:
+        status = 'complete'
     fields ={
                     'task_name': task.task_name,
                     'description': task.task_description,
                     'project': task.project,
                     'due_date': task.due_date,
                     'assign_date' : task.date_assigned_to,
+                    'status' : status
                     
             }
     if employees.count() != 0:
@@ -367,7 +367,7 @@ def edit_task(request, task_id):
     print(nonEmptyFields)
 
     #employee = task.Employee
-    form = addTask(initial=nonEmptyFields)
+    form = editTask(initial=nonEmptyFields)
     return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
