@@ -240,7 +240,7 @@ def add_task(request):
                     'task_description': task_description,
                     'project': project,
                     'due_date': due_date,
-                    'Date_assigned_to' : assign_date
+                    'date_assigned_to' : assign_date
             }
             nonEmptyFields = {}
             for x in fields:
@@ -254,7 +254,16 @@ def add_task(request):
             print(employee)
             if employee != None:
                 employee.Tasks.add(newTask)
-
+                message = "You have been assigned a new task: " + str(newTask.task_name)
+                channel_layer = get_channel_layer()
+                # Trigger message sent to group
+                async_to_sync(channel_layer.group_send)(
+                    str(employee.pk), # uses an employees primary key
+                    {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
 
             return HttpResponseRedirect('/manager_tools')
     else:
@@ -291,37 +300,23 @@ def edit_task(request, task_id):
                 task.employee_set.clear()
             else:
                 employee.Tasks.add(task)
+
+            # Used for notifications
+                message = "Your task '" + str(task.task_name) + "' has been edited"
+                channel_layer = get_channel_layer()
+                # Trigger message sent to group
+                async_to_sync(channel_layer.group_send)(
+                    str(employee.pk), # uses an employees primary key
+                    {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
+
             task.save()
             # Going to loop through each field to make sure its not empty
             
-        '''
-        task.task_name = request.POST.get('task_name')
-        task.task_description = request.POST.get('description')
-       
-        project = request.POST.get('project')
-        print(project)
-        if project != '':
-            project = Project.objects.get(pk=project)
-            task.project = project
-        else:
-            task.project = None
-        task.save()
-        '''
-    # Used for notifications
 
-        message = "hello"
-        channel_layer = get_channel_layer()
-        # Trigger message sent to group
-        async_to_sync(channel_layer.group_send)(
-            str(1), # uses an employees primary key
-            {
-                "type": "send_notification",
-                "message": message
-            }
-        )
-
-         
-      
         return HttpResponseRedirect('/manager_tools')
    
     # employee will need to be fixed later when we allow for multiple employees
