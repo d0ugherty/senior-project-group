@@ -93,17 +93,19 @@ def create_project(request):
 
 
 def home_page(request, employee_id, day, month, year):
-
+    screen_date = date(year,month,day)
     employee = Employee.objects.get(pk=employee_id)
+    shift = employee.Shifts.filter(date=screen_date)
+    if shift.first() != None:
+        shift = shift.first()
     # should filter all tasks that have not been completed
     # date from url
-    screen_date = date(year,month,day)
+    print(shift)
     print(screen_date)
     tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
    #print(employee)
    # print(tasks)
-    print(datetime.today())
-    print(datetime.min)
+    
 
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
@@ -130,7 +132,7 @@ def home_page(request, employee_id, day, month, year):
                 x.is_complete = True
                 x.save()
 
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks})
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
     model = Task
