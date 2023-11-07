@@ -277,8 +277,24 @@ Employee will need to be changed to allow for multiple employees to appear
 def edit_task(request, task_id):
 
     task = Task.objects.get(pk=task_id) 
-
     if request.method=='POST':
+        form = addTask(request.POST)
+        if form.is_valid():
+            task.task_name = form.cleaned_data['task_name']
+            task.task_description = form.cleaned_data['description']
+            task.project = form.cleaned_data['project']
+            employee = form.cleaned_data['employee']
+            task.due_date = form.cleaned_data['due_date']
+            task.date_assigned_to = form.cleaned_data['assign_date']
+
+            if employee == None:
+                task.employee_set.clear()
+            else:
+                employee.Tasks.add(task)
+            task.save()
+            # Going to loop through each field to make sure its not empty
+            
+        '''
         task.task_name = request.POST.get('task_name')
         task.task_description = request.POST.get('description')
        
@@ -290,7 +306,7 @@ def edit_task(request, task_id):
         else:
             task.project = None
         task.save()
-
+        '''
     # Used for notifications
 
         message = "hello"
@@ -308,26 +324,28 @@ def edit_task(request, task_id):
       
         return HttpResponseRedirect('/manager_tools')
    
-    #print(task.project)
-    if task.project != None :
-            project = Project.objects.get(pk=task.project.pk)
-    else:
-        project = ''
-      
-    temp = task.employee_set.all()
+    # employee will need to be fixed later when we allow for multiple employees
+    employees = task.employee_set.all()
    
-    if temp:
-        employee = temp [0]
-    else:
-        employee = None
+    fields ={
+                    'task_name': task.task_name,
+                    'description': task.task_description,
+                    'project': task.project,
+                    'due_date': task.due_date,
+                    'assign_date' : task.date_assigned_to,
+                    
+            }
+    if employees.count() != 0:
+        fields['employee'] = employees[0]
 
-    if employee != None :
-                employee = employee
-    else:
-            employee = ''
+    nonEmptyFields = {}
+    for x in fields:
+        if fields[x] != "":
+            nonEmptyFields.update({x : fields[x]})
+    print(nonEmptyFields)
 
     #employee = task.Employee
-    form = editTask(initial={'task_name':task.task_name,'description': task.task_description, 'project':project, 'employee':employee})
+    form = addTask(initial=nonEmptyFields)
     return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
