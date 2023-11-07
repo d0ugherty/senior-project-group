@@ -67,6 +67,7 @@ task5.Date_assigned_to = '2023-10-25 09:30:59'
 task5.due_date = '2023-10-26 23:59:59'
 task5.date_completed = None
 task5.is_complete = False
+task5.to_be_taken= True
 task5.save()
 
 

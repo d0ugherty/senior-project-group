@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from calendar import month_name
 from calendar import HTMLCalendar
 
-from .models import Task
+from .models import Task, Shift
 from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask
 from .util import *
 
@@ -240,16 +240,16 @@ def update_task_status(request,task_id):
 
 def shift_switch(request,employee_id):
     employee = Employee.objects.get(pk=employee_id)
-    eShifts = employee.Shifts.filter()
+    eShifts = employee.Tasks.filter()
 
-    shifts = Shift.filter(to_be_taken=True)
+    shifts = Task.objects.filter(to_be_taken=True)
 
     for e in eShifts:
         for s in shifts:
             #check for shift discrepancies
             #dont show shifts employees can't take
             if e.start == s.start or e.end == s.end:
-                shifts.remove(s) #I will not be able to test this very well until we have a lot of data
+                shifts.exclude(start = s.start, end= s.end) #I will not be able to test this very well until we have a lot of data
 
 
     return render(request, 'shift_switch.html', {
@@ -262,6 +262,6 @@ def swap_shifts(request, employee_id, shift_id):
     shift = Shift.objects.get(pk=shift_id)
 
     #add the shift to the current employee
-    employee.Shift.append(shift)
+    employee.Shifts.append(shift)
 
     return home_redirect

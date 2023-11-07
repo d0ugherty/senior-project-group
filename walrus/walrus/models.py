@@ -28,6 +28,11 @@ class Task(models.Model):
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
 
+    #Shift stuff, gonna see if this works better
+    start = models.CharField(max_length=255, blank=True, null=True)  
+    end = models.CharField(max_length=255, blank=True, null=True)  
+    to_be_taken = models.BooleanField(default=False)
+
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
     def time_on_task(self):
