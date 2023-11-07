@@ -81,13 +81,9 @@ class Calendar(HTMLCalendar):
      IDs are being input as CharFields, this will
      just help to make sure that data entered is valid
 """
-def validate_id(input_id, form):
-     id_str = input_id.strip()
-     if id_str.isdigit():
-          return int(id_str)
-     else:
-          form.add_error('employee_id', 'Please enter a valid ID')
-
+def is_valid_id(input_id):
+       return input_id.strip().isdigit()
+     
 
 def adjust_clock_in(time_record):
                     print("boo")
@@ -108,4 +104,6 @@ def adjust_clock_in(time_record):
                         time_record.in_progress = False
                         time_record.save()
                         print("clock2")
+
+
 
