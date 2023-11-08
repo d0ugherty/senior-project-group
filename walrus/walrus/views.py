@@ -37,6 +37,7 @@ def home_redirect(request):
     return render(request, 'home.html')
 
 
+
 def list_tasks(request):
     try:
         tasks = Task.objects.all()
@@ -88,6 +89,16 @@ def create_project(request):
     form = projectForm()
     return render(request, 'create_project.html', {'form':form})
 
+
+def task_detail (request, task_id):
+    form = taskSearchForm()
+
+    task = Task.objects.get(id=task_id)
+
+    return render (request, 'task_detail.html', {
+        'task': task,
+        'form' : form,
+    })
 
 def home_page(request, employee_id, day, month, year):
     screen_date = date(year,month,day)

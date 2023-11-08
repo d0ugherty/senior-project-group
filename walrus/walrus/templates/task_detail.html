@@ -1,0 +1,73 @@
+{% block content %}
+
+<style>
+    .center {
+        text-align: center;
+    }
+
+    fieldset {
+        border: 2px solid rgb(0, 0, 0);
+        width: 400px;
+        margin:auto;
+    }
+
+    .button {
+        font: 16px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 6px 12px 6px 12px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
+    }
+
+    .buttonED {
+        float: left;
+    }
+
+    .buttonGB {
+        float: right;
+    }
+</style>
+
+<script language="javascript">
+    function hideEdit() {
+        if (user.is_superuser) {
+            document.getElementById("btn1").style.visibility="hidden"
+        }
+    }
+</script>
+
+
+
+<body onload="hideEdit()">
+<div id="form">
+    <fieldset> <!--TASK #-->
+        <legend><b>Task {{ task.pk }}</b></legend>
+
+        <fieldset> <!--TASK DESCRIPTION-->
+            <legend><b>Description</b></legend>
+            <a>{{ task.task_description }}</a>
+        </fieldset> <br>
+        
+        <fieldset> <!--TASK INFO-->
+            <legend><b>Task Info</b></legend>
+            <a>Project Name: {{ task.task_name }}</a>
+            <h1>{{ "" }}</h1> <!--blank space-->
+            <a>Assigned To: {{ user.first_name }} {{" "}} {{ user.last_name }} </a>
+            <!--Fix later this week; won't display correct name when user is an admin-->
+        </fieldset> <br> <br>
+
+        <!--hides button if user is not a superuser-->
+        {% if user.is_superuser %}
+            <!--not sure if edit_task works yet, writing this anyways-->
+            <a href="/manager_tools/edit_task/{{ task.pk }}" class="button buttonED" id="btn1">Edit Task</a>
+        {% endif %}
+        
+        <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
+    </fieldset>
+</div>
+</body>
+{% endblock %}
