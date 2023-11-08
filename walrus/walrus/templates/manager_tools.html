@@ -1,12 +1,13 @@
 {% block content %}
 
-<title>Manager Home</title>
-<h3>Manager Home</h3>
+<title>Manager Tools</title>
+<h3>Manager Tools</h3>
 
 <div>
-    <form action="{% url 'manager_home_redirect' %}" method="post">
+    <form action="{% url 'manager_tools_redirect' %}" method="post">
         {% csrf_token %}
         <button type="submit" name="destination" value="/add_task/">Add Tasks</button>
+        <button type="submit" name="destination" value="/create_project/">Create Project</button>
         <button type="submit" name="destination" value="/list_tasks/">View All Tasks</button>
         <button type="submit" name="destination" value="/schedule_employee/">Scheduling</button>
         <button type="submit" name="destination" value="/employee_stats/">Employee Statistics</button>
