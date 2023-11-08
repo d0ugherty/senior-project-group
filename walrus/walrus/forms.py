@@ -93,7 +93,7 @@ class updateTask(forms.Form):
 
 class scheduleEmployee(forms.Form):
     employee = forms.ModelChoiceField(queryset=Employee.objects.all())
-    date = forms.DateField(label="Date", widget=DateInput, required=False)
+    date = forms.DateField(label="Date", widget=DateInput)
     start_time = forms.ChoiceField(choices=TIME_CHOICES)
     end_time = forms.ChoiceField(choices=TIME_CHOICES)
 
