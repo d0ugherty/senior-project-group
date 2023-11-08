@@ -35,6 +35,10 @@ def availability(request, employee_id):
                 employee.availability = availability
                 employee.save()
         set_availability(request, employee)
+        # returning to home page
+        today = datetime.today()
+        return HttpResponseRedirect('/home/' + str(employee_id) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year))
+
     if employee.availability != None:
         dict = {
             'sunday_start' : employee.availability.sunday_start, 'sunday_end' : employee.availability.sunday_end,

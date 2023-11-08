@@ -21,7 +21,7 @@ Todays shift : {{shift.start}} -  {{shift.end}}
 <a href="{%url 'calendar' %}">Calendar </a>
 <br>
 <a href="{% url 'manager_tools' %}">Manager Tools</a>
-<a > RTO/Avilability </a>
+<a  href= "/home/{{ employee.pk }}/availability" >Avilability </a>
 <br>
 <a href="{%url 'list_tasks' %}">All Tasks </a>
 
