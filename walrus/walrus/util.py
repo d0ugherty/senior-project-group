@@ -68,7 +68,7 @@ class Calendar(HTMLCalendar):
 	# formats a month as a table
 	# filter tasks by year and month
 	def formatmonth(self, withyear=True):
-		tasks = Task.objects.filter(date_created__year=self.year, date_created__month=self.month)
+		tasks = Task.objects.filter(due_date__year=self.year, due_date__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
 		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
