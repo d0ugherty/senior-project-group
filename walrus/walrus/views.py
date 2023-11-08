@@ -133,10 +133,12 @@ def task_detail (request, task_id):
     form = taskSearchForm()
 
     task = Task.objects.get(id=task_id)
-
+    updates = task.task_update_set.all()
+    print(updates)
     return render (request, 'task_detail.html', {
         'task': task,
         'form' : form,
+        'updates' : updates,
     })
 
 def home_page(request, employee_id, day, month, year):
@@ -391,7 +393,7 @@ def edit_task(request, task_id):
             # Going to loop through each field to make sure its not empty
             
 
-        return HttpResponseRedirect('/manager_tools')
+        return HttpResponseRedirect('/task_detail/' + str(task_id))
    
     # employee will need to be fixed later when we allow for multiple employees
     employees = task.employee_set.all()

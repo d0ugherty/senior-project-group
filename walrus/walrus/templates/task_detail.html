@@ -71,3 +71,16 @@
 </div>
 </body>
 {% endblock %}
+
+<br><br>
+Updates:
+
+<br>
+{% for update in updates %}
+{{ update.description }}
+<br>
+{% if update.venue_image %}
+<img src="{{ update.venue_image.url }}">
+{% endif %}
+<br>
+{% endfor %}
