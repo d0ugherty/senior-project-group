@@ -90,6 +90,8 @@ user = User.objects.create_user(username="john",
                                 password="johnpassword", 
                                 is_staff=True)
 user.is_superuser = True
+user.first_name = "Matt"
+user.last_name = "Smith"
 user.save()
 e = Employee(user=user, employee_id = 2)
 e.save()
