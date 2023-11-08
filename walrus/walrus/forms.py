@@ -11,6 +11,13 @@ STATUS_CHOICES = (
 ('incomplete', 'incomplete'),
 ('complete', 'complete'),)
 
+EDIT_TASK_STATUS = (
+('incomplete', 'incomplete'),
+('complete', 'complete'),
+
+)
+
+
 class taskSearchForm(forms.Form):
     task_name = forms.CharField(label="Task name", max_length=100, required=False)
     project_name = forms.CharField(label="Project name", max_length=100, required=False)
@@ -29,13 +36,18 @@ class addTask(forms.Form):
     
 class editTask(forms.Form):
     task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250,required=False)
+    description = forms.CharField(max_length=250, required=False)
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
+    due_date = forms.DateField(label="Due Date", widget=DateInput, required=False)
+    assign_date = forms.DateField(label="Assignment Date", widget=DateInput, required=False)
+    status = forms.ChoiceField(choices=EDIT_TASK_STATUS)
+
      
 
 class employeeIdSearch(forms.Form):
     employee_id = forms.CharField(label="Enter Employee ID Number",max_length=100, required=False)
+    status = forms.ChoiceField(choices=STATUS_CHOICES)
 
 
 class updateTask(forms.Form):

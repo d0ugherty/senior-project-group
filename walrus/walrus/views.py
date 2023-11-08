@@ -28,8 +28,12 @@ from asgiref.sync import async_to_sync
 def home_redirect(request):
     user=request.user
     if user.is_authenticated:
-        url = 'home/' + str(user.employee.pk)
-        return redirect(url)
+     today = datetime.today()
+     url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
+       
+
+
+     return redirect(url)
     return render(request, 'home.html')
 
 
@@ -96,31 +100,30 @@ def task_detail (request, task_id):
         'form' : form,
     })
 
-def home_page(request, employee_id):
-
-
-    '''
-    todays_date = datetime.date.today() # todays date
-    todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
-    # todays_date=date.today().weekday() # week day as an int
-    todays_date=todays_date.weekday()
-    '''
+def home_page(request, employee_id, day, month, year):
+    screen_date = date(year,month,day)
     employee = Employee.objects.get(pk=employee_id)
-
+    shift = employee.Shifts.filter(date=screen_date)
+    if shift.first() != None:
+        shift = shift.first()
     # should filter all tasks that have not been completed
-    tasks =  employee.Tasks.filter()
+    # date from url
+    print(shift)
+    print(screen_date)
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
    #print(employee)
    # print(tasks)
-    test = 1
+    
+
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
         # I just have the buttons named as the task object they are associated with
-        #print(request.POST)
+        print(request.POST)
        
         for x in tasks:
-            #print (str(x) + "complete")
-
-            if str(x) in request.POST:
+            # print(str(x) + " complete")            
+            # each button is labeled with either clock or complete so we know what to do
+            if str(x) + " clock" in request.POST:
                 print(str(employee_id))
                 #Getting the Time_spent object associated with the task and employee
                 if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
@@ -132,8 +135,12 @@ def home_page(request, employee_id):
                     time_record = Time_Spent(employee=employee, task=x)
                     time_record.save()
                     adjust_clock_in(time_record)
+            
+            elif str(x) + " complete" in request.POST:
+                x.is_complete = True
+                x.save()
 
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
     model = Task
@@ -307,7 +314,7 @@ def edit_task(request, task_id):
 
     task = Task.objects.get(pk=task_id) 
     if request.method=='POST':
-        form = addTask(request.POST)
+        form = editTask(request.POST)
         if form.is_valid():
             task.task_name = form.cleaned_data['task_name']
             task.task_description = form.cleaned_data['description']
@@ -315,7 +322,13 @@ def edit_task(request, task_id):
             employee = form.cleaned_data['employee']
             task.due_date = form.cleaned_data['due_date']
             task.date_assigned_to = form.cleaned_data['assign_date']
-
+            status = form.cleaned_data['status']
+           # adjusting status
+            if status == 'complete':
+                task.is_complete = True
+            else:
+                task.is_complete = False
+            # removing or adding employees to task
             if employee == None:
                 task.employee_set.clear()
             else:
@@ -341,13 +354,17 @@ def edit_task(request, task_id):
    
     # employee will need to be fixed later when we allow for multiple employees
     employees = task.employee_set.all()
-   
+    if task.is_complete == False:
+        status = 'incomplete'
+    else:
+        status = 'complete'
     fields ={
                     'task_name': task.task_name,
                     'description': task.task_description,
                     'project': task.project,
                     'due_date': task.due_date,
                     'assign_date' : task.date_assigned_to,
+                    'status' : status
                     
             }
     if employees.count() != 0:
@@ -360,7 +377,7 @@ def edit_task(request, task_id):
     print(nonEmptyFields)
 
     #employee = task.Employee
-    form = addTask(initial=nonEmptyFields)
+    form = editTask(initial=nonEmptyFields)
     return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
