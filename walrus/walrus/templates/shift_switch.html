@@ -1,9 +1,9 @@
 {% block content %}
 
 <style>
-    .center {
-        text-align: center;
-    }
+    h3 {text-align: center;}
+
+    .center {text-align: center;}
 
     fieldset {
         border: 2px solid rgb(0, 0, 0);
@@ -12,15 +12,15 @@
     }
 
     .button {
-        padding: 6px 12px;
-    }
-
-    .button1 {
-        float: left;
-    }
-
-    .button2 {
-        float: right;
+        font: 16px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 6px 12px 6px 12px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
     }
 </style>
 
@@ -30,11 +30,11 @@
         {% for s in shifts %}
             <fieldset>
                 <legend><b>{{ s.task_name }}</b></legend>
-                <b>Date: {{ s.due_date }} Start: {{ s.start }} End: {{ s.end }}</b>
+                <b>Date: {{ s.due_date }}   Start: {{ s.start }}   End: {{ s.end }}</b>
                 <br><br>
                 <b>Task: {{ s.task_description }}</b>
                 <br><br>
-                <button class="button">Pick Up Shift</button>
+                <a href="{% url 'home' %}" class="button">Pick Up Shift</button>
             </fieldset>
         {% endfor %}
     </div>

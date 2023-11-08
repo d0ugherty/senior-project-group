@@ -259,9 +259,9 @@ def shift_switch(request,employee_id):
 
 def swap_shifts(request, employee_id, shift_id):
     employee = Employee.objects.get(pk=employee_id)
-    shift = Shift.objects.get(pk=shift_id)
+    shift = Task.objects.get(pk=shift_id)
 
     #add the shift to the current employee
-    employee.Shifts.append(shift)
+    employee.Tasks.add(shift)
 
     return home_redirect
