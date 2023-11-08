@@ -1,9 +1,13 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
+    due_date = models.DateTimeField(blank=True, null=True)
+    def __str__(self):
+        return self.project_name
     
 """
 
@@ -22,11 +26,22 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, default=date.today())
-    Date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
+    
+    date_created = models.DateTimeField(blank=True, auto_now_add=True)
+    date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
 
+    # Calculates how long an employee has spend on a task
+    # Might use the time_spent model instead
+    def time_on_task(self):
+        if self.date_assigned_to == None:
+            return None
+        if self.is_complete:
+            return self.date_completed - self.date_assigned_to
+        elif self.date_assigned_to != None and self.date_completed == None:
+            return datetime.now(timezone.utc) - self.date_assigned_to
+        
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)
@@ -37,8 +52,12 @@ class Task_Update(models.Model):
 
     
     #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
-  
 
+class Shift(models.Model):
+     date = models.DateField(null=True)
+     start = models.CharField(max_length=255, blank=True, null=True)  
+     end = models.CharField(max_length=255, blank=True, null=True)  
+     to_be_taken = models.BooleanField(default=False)
 
 class Employee(models.Model):
 
@@ -56,7 +75,7 @@ class Employee(models.Model):
     employee_id = models.IntegerField(null=True, blank=True)
 
     dept = models.CharField(max_length=255, blank=True, null=True)
-    #Shifts = models.OneToManyField(Shift)
+    Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     #Days_request_off = models.OneToManyField(Request_off)
     #Availability = OneToMany(avilable_time)
 
@@ -68,3 +87,9 @@ class Time_Spent(models.Model):
         in_progress = models.BooleanField(default=False, null=True)
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
+class Notifications (models.Model):
+     message = models.TextField()
+     created_at = models.DateTimeField(auto_now_add=True)
+
+     def __str(self):
+          return self.message

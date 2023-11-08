@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'walrus',
+    'channels',
     'employee.apps.EmployeeConfig',
 ]
 
@@ -140,3 +141,11 @@ LOGOUT_REDIRECT_URL = "home"
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+
+
+# info so we know how to send to
+
+CHANNEL_LAYERS = {
+    "default": {"BACKEND":"channels.layers.InMemoryChannelLayer"},
+
+}
