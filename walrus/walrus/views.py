@@ -11,18 +11,70 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import taskSearchForm, addTask, employeeIdSearch, updateTask, projectForm
+from .forms import *
 from .util import *
 
 from datetime import datetime,timezone
+
+from django.contrib import messages
+# Imports for notifications
+from walrus.admin import SendNotificationForm
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+
+def availability(request, employee_id):
+    print("hello")
+    employee = Employee.objects.get(pk=employee_id)
+    if request.method == "POST":
+        employee = Employee.objects.get(pk=employee_id)
+        if employee.availability == None:
+                #print("does not")
+                availability = Availability()
+                availability.save()
+                employee.availability = availability
+                employee.save()
+        set_availability(request, employee)
+        # returning to home page
+        today = datetime.today()
+        return HttpResponseRedirect('/home/' + str(employee_id) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year))
+
+    if employee.availability != None:
+        dict = {
+            'sunday_start' : employee.availability.sunday_start, 'sunday_end' : employee.availability.sunday_end,
+            'monday_start' : employee.availability.monday_start, 'monday_end' : employee.availability.monday_end,
+            'tuesday_start' : employee.availability.tuesday_start, 'tuesday_end' : employee.availability.tuesday_end,
+            'wednesday_start' : employee.availability.wednesday_start, 'wednesday_end' : employee.availability.wednesday_end,
+            'thursday_start' : employee.availability.thursday_start, 'thursday_end' : employee.availability.thursday_end,
+            'friday_start' : employee.availability.friday_start, 'friday_end' : employee.availability.friday_end,
+            'saturday_start' : employee.availability.saturday_start, 'saturday_end' : employee.availability.saturday_end,
+             }
+    else:
+        dict = {}
+#    page = 'home/' + str(request.user.pk)
+    #redirect('page')
+
+
+    form = availabilityForm(initial=dict)
+    return render(request, 'availability.html', {'form':form})
+
+
+
+
+
 
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
     if user.is_authenticated:
-        url = 'home/' + str(user.employee.pk)
-        return redirect(url)
+     today = datetime.today()
+     url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
+       
+
+
+     return redirect(url)
     return render(request, 'home.html')
+
 
 
 def list_tasks(request):
@@ -77,31 +129,42 @@ def create_project(request):
     return render(request, 'create_project.html', {'form':form})
 
 
-def home_page(request, employee_id):
+def task_detail (request, task_id):
+    form = taskSearchForm()
 
+    task = Task.objects.get(id=task_id)
+    updates = task.task_update_set.all()
+    print(updates)
+    return render (request, 'task_detail.html', {
+        'task': task,
+        'form' : form,
+        'updates' : updates,
+    })
 
-    '''
-    todays_date = datetime.date.today() # todays date
-    todays_date=todays_date-datetime.timedelta(40) # going back a certain amount of days
-    # todays_date=date.today().weekday() # week day as an int
-    todays_date=todays_date.weekday()
-    '''
+def home_page(request, employee_id, day, month, year):
+    screen_date = date(year,month,day)
     employee = Employee.objects.get(pk=employee_id)
-
+    shift = employee.Shifts.filter(date=screen_date)
+    if shift.first() != None:
+        shift = shift.first()
     # should filter all tasks that have not been completed
-    tasks =  employee.Tasks.filter()
+    # date from url
+    print(shift)
+    print(screen_date)
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
    #print(employee)
    # print(tasks)
-    test = 1
+    
+
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
         # I just have the buttons named as the task object they are associated with
-        #print(request.POST)
+        print(request.POST)
        
         for x in tasks:
-            #print (str(x) + "complete")
-
-            if str(x) in request.POST:
+            # print(str(x) + " complete")            
+            # each button is labeled with either clock or complete so we know what to do
+            if str(x) + " clock" in request.POST:
                 print(str(employee_id))
                 #Getting the Time_spent object associated with the task and employee
                 if (Time_Spent.objects.filter(employee=employee_id,task=x.pk)):
@@ -113,8 +176,12 @@ def home_page(request, employee_id):
                     time_record = Time_Spent(employee=employee, task=x)
                     time_record.save()
                     adjust_clock_in(time_record)
+            
+            elif str(x) + " complete" in request.POST:
+                x.is_complete = True
+                x.save()
 
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'test':test})
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
     model = Task
@@ -176,6 +243,8 @@ def manager_tools_redirect(request):
         case "/employee_stats/":
             return HttpResponseRedirect(destination)
         case "/create_project/":
+            return HttpResponseRedirect(destination)
+        case "/schedule_employee/":
             return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
@@ -241,7 +310,7 @@ def add_task(request):
                     'task_description': task_description,
                     'project': project,
                     'due_date': due_date,
-                    'Date_assigned_to' : assign_date
+                    'date_assigned_to' : assign_date
             }
             nonEmptyFields = {}
             for x in fields:
@@ -255,7 +324,16 @@ def add_task(request):
             print(employee)
             if employee != None:
                 employee.Tasks.add(newTask)
-
+                message = "You have been assigned a new task: " + str(newTask.task_name)
+                channel_layer = get_channel_layer()
+                # Trigger message sent to group
+                async_to_sync(channel_layer.group_send)(
+                    str(employee.pk), # uses an employees primary key
+                    {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
 
             return HttpResponseRedirect('/manager_tools')
     else:
@@ -266,6 +344,84 @@ def add_task(request):
     'add_task.html',
     {'form': form}
     )
+
+
+'''
+Employee will need to be changed to allow for multiple employees to appear
+'''
+
+
+
+
+def edit_task(request, task_id):
+
+    task = Task.objects.get(pk=task_id) 
+    if request.method=='POST':
+        form = editTask(request.POST)
+        if form.is_valid():
+            task.task_name = form.cleaned_data['task_name']
+            task.task_description = form.cleaned_data['description']
+            task.project = form.cleaned_data['project']
+            employee = form.cleaned_data['employee']
+            task.due_date = form.cleaned_data['due_date']
+            task.date_assigned_to = form.cleaned_data['assign_date']
+            status = form.cleaned_data['status']
+           # adjusting status
+            if status == 'complete':
+                task.is_complete = True
+            else:
+                task.is_complete = False
+            # removing or adding employees to task
+            if employee == None:
+                task.employee_set.clear()
+            else:
+                employee.Tasks.add(task)
+
+            # Used for notifications
+                message = "Your task '" + str(task.task_name) + "' has been edited"
+                channel_layer = get_channel_layer()
+                # Trigger message sent to group
+                async_to_sync(channel_layer.group_send)(
+                    str(employee.pk), # uses an employees primary key
+                    {
+                        "type": "send_notification",
+                        "message": message
+                    }
+                )
+
+            task.save()
+            # Going to loop through each field to make sure its not empty
+            
+
+        return HttpResponseRedirect('/task_detail/' + str(task_id))
+   
+    # employee will need to be fixed later when we allow for multiple employees
+    employees = task.employee_set.all()
+    if task.is_complete == False:
+        status = 'incomplete'
+    else:
+        status = 'complete'
+    fields ={
+                    'task_name': task.task_name,
+                    'description': task.task_description,
+                    'project': task.project,
+                    'due_date': task.due_date,
+                    'assign_date' : task.date_assigned_to,
+                    'status' : status
+                    
+            }
+    if employees.count() != 0:
+        fields['employee'] = employees[0]
+
+    nonEmptyFields = {}
+    for x in fields:
+        if fields[x] != "":
+            nonEmptyFields.update({x : fields[x]})
+    print(nonEmptyFields)
+
+    #employee = task.Employee
+    form = editTask(initial=nonEmptyFields)
+    return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
@@ -289,3 +445,88 @@ def update_task_status(request,task_id):
     form = updateTask()
     return render(request, 'update_task_status.html', {'form':form})
 
+def schedule_employee(request):
+    avil = None
+    if request.method == "POST":
+        if "search" in request.POST:
+            form = employeeDropdownSearch(request.POST)
+            if form.is_valid():
+                employee = form.cleaned_data['employee']
+               
+                print(employee.pk)
+                avil = employee.availability
+                print(avil)
+        if "save_shift" in request.POST:
+            employee_pk = request.POST.get('employee')
+            employee = Employee.objects.get(pk=employee_pk)
+            date = request.POST.get('date')
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+            print(employee)
+            shift = Shift(date=date, start=start_time, end=end_time)
+            shift.save()
+            employee.Shifts.add(shift)
+        if "select_week_form" in request.POST:
+            form = selectWeek(request.POST)
+            if form.is_valid():
+                date = form.cleaned_data['date']
+                print(date.weekday())
+                
+                start_date = None
+                end_date = None
+                if (date.weekday() == 0):
+                    start_date = date-timedelta(1)
+                    end_date = date + timedelta(5)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 1):
+                    start_date = date-timedelta(2)
+                    end_date = date + timedelta(4)
+
+                    print(start_date)
+                    print(end_date)
+
+                if (date.weekday() == 2):
+                    start_date = date-timedelta(3)
+                    end_date = date + timedelta(3)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 3):
+                    start_date = date-timedelta(4)
+                    end_date = date + timedelta(2)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 4):
+                    start_date = date-timedelta(5)
+                    end_date = date + timedelta(1)
+
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 5):
+                    start_date = date-timedelta(6)
+                    end_date = date 
+                    print(start_date)
+                    print(end_date)
+                if (date.weekday() == 6):
+                    start_date = date
+                    end_date = date + timedelta(6)
+
+
+
+                    print(start_date)
+                    print(end_date)
+            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1))))
+
+            print(shifts)
+
+    search_form = employeeDropdownSearch()
+    schedule_form = scheduleEmployee()
+    select_week_form = selectWeek()
+
+    return render(request, 'schedule_employee.html', 
+                  {'search_form':search_form, 'avil':avil, 
+                   'schedule_form':schedule_form, 'select_week_form':select_week_form,
+                   'select_week_form':select_week_form })
