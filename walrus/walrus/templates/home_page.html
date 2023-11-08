@@ -29,7 +29,7 @@ Todays shift : {{shift.start}} -  {{shift.end}}
 {% for x in tasks %}
 {{x.task_name}} <a href= {% url 'update_task_status' task_id=x.pk %}>Update </a> <br>
 
-<a>Description </a>
+<a href = "/task_detail/{{ x.pk }}">Description </a>
 <br>
 <button type="submit" name="{{x}} clock"> Clock-in </button> <button type="submit" name="{{x}} complete"> Task complete </button> <br><br>
 <br><br>
