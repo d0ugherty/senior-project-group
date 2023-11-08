@@ -28,15 +28,12 @@ from asgiref.sync import async_to_sync
 def home_redirect(request):
     user=request.user
     if user.is_authenticated:
-       today = datetime.today()
-
-       
-
-    url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
+     today = datetime.today()
+     url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
        
 
 
-    return redirect(url)
+     return redirect(url)
     return render(request, 'home.html')
 
 
