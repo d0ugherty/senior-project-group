@@ -7,7 +7,7 @@ django.setup()
 #from walrus.views import *
 #from .models import Employee
 from django.contrib.auth.models import User
-from walrus.models import Employee, Task, Project, Task_Update, Time_Spent, Availability
+from walrus.models import Employee, Task, Project, Task_Update, Time_Spent, Availability, Shift
 Availability.objects.all().delete()
 Time_Spent.objects.all().delete()
 Task_Update.objects.all().delete()
@@ -15,7 +15,7 @@ Employee.objects.all().delete()
 User.objects.all().delete()
 Project.objects.all().delete()
 Task.objects.all().delete()
-
+Shift.objects.all().delete()
 # Update 1
 update_1 = Task_Update(description="Task has been started")
 update_1.save()
@@ -80,7 +80,10 @@ task5.date_completed = None
 task5.is_complete = False
 task5.save()
 
+# shift 1
 
+shift_1 = Shift(date=datetime.datetime.today(), start="7:00am", end="12:00pm")
+shift_1.save()
 # User/Employee 1
 user = User.objects.create_user(username="test", 
                                 email="oconno65@students.rowan.edu", 
@@ -95,7 +98,7 @@ e = Employee(user=user, employee_id = 1)
 e.save()
 e.Tasks.add(task)
 e.Tasks.add(task2)
-
+e.Shifts.add(shift_1)
 # avil
 availability = Availability(sunday_start='Not available', sunday_end = 'Not available', monday_start = '7:00am', monday_end = '12:00pm')
 availability.save()
