@@ -106,6 +106,3 @@ class projectForm(forms.Form):
     due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)
 
 
-class projectForm(forms.Form):
-    name = forms.CharField(label="Project Name",max_length=250)
-    due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)

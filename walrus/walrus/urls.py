@@ -40,7 +40,7 @@ urlpatterns = [
     path('employee_stats/', views.employee_stats, name='employee_stats'),
     path('home/<int:employee_id>/<int:day>/<int:month>/<int:year>', views.home_page, name='home_page'),
     path('home/<int:employee_id>/availability', views.availability, name='availability'),
-    path('schedule_employee', views.schedule_employee, name = 'schedule_employee' ),
+    path('schedule_employee/', views.schedule_employee, name = 'schedule_employee' ),
 
     #path('employee_stats/<int:employee_id>', views.get_stats, name="get_stats")
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),

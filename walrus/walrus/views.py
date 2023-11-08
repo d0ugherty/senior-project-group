@@ -11,10 +11,17 @@ from calendar import month_name
 from calendar import HTMLCalendar
 
 from .models import Task
-from .forms import *, editTask, projectForm
+from .forms import *
 from .util import *
 
 from datetime import datetime,timezone
+
+from django.contrib import messages
+# Imports for notifications
+from walrus.admin import SendNotificationForm
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 
 def availability(request, employee_id):
     print("hello")
@@ -48,11 +55,7 @@ def availability(request, employee_id):
     return render(request, 'availability.html', {'form':form})
 
 
-from django.contrib import messages
-# Imports for notifications
-from walrus.admin import SendNotificationForm
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+
 
 
 
@@ -234,6 +237,8 @@ def manager_tools_redirect(request):
         case "/employee_stats/":
             return HttpResponseRedirect(destination)
         case "/create_project/":
+            return HttpResponseRedirect(destination)
+        case "/schedule_employee/":
             return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
@@ -454,7 +459,7 @@ def schedule_employee(request):
             print(employee)
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
-            employee.shifts.add(shift)
+            employee.Shifts.add(shift)
         if "select_week_form" in request.POST:
             form = selectWeek(request.POST)
             if form.is_valid():

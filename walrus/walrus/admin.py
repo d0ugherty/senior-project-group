@@ -22,7 +22,6 @@ admin.site.register(Time_Spent)
 admin.site.register(Task_Update)
 admin.site.register(Availability)
 admin.site.register(Shift)
-admin.site.register(Shift)
 
 
 class EmployeeInLine(admin.StackedInline):

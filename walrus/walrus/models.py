@@ -58,6 +58,7 @@ class Shift(models.Model):
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
      to_be_taken = models.BooleanField(default=False)
+
 class Availability(models.Model):
     sunday_start = models.CharField(max_length=255, blank=True, null=True)
     sunday_end = models.CharField(max_length=255, blank=True, null=True)
@@ -93,7 +94,7 @@ class Employee(models.Model):
     employee_id = models.IntegerField(null=True, blank=True)
 
     dept = models.CharField(max_length=255, blank=True, null=True)
-    #Shifts = models.OneToManyField(Shift)
+    Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     #Days_request_off = models.OneToManyField(Request_off)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
