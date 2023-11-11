@@ -1,6 +1,18 @@
-{% block content %}
+<style>
+  body {
+    left      : 50%;
+    top       : 50%;
+    position  : absolute;
+    transform : translate(-50%, -50%);
+    background-color:beige;
+    font-size: 30px
+}
+</style>
 
+
+{% block content %}
 <div>
+  <body>
   <form action='{% url "add_task" %}' method="POST">
 
     {% csrf_token %}
@@ -8,7 +20,28 @@
     {{ form.as_p }}
 
     <input type="submit"  value="Create Task">
+    <style> 
+      input[type=text] {
+        padding: 8px 20px;
+        margin: 4px 0;
+        box-sizing: border-box;
+        background-color:lightsteelblue;
+      }
+      select {
+        padding: 8px 20px;
+        border: 2px solid black;
+        border-radius: 4px;
+        background-color:lightsteelblue;
+      }
+      [type="date"] {
+        padding: 8px 20px;
+        margin: 4px 0;
+        box-sizing: border-box;
+        background-color:lightsteelblue;
+      }
+      </style>
   </form>
+</body>
 </div>
 
 {% endblock %}
