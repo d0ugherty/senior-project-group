@@ -6,7 +6,28 @@
     transform : translate(-50%, -50%);
     background-color:beige;
     font-size: 30px
-}
+  }
+  input[type=text] {
+    padding: 8px 20px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    color:#000000;
+  }
+  select {
+    padding: 8px 20px;
+    border: 2px solid black;
+    border-radius: 4px;
+  }
+  [type="date"] {
+    padding: 8px 20px;
+    margin: 4px 0;
+    box-sizing: border-box;
+  }
+  [type="submit"]{
+    padding: 8px 20px;
+    margin: 4px 0;
+    box-sizing: border-box;
+  }
 </style>
 
 
@@ -20,29 +41,6 @@
     {{ form.as_p }}
 
     <input type="submit"  value="Create Task">
-    <style> 
-      input[type=text] {
-        padding: 8px 20px;
-        margin: 4px 0;
-        box-sizing: border-box;
-        color:#000000;
-      }
-      select {
-        padding: 8px 20px;
-        border: 2px solid black;
-        border-radius: 4px;
-      }
-      [type="date"] {
-        padding: 8px 20px;
-        margin: 4px 0;
-        box-sizing: border-box;
-      }
-      [type="submit"]{
-        padding: 8px 20px;
-        margin: 4px 0;
-        box-sizing: border-box;
-      }
-      </style>
   </form>
 </body>
 </div>
