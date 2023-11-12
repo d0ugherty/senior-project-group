@@ -46,6 +46,7 @@ urlpatterns = [
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
     path('manager_tools/edit_task/<int:task_id>', views.edit_task, name='edit_task'),
     path('create_project/', views.create_project, name='create_project'),
+    path('home/<int:employee_id>/profile', views.profile, name='profile'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

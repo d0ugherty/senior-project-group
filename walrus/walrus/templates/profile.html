@@ -1,0 +1,20 @@
+<h3>Hello</h3>
+{% if user.employee.profile_pic %}
+<img src=" /media/{{ user.employee.profile_pic }} "
+width="500" 
+height="500" >
+
+{% else %}
+<img src="/media/images/profile pic.jpg_large" 
+width="200" 
+height="200" >
+{% endif %}
+<br>
+{{ user.first_name }} {{ user.last_name}}
+<br>
+{{user.email}}
+<br>
+{% if user.employee.phone_number %}
+{{user.employee.phone_number}}
+{% endif %}
+

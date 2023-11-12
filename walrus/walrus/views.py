@@ -60,7 +60,11 @@ def availability(request, employee_id):
 
 
 
+def profile(request, employee_id):
 
+    user = request.user
+
+    return render (request, 'profile.html', {'user':user})
 
 
 # after user logs in this redirects them to home page
@@ -180,7 +184,10 @@ def home_page(request, employee_id, day, month, year):
             elif str(x) + " complete" in request.POST:
                 x.is_complete = True
                 x.save()
+#    if request.htmx:
+ #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
+  #  else:
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
