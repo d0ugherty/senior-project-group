@@ -106,3 +106,5 @@ class projectForm(forms.Form):
     due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)
 
 
+class change_profile_image_Form(forms.Form):
+    profile_pic = forms.ImageField(label="image",required=False)

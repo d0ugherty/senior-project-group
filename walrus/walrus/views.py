@@ -61,10 +61,26 @@ def availability(request, employee_id):
 
 
 def profile(request, employee_id):
-
     user = request.user
 
-    return render (request, 'profile.html', {'user':user})
+    # getting and changing the profile pic
+    if request.method == 'POST':
+        print(request.POST)
+        if 'change picture' in request.POST:
+            form = change_profile_image_Form(request.POST, request.FILES)
+            if form.is_valid():
+                image = form.cleaned_data.get('profile_pic')
+                user.employee.profile_pic = image
+                user.employee.save()
+        if 'remove' in request.POST:
+            print("REMOVING")
+            user.employee.profile_pic = None
+            user.employee.save()
+
+
+    
+    pic_form = change_profile_image_Form()
+    return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
 
 
 # after user logs in this redirects them to home page
