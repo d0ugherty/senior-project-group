@@ -73,7 +73,6 @@ def profile(request, employee_id):
                 user.employee.profile_pic = image
                 user.employee.save()
         if 'remove' in request.POST:
-            print("REMOVING")
             user.employee.profile_pic = None
             user.employee.save()
 
