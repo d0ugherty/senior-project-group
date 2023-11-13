@@ -529,7 +529,9 @@ def schedule_employee(request):
     return render(request, 'schedule_employee.html', 
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
-                   'select_week_form':select_week_form })def shift_switch(request,employee_id):
+                   'select_week_form':select_week_form })
+
+def shift_switch(request,employee_id):
     employee = Employee.objects.get(pk=employee_id)
     eShifts = employee.Tasks.filter()
 
