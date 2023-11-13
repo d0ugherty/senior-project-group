@@ -24,6 +24,12 @@
     }
 </style>
 
+<script>
+    function addShift(swap) {
+        employee.Tasks.add(swap)
+    }
+</script>
+
 <body>
     <div id="form">
         <h3>Shifts Available:</h3>
@@ -34,7 +40,7 @@
                 <br><br>
                 <b>Task: {{ s.task_description }}</b>
                 <br><br>
-                <a href="{% url 'home' %}" class="button">Pick Up Shift</button>
+                <a onclick="addShift(s)" class="button">Pick Up Shift</button>
             </fieldset>
         {% endfor %}
     </div>

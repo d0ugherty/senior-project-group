@@ -49,7 +49,7 @@ class Calendar(HTMLCalendar):
 	# formats a day as a td
 	# filter tasks by day
 	def formatday(self, day, tasks):
-		tasks_per_day = tasks.filter(date_created__day=day)
+		tasks_per_day = tasks.filter(due_date__day=day)
 		d = ''
 		for task in tasks_per_day:
 			d += f'<li> {task.task_name} </li>'
@@ -68,7 +68,7 @@ class Calendar(HTMLCalendar):
 	# formats a month as a table
 	# filter tasks by year and month
 	def formatmonth(self, withyear=True):
-		tasks = Task.objects.filter(date_created__year=self.year, date_created__month=self.month)
+		tasks = Task.objects.filter(due_date__year=self.year, due_date__month=self.month)
 
 		cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
 		cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
@@ -104,6 +104,34 @@ def adjust_clock_in(time_record):
                         time_record.in_progress = False
                         time_record.save()
                         print("clock2")
+
+def set_availability(request,employee):
+     print("called")
+            
+     employee.availability.sunday_start = request.POST.get('sunday_start')
+     employee.availability.sunday_end = request.POST.get('sunday_end')
+
+     employee.availability.monday_start = request.POST.get('monday_start')
+     employee.availability.monday_end = request.POST.get('monday_end')
+
+     employee.availability.tuesday_start = request.POST.get('tuesday_start')
+     employee.availability.tuesday_end = request.POST.get('tuesday_end')
+
+     employee.availability.wednesday_start = request.POST.get('wednesday_start')
+     employee.availability.wednesday_end = request.POST.get('wednesday_end')
+
+     employee.availability.thursday_start = request.POST.get('thursday_start')
+     employee.availability.thursday_end = request.POST.get('thursday_end')
+
+     employee.availability.friday_start = request.POST.get('friday_start')
+     employee.availability.friday_end = request.POST.get('friday_end')
+
+     employee.availability.saturday_start = request.POST.get('saturday_start')
+     employee.availability.saturday_end = request.POST.get('saturday_end')
+
+     #print( employee.availability.sunday_start)
+     employee.availability.save()
+     #print(sunday_start)
 
 
 

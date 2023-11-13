@@ -1,3 +1,7 @@
+<html>
+<body>
+{% include 'notification.html' %}
+
 {% block content %}
 {% if user.is_authenticated %}
 
@@ -12,10 +16,12 @@ Hi {{ user.first_name }}!
 
 {% csrf_token %}
 <br>
+Todays shift : {{shift.start}} -  {{shift.end}}
+<br><br>
 <a href="{%url 'calendar' %}">Calendar </a>
 <br>
 <a href="{% url 'manager_tools' %}">Manager Tools</a>
-<a > RTO/Avilability </a>
+<a  href= "/home/{{ employee.pk }}/availability" > Avilability </a>
 <br>
 <a href="{%url 'list_tasks' %}">All Tasks </a>
 
@@ -23,9 +29,14 @@ Hi {{ user.first_name }}!
 {% for x in tasks %}
 {{x.task_name}} <a href= {% url 'update_task_status' task_id=x.pk %}>Update </a> <br>
 
-<a>Description </a>
+<a href = "/task_detail/{{ x.pk }}">Description </a>
 <br>
-<button type="submit" name="{{x}}"> Clock-in </button> <br><br>
+<button type="submit" name="{{x}} clock"> Clock-in </button> <button type="submit" name="{{x}} complete"> Task complete </button> <br><br>
+<br><br>
 {% endfor %}
 </form>
 {% endblock %}
+
+</body>
+</html>
+

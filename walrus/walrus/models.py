@@ -5,6 +5,9 @@ from datetime import date, datetime, timedelta
 
 class Project(models.Model):
     project_name = models.CharField(max_length=255 )
+    due_date = models.DateTimeField(blank=True, null=True)
+    def __str__(self):
+        return self.project_name
     
 """
 
@@ -23,8 +26,9 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, default=date.today())
-    Date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
+    
+    date_created = models.DateTimeField(blank=True, auto_now_add=True)
+    date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
 
@@ -36,13 +40,13 @@ class Task(models.Model):
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
     def time_on_task(self):
-        if self.Date_assigned_to == None:
+        if self.date_assigned_to == None:
             return None
         if self.is_complete:
-            return self.date_completed - self.Date_assigned_to
-        elif self.Date_assigned_to != None and self.date_completed == None:
-            return datetime.now(timezone.utc) - self.Date_assigned_to
-    
+            return self.date_completed - self.date_assigned_to
+        elif self.date_assigned_to != None and self.date_completed == None:
+            return datetime.now(timezone.utc) - self.date_assigned_to
+        
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)
@@ -59,6 +63,25 @@ class Shift(models.Model):
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
      to_be_taken = models.BooleanField(default=False)
+
+class Availability(models.Model):
+    sunday_start = models.CharField(max_length=255, blank=True, null=True)
+    sunday_end = models.CharField(max_length=255, blank=True, null=True)
+    monday_start = models.CharField(max_length=255, blank=True, null=True)
+    monday_end = models.CharField(max_length=255, blank=True, null=True)
+    tuesday_start = models.CharField(max_length=255, blank=True, null=True)
+    tuesday_end = models.CharField(max_length=255, blank=True, null=True)
+    wednesday_start = models.CharField(max_length=255, blank=True, null=True)
+    wednesday_end = models.CharField(max_length=255, blank=True, null=True)
+    thursday_start = models.CharField(max_length=255, blank=True, null=True)
+    thursday_end = models.CharField(max_length=255, blank=True, null=True)
+    friday_start = models.CharField(max_length=255, blank=True, null=True)
+    friday_end = models.CharField(max_length=255, blank=True, null=True)
+    saturday_start = models.CharField(max_length=255, blank=True, null=True)
+    saturday_end = models.CharField(max_length=255, blank=True, null=True)
+
+
+
 
 class Employee(models.Model):
 
@@ -78,7 +101,7 @@ class Employee(models.Model):
     dept = models.CharField(max_length=255, blank=True, null=True)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     #Days_request_off = models.OneToManyField(Request_off)
-    #Availability = OneToMany(avilable_time)
+    availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
 
 
@@ -88,3 +111,9 @@ class Time_Spent(models.Model):
         in_progress = models.BooleanField(default=False, null=True)
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
+class Notifications (models.Model):
+     message = models.TextField()
+     created_at = models.DateTimeField(auto_now_add=True)
+
+     def __str(self):
+          return self.message
