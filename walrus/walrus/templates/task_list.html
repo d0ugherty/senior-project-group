@@ -1,3 +1,8 @@
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
 <form method="POST">
      {% csrf_token %}
      {{ form.as_p }}
@@ -24,9 +29,9 @@
                 <!-- Task Status -->
                 <td>
                     {% if t.is_complete %}
-                        Complete
+                        <p style="background-color:#32cd32;">&nbsp Complete</p>
                     {% else %}
-                        Incomplete
+                        <p style="background-color:#ffff00;">&nbsp Incomplete &nbsp</p>
                     {% endif %}
                 </td>
                 <!-- Assigned Employees -->
