@@ -1,22 +1,6 @@
 
-.cards {
-    margin: 0 auto;
-    display: flex;
-    border-radius: 10px;
-    border-color: #000000;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 15px;
-    padding: 1.5%;
-    box-sizing: border-box;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  }
-  
-.cards:hover {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.16), 0 4px 10px rgba(0,0,0,0.23);
-  }
-  
-.btn-primary {
-    margin: 10px; /* Adds space around buttons */
-    /* other styles */
+form {
+  display: flex;
+  flex: column;
+  width: 50%;
 }
