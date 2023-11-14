@@ -7,8 +7,9 @@
 </head>
 {% block content %}
 <title>Manager Tools</title>
-<div id="button-container" class="button-container" >
-        <form action="{% url 'manager_tools_redirect' %}" method="post">
+
+<body class="parent-container">
+        <form class="button-container" action="{% url 'manager_tools_redirect' %}" method="post">
         <h1 class="heading">Manager Tools</h1>
           {% csrf_token %}
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/add_task/">Add Tasks</button>
@@ -18,5 +19,5 @@
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/employee_stats/">Employee Statistics</button>
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/edit_user_info/">Edit User Information</button>
       </form>
-  </div>
+</body>
 {% endblock %}

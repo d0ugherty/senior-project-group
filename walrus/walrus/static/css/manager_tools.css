@@ -1,10 +1,20 @@
-.container {
-
+.button-container {
+  text-align: center;
   margin: auto; /* Center the container */
   padding: 1rem; /* Space inside the container */
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); /* Shadow effect */
   border-radius: 10px; /* Rounded corners */
-  max-width: 20rem; /* Maximum width of the container */
-  width: 30%; /* Make it responsive */
+  background-color: antiquewhite;
+  max-width: 100rem; /* Maximum width of the container */
+  min-width: 20rem;
+  width: 50%; /* Make it responsive */
   box-sizing: border-box; /* Include padding and border in the width */
+}
+
+.parent-container {
+  background-color:lightseagreen ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* This makes the container take the full viewport height */
 }
