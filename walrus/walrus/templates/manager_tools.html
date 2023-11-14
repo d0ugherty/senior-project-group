@@ -1,13 +1,14 @@
 {% load static %}
 
-{% block extra_head %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<head>
+  
   <link rel="stylesheet" href="{% static '/css/manager_tools.css' %}">
-{% endblock %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
 {% block content %}
 <title>Manager Tools</title>
-
-      <form id="button-container" class="button-container" action="{% url 'manager_tools_redirect' %}" method="post">
+<div id="button-container" class="button-container" >
+        <form action="{% url 'manager_tools_redirect' %}" method="post">
         <h1 class="heading">Manager Tools</h1>
           {% csrf_token %}
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/add_task/">Add Tasks</button>
@@ -17,4 +18,5 @@
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/employee_stats/">Employee Statistics</button>
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/edit_user_info/">Edit User Information</button>
       </form>
+  </div>
 {% endblock %}
