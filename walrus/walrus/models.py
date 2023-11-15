@@ -75,9 +75,6 @@ class Availability(models.Model):
     saturday_start = models.CharField(max_length=255, blank=True, null=True)
     saturday_end = models.CharField(max_length=255, blank=True, null=True)
 
-
-
-
 class Employee(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -98,17 +95,21 @@ class Employee(models.Model):
     #Days_request_off = models.OneToManyField(Request_off)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
-
-
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
         in_progress = models.BooleanField(default=False, null=True)
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
+
 class Notifications (models.Model):
      message = models.TextField()
      created_at = models.DateTimeField(auto_now_add=True)
 
      def __str(self):
           return self.message
+     
+class Role(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
