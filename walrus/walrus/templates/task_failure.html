@@ -1,7 +1,25 @@
+<style>
+    body {
+        left      : 50%;
+        top       : 50%;
+        position  : absolute;
+        transform : translate(-50%, -50%);
+        background-color:beige;
+        font-size: 30px
+    }
+    input[type=checkbox]{
+        padding: 8px 20px;
+        margin: 4px 0;
+        background-color:#ff0000;
+    }
+</style>
 <body>
-    <p> WARNING: THIS CANNOT BE UNDONE. READ FULLY! IF UNABLE TO COMPLETE THIS TASK, CLICK THE BUTTON LABLED 'CANNOT COMPLETE'. OTHERWISE, CLICK THE BUTTON LABLED 'GO HOME'</p>
+    <b> WARNING: THIS CANNOT BE UNDONE. <br> 
+        READ FULLY! <br><br>
+        IF UNABLE TO COMPLETE THIS TASK, CLICK THE BOX LABLED 'TASK FAILED'. <br><br>
+        OTHERWISE, CLICK THE BUTTON LABLED 'GO HOME'<br><br></b>
     <a href="{% url 'home' %}" class="button buttonGB">Go Home</a>
-    <form method = "POST">
+    <form method = "POST"><br>
         {% csrf_token %}
         {{ fail_form }}
         <input type="Submit"  value="Submit" >
