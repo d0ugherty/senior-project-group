@@ -1,0 +1,8 @@
+<body>
+    <p> WARNING: THIS CANNOT BE UNDONE. READ FULLY! IF UNABLE TO COMPLETE THIS TASK, CLICK THE BUTTON LABLED 'CANNOT COMPLETE'. OTHERWISE, CLICK THE BUTTON LABLED 'GO HOME'</p>
+    <a href="{% url 'home' %}" class="button buttonGB">Go Home</a>
+    <form method = "POST">
+        {% csrf_token %}
+        {{ fail_form }}
+        <input type="Submit"  value="Submit" >
+    </form>

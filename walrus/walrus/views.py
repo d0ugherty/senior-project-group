@@ -530,3 +530,16 @@ def schedule_employee(request):
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
                    'select_week_form':select_week_form })
+
+def task_failure(request, task_id):
+    if request.method=='POST':
+        form = failureForm(request.POST)
+        task = Task.objects.get(id=task_id)
+        if form['failure']:
+            task.wont_complete = True
+        task.save()
+        return HttpResponseRedirect(reverse('list_tasks'))
+    
+    form = failureForm()
+    return render(request, 'task_failure.html',
+                  { 'fail_form':form })

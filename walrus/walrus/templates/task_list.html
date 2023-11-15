@@ -28,10 +28,14 @@
                 <td>{{ t.due_date }} </td>
                 <!-- Task Status -->
                 <td>
-                    {% if t.is_complete %}
-                        <p style="background-color:#32cd32;">&nbsp Complete</p>
+                    {% if t.wont_complete %}
+                        <p style="background-color:#FF0000;">&nbsp Failed</p>
                     {% else %}
-                        <p style="background-color:#ffff00;">&nbsp Incomplete &nbsp</p>
+                        {% if t.is_complete %}
+                            <p style="background-color:#32cd32;">&nbsp Complete</p>
+                        {% else %}
+                            <p style="background-color:#ffff00;">&nbsp Incomplete &nbsp</p>
+                        {% endif %}
                     {% endif %}
                 </td>
                 <!-- Assigned Employees -->
