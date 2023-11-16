@@ -87,14 +87,10 @@ def is_valid_id(input_id):
 """
      Checks for duplicate role names in the database
 """
-def  validate_role(input):
+def  is_valid_role(input):
      existing_roles = set()
      existing_roles = Role.objects.filter(input)
-     if input in existing_roles:
-          # show error
-          pass
-     else:
-          pass
+     return input in existing_roles
      
 def adjust_clock_in(time_record):
      print("boo")
