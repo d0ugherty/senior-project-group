@@ -82,9 +82,18 @@ class Calendar(HTMLCalendar):
      just help to make sure that data entered is valid
 """
 def is_valid_id(input_id):
-       return input_id.strip().isdigit()
+     return input_id.strip().isdigit()
      
-
+"""
+     Checks for duplicate role names in the database
+"""
+def  validate_role(input):
+     existing_roles = set()
+     existing_roles = Role.objects.filter(input)
+     if input in existing_roles:
+          # show error
+     
+     
 def adjust_clock_in(time_record):
                     print("boo")
                     # When employee clocks in 
