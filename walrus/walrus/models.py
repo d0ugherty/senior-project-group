@@ -77,12 +77,11 @@ class Availability(models.Model):
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.TextField()
     def __str__(self):
             return self.name
     
 class Employee(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
     is_manager = models.CharField(
@@ -95,7 +94,6 @@ class Employee(models.Model):
         return self.user.username
 
     employee_id = models.IntegerField(null=True, blank=True)
-
     dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
