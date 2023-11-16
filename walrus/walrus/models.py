@@ -106,7 +106,7 @@ class Notifications (models.Model):
      message = models.TextField()
      created_at = models.DateTimeField(auto_now_add=True)
 
-     def __str(self):
+     def __str__(self):
           return self.message
      
 class Role(models.Model):
