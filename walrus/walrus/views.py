@@ -96,10 +96,34 @@ def profile(request, employee_id):
     
     pic_form = change_profile_image_Form()
     #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
-    return render (request, 'new_profile.html',{'user':user})
+    #return render (request, 'new_profile.html',{'user':user})
+    return render (request, 'edit_profile.html',{'user':user})
+
+def edit_profile(request, employee_id):
+    user = request.user
+    print("WE IN HERE?")
+    if request.method == 'POST':
+        print("hello")
+        #print(request.POST)    
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+
+        # PUT PHONE NUMBER AND IMAGE
 
 
 
+        print(first_name)
+        print(user.first_name)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.save()
+
+
+
+
+    return render (request, 'edit_profile.html',{'user':user})
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
