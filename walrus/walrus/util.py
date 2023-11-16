@@ -92,27 +92,28 @@ def  validate_role(input):
      existing_roles = Role.objects.filter(input)
      if input in existing_roles:
           # show error
-     
+          pass
+     else:
+          pass
      
 def adjust_clock_in(time_record):
-                    print("boo")
-                    # When employee clocks in 
-                    if (time_record.in_progress == False):
-                        time_record.in_progress=True
-                        time_record.last_clock_in = datetime.now()
-                        time_record.last_clock_in = datetime.now(timezone.utc)
-                        time_record.save()
-                        print("clock")
-                    else:
-                    # When employee clocks out 
-
-                        additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
-                        print(additionalTime)
-                        time_record.total_time = time_record.total_time + additionalTime
+     print("boo")
+     # When employee clocks in 
+     if (time_record.in_progress == False):
+          time_record.in_progress=True
+          time_record.last_clock_in = datetime.now()
+          time_record.last_clock_in = datetime.now(timezone.utc)
+          time_record.save()
+          print("clock")
+     else:
+          # When employee clocks out 
+          additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
+          print(additionalTime)
+          time_record.total_time = time_record.total_time + additionalTime
                        
-                        time_record.in_progress = False
-                        time_record.save()
-                        print("clock2")
+          time_record.in_progress = False
+          time_record.save()
+          print("clock2")
 
 def set_availability(request,employee):
      print("called")
