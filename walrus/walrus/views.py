@@ -293,10 +293,16 @@ def create_role(request):
             role_name = form.cleaned_data['role_name'].strip()
             role_desc = form.cleaned_data['description'].strip()
             ## prevent duplicates by checking if a role with the same name exists
-            validate_role(role_name)
-            
-
-        pass
+            if not is_valid_role:
+                # show error
+                pass
+            else:
+                new_role = Role.objects.create(name=role_name, description=role_desc)
+            return render(request, 'create_role.html', {'form': form,
+                                                        'role': new_role})
+    else:
+        form = createRole()
+        return render(request,'create_role.html',{'form' : form})
 
 """
     Add Task
