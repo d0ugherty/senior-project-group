@@ -75,7 +75,10 @@ class Availability(models.Model):
     saturday_start = models.CharField(max_length=255, blank=True, null=True)
     saturday_end = models.CharField(max_length=255, blank=True, null=True)
 
-
+class Request_Off(models.Model):
+    description = models.CharField(max_length=255, blank=True)
+    start = models.CharField(max_length=255, blank=True, null=True)  
+    end = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Employee(models.Model):
@@ -99,7 +102,7 @@ class Employee(models.Model):
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
     profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
     phone_number = models.IntegerField(blank=True, null=True)
-
+    Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
@@ -112,3 +115,4 @@ class Notifications (models.Model):
 
      def __str(self):
           return self.message
+     

@@ -23,6 +23,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
+
 def availability(request, employee_id):
     print("hello")
     employee = Employee.objects.get(pk=employee_id)
@@ -58,7 +59,22 @@ def availability(request, employee_id):
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
-
+def request_time_off(request, employee_id):
+    user = request.user
+    if request.method == 'POST':
+        
+        form = requestOffForm(request.POST)
+        if form.is_valid():
+            
+                description = form.cleaned_data['description']
+                start_date = form.cleaned_data['start_date']
+                end_date = form.cleaned_data['end_date']
+                print(start_date)
+                new_request_off = Request_Off(description=description, start=start_date, end=end_date)
+                new_request_off.save()
+                user.employee.Request_Offs.add(new_request_off)
+    form = requestOffForm()
+    return render(request, 'request_time_off.html', {'form':form})
 
 def profile(request, employee_id):
     user = request.user
