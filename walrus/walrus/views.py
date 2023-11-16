@@ -95,7 +95,9 @@ def profile(request, employee_id):
 
     
     pic_form = change_profile_image_Form()
-    return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
+    #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
+    return render (request, 'new_profile.html',{'user':user})
+
 
 
 # after user logs in this redirects them to home page
