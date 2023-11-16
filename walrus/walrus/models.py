@@ -97,7 +97,6 @@ class Employee(models.Model):
     dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
-    #Days_request_off = models.OneToManyField(Request_off)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
 class Time_Spent(models.Model):
