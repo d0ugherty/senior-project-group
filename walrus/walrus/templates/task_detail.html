@@ -83,10 +83,14 @@
             <!--not sure if edit_task works yet, writing this anyways-->
             <a href="/manager_tools/edit_task/{{ task.pk }}" class="button buttonED" id="btn1">Edit Task</a>
         {% endif %}
-
+        
         <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
     </fieldset>
-    <a href="/cannot_complete/{{ task.pk }}" class="button buttonCE">Cannot Complete</a>
+    {% if task.wont_complete == True %}
+        <p class = "center"> Task Failed </p>
+    {% else %}
+        <a href="/cannot_complete/{{ task.pk }}" class="button buttonCE">Cannot Complete</a>
+    {% endif %}
 </div>
 </body>
 {% endblock %}
