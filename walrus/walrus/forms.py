@@ -79,6 +79,10 @@ class editTask(forms.Form):
     status = forms.ChoiceField(choices=EDIT_TASK_STATUS)
 
      
+class requestOffForm(forms.Form):
+    description = forms.CharField(max_length=250, required=False)
+    start_date = forms.DateField(label="Start Date", widget=DateInput, required=False)
+    end_date = forms.DateField(label="End Date", widget=DateInput, required=False)
 
 class employeeIdSearch(forms.Form):
     employee_id = forms.CharField(label="Enter Employee ID Number",max_length=100, required=False)
@@ -107,3 +111,7 @@ class projectForm(forms.Form):
 
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
+    
+class change_profile_image_Form(forms.Form):
+    profile_pic = forms.ImageField(label="image",required=False)
+

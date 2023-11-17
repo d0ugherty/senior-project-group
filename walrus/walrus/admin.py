@@ -22,7 +22,7 @@ admin.site.register(Time_Spent)
 admin.site.register(Task_Update)
 admin.site.register(Availability)
 admin.site.register(Shift)
-
+admin.site.register(Request_Off)
 
 class EmployeeInLine(admin.StackedInline):
     model = Employee

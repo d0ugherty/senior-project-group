@@ -1,5 +1,11 @@
 <html>
 <body>
+  <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <div class="container mx-auto">
+    </div>
+    </body>
+
 {% include 'notification.html' %}
 
 {% block content %}
