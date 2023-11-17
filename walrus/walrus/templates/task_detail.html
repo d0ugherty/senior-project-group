@@ -60,6 +60,17 @@
             <!--Fix later this week; won't display correct name when user is an admin-->
         </fieldset> <br> <br>
 
+        <fieldset>
+            <legend><b>Updates:</b></legend>
+            {% for update in updates %}
+                <a>{{ update.description }}</a>
+                {%if update.venue_image %}
+                    <img src="{{ update.venue_image.url }}">
+                {% endif %}
+                <br>
+            {% endfor %}
+        </fieldset>
+
         <!--hides button if user is not a superuser-->
         {% if user.is_superuser %}
             <!--not sure if edit_task works yet, writing this anyways-->
@@ -71,16 +82,3 @@
 </div>
 </body>
 {% endblock %}
-
-<br><br>
-Updates:
-
-<br>
-{% for update in updates %}
-{{ update.description }}
-<br>
-{% if update.venue_image %}
-<img src="{{ update.venue_image.url }}">
-{% endif %}
-<br>
-{% endfor %}
