@@ -101,13 +101,14 @@ class Employee(models.Model):
 
     employee_id = models.IntegerField(null=True, blank=True)
     dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    Shifts = models.ManyToManyField(Shift, null=True, blank=True)
-    availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
+    #role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    #Shifts = models.ManyToManyField(Shift, null=True, blank=True)
+    #availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
-    profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
-    phone_number = models.IntegerField(blank=True, null=True)
-    Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
+    #profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
+    #phone_number = models.IntegerField(blank=True, null=True)
+    #Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
+
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
