@@ -251,7 +251,10 @@ def home_page(request, employee_id, day, month, year):
  #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
   #  else:
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
+
+
+    test = tasks[0]
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift, 'test':test})
 
 class CalendarView(generic.ListView):
     model = Task
