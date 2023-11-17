@@ -363,7 +363,7 @@ def create_role(request):
             role_name = form.cleaned_data['role_name'].strip()
             role_desc = form.cleaned_data['description'].strip()
             ## prevent duplicates by checking if a role with the same name exists
-            if not is_valid_role:
+            if not is_valid_role(role_name):
                 # show error
                 pass
             else:
