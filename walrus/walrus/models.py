@@ -26,12 +26,12 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    
+
     date_created = models.DateTimeField(blank=True, auto_now_add=True)
     date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
-
+    wont_complete = models.BooleanField(default=False)
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
     def time_on_task(self):

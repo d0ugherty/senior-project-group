@@ -109,6 +109,9 @@ class projectForm(forms.Form):
     name = forms.CharField(label="Project Name",max_length=250)
     due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)
 
-
+class failureForm(forms.Form):
+    failure = forms.BooleanField(label="Task Failed")
+    
 class change_profile_image_Form(forms.Form):
     profile_pic = forms.ImageField(label="image",required=False)
+
