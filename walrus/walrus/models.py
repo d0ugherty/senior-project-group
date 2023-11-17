@@ -26,12 +26,12 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    
+
     date_created = models.DateTimeField(blank=True, auto_now_add=True)
     date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
-
+    wont_complete = models.BooleanField(default=False, null=True)
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
     def time_on_task(self):
@@ -81,6 +81,12 @@ class Role(models.Model):
     def __str__(self):
             return self.name
     
+class Request_Off(models.Model):
+    description = models.CharField(max_length=255, blank=True)
+    start = models.CharField(max_length=255, blank=True, null=True)  
+    end = models.CharField(max_length=255, blank=True, null=True)
+
+
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
@@ -99,6 +105,9 @@ class Employee(models.Model):
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
+    profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
+    phone_number = models.IntegerField(blank=True, null=True)
+    Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
@@ -112,4 +121,5 @@ class Notifications (models.Model):
 
      def __str__(self):
           return self.message
+     
      

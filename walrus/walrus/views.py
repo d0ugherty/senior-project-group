@@ -23,6 +23,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
+
 def availability(request, employee_id):
     print("hello")
     employee = Employee.objects.get(pk=employee_id)
@@ -58,11 +59,77 @@ def availability(request, employee_id):
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
+def request_time_off(request, employee_id):
+    user = request.user
+    if request.method == 'POST':
+        
+        form = requestOffForm(request.POST)
+        if form.is_valid():
+            
+                description = form.cleaned_data['description']
+                start_date = form.cleaned_data['start_date']
+                end_date = form.cleaned_data['end_date']
+                print(start_date)
+                new_request_off = Request_Off(description=description, start=start_date, end=end_date)
+                new_request_off.save()
+                user.employee.Request_Offs.add(new_request_off)
+    form = requestOffForm()
+    return render(request, 'request_time_off.html', {'form':form})
+
+def profile(request, employee_id):
+    user = request.user
+
+    # getting and changing the profile pic
+    if request.method == 'POST':
+        print(request.POST)
+        if 'change picture' in request.POST:
+            form = change_profile_image_Form(request.POST, request.FILES)
+            if form.is_valid():
+                image = form.cleaned_data.get('profile_pic')
+                user.employee.profile_pic = image
+                user.employee.save()
+        if 'remove' in request.POST:
+            user.employee.profile_pic = None
+            user.employee.save()
+
+
+    
+    pic_form = change_profile_image_Form()
+    #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
+    return render (request, 'new_profile.html',{'user':user})
+    #return render (request, 'edit_profile.html',{'user':user})
+
+def edit_profile(request, employee_id):
+    user = request.user
+    if request.method == 'POST':
+        form = change_profile_image_Form(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.cleaned_data.get('profile_pic')
+            print(image)
+            if image != None:
+                user.employee.profile_pic = image
+                user.employee.save()
+        print("hello")
+        print(request.POST)    
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        phone_number = request.POST['phone_number']
+        # PUT PHONE NUMBER AND IMAGE
 
 
 
-
-
+        print(first_name)
+        print(user.first_name)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.employee.phone_number = phone_number
+        user.employee.save()
+        user.save()
+        
+    pic_form = change_profile_image_Form()
+    return render (request, 'edit_profile.html',{'user':user, 'form':pic_form})
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
@@ -180,7 +247,10 @@ def home_page(request, employee_id, day, month, year):
             elif str(x) + " complete" in request.POST:
                 x.is_complete = True
                 x.save()
+#    if request.htmx:
+ #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
+  #  else:
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
@@ -546,3 +616,16 @@ def schedule_employee(request):
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
                    'select_week_form':select_week_form })
+
+def task_failure(request, task_id):
+    if request.method=='POST':
+        form = failureForm(request.POST)
+        task = Task.objects.get(id=task_id)
+        if form['failure']:
+            task.wont_complete = True
+        task.save()
+        return HttpResponseRedirect(reverse('list_tasks'))
+    
+    form = failureForm()
+    return render(request, 'task_failure.html',
+                  { 'fail_form':form })

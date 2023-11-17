@@ -46,6 +46,11 @@ urlpatterns = [
     path('update_task_status/<int:task_id>',views.update_task_status, name='update_task_status'),
     path('manager_tools/edit_task/<int:task_id>', views.edit_task, name='edit_task'),
     path('create_project/', views.create_project, name='create_project'),
+    path('cannot_complete/<int:task_id>', views.task_failure, name='task_failure'),
+    path('home/<int:employee_id>/profile', views.profile, name='profile'),
+        path('home/<int:employee_id>/profile/edit_profile', views.edit_profile, name='edit_profile'),
+    path('home/<int:employee_id>/request_time_off', views.request_time_off, name='request_time_off'),
+  
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
