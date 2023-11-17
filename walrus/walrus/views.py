@@ -96,19 +96,25 @@ def profile(request, employee_id):
     
     pic_form = change_profile_image_Form()
     #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
-    #return render (request, 'new_profile.html',{'user':user})
-    return render (request, 'edit_profile.html',{'user':user})
+    return render (request, 'new_profile.html',{'user':user})
+    #return render (request, 'edit_profile.html',{'user':user})
 
 def edit_profile(request, employee_id):
     user = request.user
-    print("WE IN HERE?")
     if request.method == 'POST':
+        form = change_profile_image_Form(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.cleaned_data.get('profile_pic')
+            print(image)
+            if image != None:
+                user.employee.profile_pic = image
+                user.employee.save()
         print("hello")
-        #print(request.POST)    
+        print(request.POST)    
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
-
+        phone_number = request.POST['phone_number']
         # PUT PHONE NUMBER AND IMAGE
 
 
@@ -118,12 +124,12 @@ def edit_profile(request, employee_id):
         user.first_name = first_name
         user.last_name = last_name
         user.email = email
+        user.employee.phone_number = phone_number
+        user.employee.save()
         user.save()
-
-
-
-
-    return render (request, 'edit_profile.html',{'user':user})
+        
+    pic_form = change_profile_image_Form()
+    return render (request, 'edit_profile.html',{'user':user, 'form':pic_form})
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
