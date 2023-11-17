@@ -316,6 +316,8 @@ def manager_tools_redirect(request):
             return HttpResponseRedirect(destination)
         case "/schedule_employee/":
             return HttpResponseRedirect(destination)
+        case "/create_role/":
+            return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
 
