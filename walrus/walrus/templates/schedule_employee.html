@@ -35,7 +35,6 @@
 
   
             {% for key, list in dict.items %} 
-            <li>{{key}} - {{list}}</li>
                 {%for attribute in list%}
 
                 {% if forloop.first %}
@@ -43,13 +42,10 @@
 
                 {%else%}
                 {{attribute.day_of_week}}
+                {{attribute.start}} - {{attribute.end}}
                 {% endif %}
-                {% endfor %}
 
+                {% endfor %}
+                <br>
           {% endfor %}
 
-
-    {%for s in shifts %}
-    {{s.day_of_week}}
-
-    {% endfor %}

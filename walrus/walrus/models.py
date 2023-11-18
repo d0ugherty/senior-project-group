@@ -94,7 +94,8 @@ class Employee(models.Model):
     )
 
     def __str__(self):
-        return self.user.username
+        name = self.user.first_name + " " + self.user.last_name
+        return name
 
     employee_id = models.IntegerField(null=True, blank=True)
 

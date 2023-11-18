@@ -616,6 +616,11 @@ def schedule_employee(request):
             #print(shifts)
             #print(employees)
 
+            #Restructruring data
+
+            
+
+
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
     select_week_form = selectWeek()
