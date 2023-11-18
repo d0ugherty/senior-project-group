@@ -11,6 +11,8 @@
 {% if user.is_authenticated %}
 
 {% load static %}
+<form method="POST">
+    {% csrf_token %}
 
 <html lang="en"><head>
   <meta charset="utf-8">
@@ -25,6 +27,8 @@
   </head>
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
+ 
+ 
   <div class="container">
   <div class="row">
   <div class="col-xl-9">
@@ -76,31 +80,22 @@
   </h6>
   </div>
   </div>
-  <div class="dropdown ms-2">
  
-  <div class="dropdown-menu dropdown-menu-end">
-  <a class="dropdown-item" href="javascript: void(0);" data-bs-toggle="modal" data-bs-target=".bs-example-new-project" onclick="editProjects('project-items-1')">Edit</a>
-  <a class="dropdown-item" href="javascript: void(0);">Share</a>
-  <div class="dropdown-divider"></div>
-  <a class="dropdown-item delete-item" onclick="deleteProjects('project-items-1')" data-id="project-items-1" href="javascript: void(0);">Delete</a>
-  </div>
-  </div>
   </div>
   <div class="mb-4">
   
     <a href = "/task_detail/{{ x.pk }}">Description </a>
     <br>
-    <a href= {% url 'update_task_status' task_id=x.pk %}>Update </a> 
-
+     
   </div>
-  <div class="d-flex">
  
  
   
-  <div class="align-self-end">
-  <span class="badge badge-soft-danger p-2 team-status">Pending</span>
-  </div>
-  </div>
+     <button class="btn btn-primary px-4 task_completion_button" type="submit" name="{{x}} complete"> Task complete </button> <br><br>
+     <a class="btn btn-primary px-4 task_update_button" href= {% url 'update_task_status' task_id=x.pk %}>Update 
+     </a> <br><br>
+
+
   </div>
   </div>
   </div>
@@ -151,7 +146,8 @@
   <script type="text/javascript">
     
   </script>
-  
+  </form>
+
   </body></html>
 
 

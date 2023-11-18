@@ -10,11 +10,7 @@ body{margin-top:20px;
         box-shadow: 0 2px 3px #eaedf2;
     }
   
-    .clock_in { 
-    position: absolute; 
-    top: 10px; 
-    right: 10px; 
-  } 
+    
     
     .pb-0 {
         padding-bottom: 0!important;
@@ -157,3 +153,25 @@ body{margin-top:20px;
         background-color: #fff;
         border: 2px solid #038edc
     }
+    .clock_in { 
+        position: absolute; 
+        top: 10px; 
+        right: 10px; 
+       
+      } 
+    .task_completion_button { 
+        position: absolute; 
+        bottom: 0px; 
+        right: 0px; 
+        width: 150px;
+
+        background-color:#0EB20D !important;
+        color: rgb(0, 0, 0) !important;
+          } 
+    .task_update_button { 
+        position: absolute; 
+        bottom: 0px; 
+        right: 150px; 
+            background-color:#d9cc1c !important;
+            color: rgb(0, 0, 0) !important;
+        } 
