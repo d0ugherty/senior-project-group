@@ -520,6 +520,11 @@ def update_task_status(request,task_id):
 
 def schedule_employee(request):
     avil = None
+    employees = None
+    shifts = None
+
+    dict = {}
+
     if request.method == "POST":
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
@@ -591,9 +596,25 @@ def schedule_employee(request):
 
                     print(start_date)
                     print(end_date)
-            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1))))
+            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1)))).order_by('date')
+            
+            for i in shifts:
+                print(i.day_of_week())
+            employees = Employee.objects.all()
 
-            print(shifts)
+            for e in employees:
+                print(e)
+                list = []
+                list.append(e)
+                for s in shifts:
+                        if s in e.Shifts.all():
+                            print("found a shift")
+                            list.append(s)
+                dict[str(e.pk)] = (list) 
+              
+            print (dict)
+            #print(shifts)
+            #print(employees)
 
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
@@ -602,7 +623,8 @@ def schedule_employee(request):
     return render(request, 'schedule_employee.html', 
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
-                   'select_week_form':select_week_form })
+                   'select_week_form':select_week_form, 
+                    'employees':employees, 'shifts':shifts, 'dict':dict})
 
 def task_failure(request, task_id):
     if request.method=='POST':

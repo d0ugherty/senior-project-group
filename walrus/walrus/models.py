@@ -58,7 +58,9 @@ class Shift(models.Model):
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
      to_be_taken = models.BooleanField(default=False)
-
+     def day_of_week(self):
+        return self.date.weekday()
+         
 class Availability(models.Model):
     sunday_start = models.CharField(max_length=255, blank=True, null=True)
     sunday_end = models.CharField(max_length=255, blank=True, null=True)

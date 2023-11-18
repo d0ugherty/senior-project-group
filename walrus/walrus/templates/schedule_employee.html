@@ -31,3 +31,25 @@
     {{ select_week_form.as_p }}
     <button name="select_week_form"> Submit </button>
     </form>
+
+
+  
+            {% for key, list in dict.items %} 
+            <li>{{key}} - {{list}}</li>
+                {%for attribute in list%}
+
+                {% if forloop.first %}
+                {{attribute}}
+
+                {%else%}
+                {{attribute.day_of_week}}
+                {% endif %}
+                {% endfor %}
+
+          {% endfor %}
+
+
+    {%for s in shifts %}
+    {{s.day_of_week}}
+
+    {% endfor %}
