@@ -1,34 +1,8 @@
 <html>
 
 
-{% block content %}
-{% if user.is_authenticated %}
-
 {% load static %}
-<form method="POST">
-    {% csrf_token %}
 
-
-<h3> Home Page   </h3>
-
-Hi {{ user.first_name }}! 
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
-  <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
-  {% endif %}
-</form>
-<form method="POST">
-
-{% csrf_token %}
-<br>
-<br><br>
-<a href="{%url 'calendar' %}">Calendar </a>
-<br>
-<a href="{% url 'manager_tools' %}">Manager Tools</a>
-<a  href= "/home/{{ employee.pk }}/availability" > Avilability </a>
-<br>
-<a href="{%url 'list_tasks' %}">All Tasks </a>
-</form>
-{% endblock %}
 <html lang="en"><head>
   <meta charset="utf-8">
 <form method="POST">
@@ -58,6 +32,28 @@ Hi {{ user.first_name }}!
   </div>
   </div>
   </div>
+  <div class="card">
+    <div class="tab-content p-4">
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+      <h4 class="card-title mb-4">Hello {{ user.first_name }}! </h4>
+    <h6 class="mb-0 text-muted">
+      <a href="{%url 'calendar' %}">Calendar </a>
+      <br>
+      <a href="{% url 'manager_tools' %}">Manager Tools</a>
+      <a  href= "/home/{{ employee.pk }}/availability" > Avilability </a>
+      <br>
+      <a href="{%url 'list_tasks' %}">All Tasks </a>
+      <p><a href="{% url 'logout' %}">Log Out</a></p>
+      <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
+      </h5>
+      </h6>
+    </div>
+    </div>
+  </div>
+</div>
+</div>
   <div class="card">
     <div class="tab-content p-4">
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
