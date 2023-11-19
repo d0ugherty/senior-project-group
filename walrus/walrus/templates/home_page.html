@@ -15,7 +15,7 @@ Hi {{ user.first_name }}!
   <p><a href="{% url 'logout' %}">Log Out</a></p>
   <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
   {% endif %}
-
+</form>
 <form method="POST">
 
 {% csrf_token %}
@@ -31,11 +31,13 @@ Hi {{ user.first_name }}!
 {% endblock %}
 <html lang="en"><head>
   <meta charset="utf-8">
+<form method="POST">
+  {% csrf_token %}
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{% static '/css/home_page.css' %}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+ 
   </head>
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -137,7 +139,7 @@ Hi {{ user.first_name }}!
   </div>
   </div>
   </div>
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  </script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript"> 
   </script>

@@ -1,0 +1,11 @@
+.update_textbox{
+    width: 500px !important; 
+        height: 200px;
+}
+
+.submit_task_update { 
+    position: absolute; 
+    bottom: 10px; 
+    right: 10px; 
+   
+  } 

@@ -245,6 +245,7 @@ def home_page(request, employee_id, day, month, year):
                     adjust_clock_in(time_record)
             
             elif str(x) + " complete" in request.POST:
+                print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
 #    if request.htmx:
@@ -504,11 +505,12 @@ def delete_task(request, task_id):
 
 def update_task_status(request,task_id):
     if request.method == "POST":
+        print("we at post")
         form = updateTask(request.POST, request.FILES)
         if form.is_valid():
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
-            
+            print("HELA")
             task = Task.objects.get(pk=task_id)
             
             update = Task_Update(description=description,task=task, venue_image=image)
