@@ -9,12 +9,6 @@
     {% csrf_token %}
 
 
-
-
-
-
-
-
 <h3> Home Page   </h3>
 
 Hi {{ user.first_name }}! 
@@ -26,7 +20,6 @@ Hi {{ user.first_name }}!
 
 {% csrf_token %}
 <br>
-Todays shift : {{shift.start}} -  {{shift.end}}
 <br><br>
 <a href="{%url 'calendar' %}">Calendar </a>
 <br>
@@ -63,6 +56,25 @@ Todays shift : {{shift.start}} -  {{shift.end}}
   </div>
   </div>
   </div>
+  <div class="card">
+    <div class="tab-content p-4">
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+      {% if shift.start is not None %}
+    <h4 class="card-title mb-4">Todays Shift {{shift.start}} -  {{shift.end}}</h4>
+      {%else%}
+      <h4 class="card-title mb-4">Todays Shift </h4>
+      {%endif%}
+    <h6 class="mb-0 text-muted">
+      <h5 class="mb-1 font-size-17 team-title">{{x.task_name}}  
+      </h5>
+      </h6>
+    </div>
+    </div>
+  </div>
+</div>
+</div>
   <div class="card">
   <div class="tab-content p-4">
   <div class="tab-pane active show" id="projects-tab" role="tabpanel">
