@@ -200,12 +200,14 @@ def task_detail (request, task_id):
     form = taskSearchForm()
 
     task = Task.objects.get(id=task_id)
+    employees = task.employee_set.all()
     updates = task.task_update_set.all()
     print(updates)
     return render (request, 'task_detail.html', {
         'task': task,
         'form' : form,
         'updates' : updates,
+        'employees':employees
     })
 
 def home_page(request, employee_id, day, month, year):
