@@ -133,8 +133,6 @@
 
     {% if task.wont_complete == True %}
         <p class = "center"> Task Failed </p>
-    {% else %}
-        <a href="/cannot_complete/{{ task.pk }}" class="button buttonCE">Cannot Complete</a>
     {% endif %}
 </div>
 </body>
