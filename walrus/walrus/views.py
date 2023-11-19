@@ -254,8 +254,7 @@ def home_page(request, employee_id, day, month, year):
   #  else:
 
 
-    test = tasks[0]
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift, 'test':test})
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
     model = Task
