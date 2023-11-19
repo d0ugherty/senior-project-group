@@ -163,7 +163,7 @@ body{margin-top:20px;
         position: absolute; 
         bottom: 0px; 
         right: 0px; 
-        width: 150px;
+        width: 130px;
 
         background-color:#0EB20D !important;
         color: rgb(0, 0, 0) !important;
@@ -171,8 +171,16 @@ body{margin-top:20px;
     .task_update_button { 
         position: absolute; 
         bottom: 0px; 
-        right: 150px; 
+        right: 135px; 
             background-color:#d9cc1c !important;
             color: rgb(0, 0, 0) !important;
         } 
+
+    .task_cannot_be_completed { 
+        position: absolute; 
+        bottom: 0px; 
+        left: 0px; 
+            background-color:#fc1c03 !important;
+            color: rgb(0, 0, 0) !important;
+            } 
    

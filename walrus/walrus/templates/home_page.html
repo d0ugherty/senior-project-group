@@ -102,9 +102,11 @@
     <a href = "/task_detail/{{ x.pk }}">Description </a>
     <br> 
   </div>
-     <button class="btn btn-primary px-4 task_completion_button" type="submit" name="{{x}} complete"> Task complete </button> <br><br>
+     <button class="btn btn-primary px-4 task_completion_button" type="submit" name="{{x}} complete"> Complete </button> <br><br>
      <a class="btn btn-primary px-4 task_update_button" href= {% url 'update_task_status' task_id=x.pk %}>Update 
-     </a> <br><br>
+     </a> 
+     <a class="btn btn-primary px-4 task_cannot_be_completed" href= {% url "task_failure" task_id=x.pk %}>Cannot be completed 
+    </a><br><br>
 
   </div>
   </div>
