@@ -16,6 +16,7 @@
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="{% static '/css/task_description.css' %}">
+  
   <div class="container">
   <div class="row">
   <div class="col-xl-9">
@@ -26,6 +27,8 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
+    <a href="{% url 'home' %}" class="back_button">Go Back</a>
+
   </div>
   </div>
   </div>
@@ -40,6 +43,9 @@
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
     <div class="d-flex align-items-center">
     <div class="flex-1">
+        
+        <a  href="/manager_tools/edit_task/{{ task.pk }}" class ="btn btn-primary px-4 clock_in" type="submit" name="{{x}} clock"> Edit Task </a>
+
         <h4>Description</h4>
         <div class="card description_card">
             <div class="tab-content p-4">
@@ -126,42 +132,7 @@
 
 
 <body onload="hideEdit()">
-<div id="form">
-    <fieldset> <!--TASK #-->
-        <legend><b>Task {{ task.pk }}</b></legend>
 
-        <fieldset> <!--TASK DESCRIPTION-->
-            <legend><b>Description</b></legend>
-            <a>{{ task.task_description }}</a>
-        </fieldset> <br>
-        
-        <fieldset> <!--TASK INFO-->
-            <legend><b>Task Info</b></legend>
-            <a>Project Name: {{ task.task_name }}</a>
-            <h1>{{ "" }}</h1> <!--blank space-->
-            <a>Assigned To: {{ user.first_name }} {{" "}} {{ user.last_name }} </a>
-            <!--Fix later this week; won't display correct name when user is an admin-->
-        </fieldset> <br> <br>
-
-        <fieldset>
-            <legend><b>Updates:</b></legend>
-            {% for update in updates %}
-                <a>{{ update.description }}</a>
-                {%if update.venue_image %}
-                    <img src="{{ update.venue_image.url }}">
-                {% endif %}
-                <br>
-            {% endfor %}
-        </fieldset>
-
-        <!--hides button if user is not a superuser-->
-        {% if user.is_superuser %}
-            <!--not sure if edit_task works yet, writing this anyways-->
-            <a href="/manager_tools/edit_task/{{ task.pk }}" class="button buttonED" id="btn1">Edit Task</a>
-        {% endif %}
-        
-        <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
-    </fieldset>
     {% if task.wont_complete == True %}
         <p class = "center"> Task Failed </p>
     {% else %}
