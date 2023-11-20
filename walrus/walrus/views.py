@@ -533,16 +533,17 @@ def schedule_employee(request):
 
 def shift_switch(request,employee_id):
     employee = Employee.objects.get(pk=employee_id)
-    eShifts = employee.Tasks.filter()
+    eShifts = employee.Shifts.filter()
 
-    shifts = Task.objects.filter(to_be_taken=True)
+    shifts = Shift.objects.filter(to_be_taken=True)
 
     for e in eShifts:
         for s in shifts:
             #check for shift discrepancies
             #dont show shifts employees can't take
-            if e.start == s.start or e.end == s.end:
-                shifts.exclude(start = s.start, end= s.end) #I will not be able to test this very well until we have a lot of data
+            if e == s:
+                #shifts.exclude(s) #I will not be able to test this very well until we have a lot of data
+                ""
 
 
     return render(request, 'shift_switch.html', {

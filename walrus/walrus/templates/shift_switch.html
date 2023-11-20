@@ -22,11 +22,13 @@
         border-bottom: 1px solid #333333;
         border-left: 1px solid #CCCCCC;
     }
+
+    .buttonGB {float: right;}
 </style>
 
-<script>
-    function addShift(swap) {
-        employee.Tasks.add(swap)
+<script type="text/javascript">
+    function addShift(s) {
+        employee.Shifts.add(s);
     }
 </script>
 
@@ -35,12 +37,14 @@
         <h3>Shifts Available:</h3>
         {% for s in shifts %}
             <fieldset>
-                <legend><b>{{ s.task_name }}</b></legend>
+                <legend><b>{{ employee.pk }}</b></legend>
                 <b>Date: {{ s.due_date }}   Start: {{ s.start }}   End: {{ s.end }}</b>
                 <br><br>
                 <b>Task: {{ s.task_description }}</b>
                 <br><br>
-                <a onclick="addShift(s)" class="button">Pick Up Shift</button>
+                <a href="#" onclick="addShift(s);" class="button">Pick Up Shift</a>
+                <input id="clickMe" type="button" value="clickme" onclick="addShift(s);" />
+                <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
             </fieldset>
         {% endfor %}
     </div>

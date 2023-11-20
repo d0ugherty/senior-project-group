@@ -84,7 +84,9 @@ task5.save()
 # shift 1
 
 shift_1 = Shift(date=datetime.datetime.today(), start="7:00am", end="12:00pm")
+shift_1.to_be_taken=True
 shift_1.save()
+
 # User/Employee 1
 user = User.objects.create_user(username="test", 
                                 email="oconno65@students.rowan.edu", 
