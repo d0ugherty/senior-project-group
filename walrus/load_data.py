@@ -119,13 +119,13 @@ e.save()
 
 # User/Employee 3
 
-user = User.objects.create_user(username="walker", 
-                                email="doughe38@students.rowan.edu", 
+user = User.objects.create_user(username="ColeMcGrath", 
+                                email="colemacgrath723@gmail.com", 
                                 password = "password",
                                 is_staff=True)
-user.first_name = "Walker"
-user.last_name = "Texas Ranger"
-user.is_superuser = True
+user.first_name = "Cole"
+user.last_name = "MacGrath"
+user.is_superuser = False
 user.save()
 e = Employee(user=user, employee_id = 3)
 e.save()
