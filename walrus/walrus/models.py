@@ -58,7 +58,9 @@ class Shift(models.Model):
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
      to_be_taken = models.BooleanField(default=False)
-
+     def day_of_week(self):
+        return self.date.weekday()
+         
 class Availability(models.Model):
     sunday_start = models.CharField(max_length=255, blank=True, null=True)
     sunday_end = models.CharField(max_length=255, blank=True, null=True)
@@ -97,7 +99,8 @@ class Employee(models.Model):
     )
 
     def __str__(self):
-        return self.user.username
+        name = self.user.first_name + " " + self.user.last_name
+        return name
 
     employee_id = models.IntegerField(null=True, blank=True)
     dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
