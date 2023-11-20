@@ -525,7 +525,7 @@ def schedule_employee(request):
     avil = None
     employees = None
     shifts = None
-
+    requests_off = None
     dict = {}
 
     if request.method == "POST":
@@ -537,6 +537,8 @@ def schedule_employee(request):
                 print(employee.pk)
                 avil = employee.availability
                 print(avil)
+                print(datetime.today())
+                requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
         if "save_shift" in request.POST:
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
@@ -632,7 +634,9 @@ def schedule_employee(request):
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
                    'select_week_form':select_week_form, 
-                    'employees':employees, 'shifts':shifts, 'dict':dict})
+                    'employees':employees, 'shifts':shifts, 'dict':dict,
+                    'requests_off':requests_off,
+                    })
 
 def task_failure(request, task_id):
     if request.method=='POST':

@@ -10,7 +10,13 @@
     {{ avil.sunday_start }} - {{avil.sunday_end}} {{ avil.monday_start }} - {{avil.monday_end}} {{ avil.tuesday_start }} - {{avil.tuesday_end}}
     {{ avil.wednesday_start }} - {{avil.wednesday_end}} {{ avil.thursday_start }} - {{avil.thursday_end}} 
     {{ avil.friday_start }} - {{avil.friday_end}}     {{ avil.saturday_start }} - {{avil.saturday_end}}
+    
+    <br>
+    {%for request in requests_off%}
 
+    {{request.start}} to {{request.end}}
+    <br>
+    {% endfor %}
 
 
     <form method="POST">
