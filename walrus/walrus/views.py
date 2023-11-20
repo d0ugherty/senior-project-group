@@ -200,12 +200,14 @@ def task_detail (request, task_id):
     form = taskSearchForm()
 
     task = Task.objects.get(id=task_id)
+    employees = task.employee_set.all()
     updates = task.task_update_set.all()
     print(updates)
     return render (request, 'task_detail.html', {
         'task': task,
         'form' : form,
         'updates' : updates,
+        'employees':employees
     })
 
 def home_page(request, employee_id, day, month, year):
@@ -245,12 +247,15 @@ def home_page(request, employee_id, day, month, year):
                     adjust_clock_in(time_record)
             
             elif str(x) + " complete" in request.POST:
+                print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
 #    if request.htmx:
  #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
   #  else:
+
+
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
@@ -519,11 +524,12 @@ def delete_task(request, task_id):
 
 def update_task_status(request,task_id):
     if request.method == "POST":
+        print("we at post")
         form = updateTask(request.POST, request.FILES)
         if form.is_valid():
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
-            
+            print("HELA")
             task = Task.objects.get(pk=task_id)
             
             update = Task_Update(description=description,task=task, venue_image=image)
@@ -535,6 +541,11 @@ def update_task_status(request,task_id):
 
 def schedule_employee(request):
     avil = None
+    employees = None
+    shifts = None
+
+    dict = {}
+
     if request.method == "POST":
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
@@ -606,9 +617,30 @@ def schedule_employee(request):
 
                     print(start_date)
                     print(end_date)
-            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1))))
+            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1)))).order_by('date')
+            
+            for i in shifts:
+                print(i.day_of_week())
+            employees = Employee.objects.all()
 
-            print(shifts)
+            for e in employees:
+                print(e)
+                list = []
+                list.append(e)
+                for s in shifts:
+                        if s in e.Shifts.all():
+                            print("found a shift")
+                            list.append(s)
+                dict[str(e.pk)] = (list) 
+              
+            print (dict)
+            #print(shifts)
+            #print(employees)
+
+            #Restructruring data
+
+            
+
 
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
@@ -617,7 +649,8 @@ def schedule_employee(request):
     return render(request, 'schedule_employee.html', 
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
-                   'select_week_form':select_week_form })
+                   'select_week_form':select_week_form, 
+                    'employees':employees, 'shifts':shifts, 'dict':dict})
 
 def task_failure(request, task_id):
     if request.method=='POST':
