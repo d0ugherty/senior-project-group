@@ -496,6 +496,7 @@ def edit_task(request, task_id):
 
     #employee = task.Employee
     form = editTask(initial=nonEmptyFields)
+    print(nonEmptyFields['project'])
     return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
@@ -596,7 +597,6 @@ def schedule_employee(request):
                 if (date.weekday() == 6):
                     start_date = date
                     end_date = date + timedelta(6)
-
 
 
                     print(start_date)
