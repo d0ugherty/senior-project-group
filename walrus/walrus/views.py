@@ -220,7 +220,7 @@ def home_page(request, employee_id, day, month, year):
     # date from url
     print(shift)
     print(screen_date)
-    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False) 
    #print(employee)
    # print(tasks)
     

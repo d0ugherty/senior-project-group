@@ -39,6 +39,8 @@
     <div class="flex-1">
       <h4 class="card-title mb-4">Hello {{ user.first_name }}! </h4>
     <h6 class="mb-0 text-muted">
+      <a  href= "/home/{{ employee.pk }}/profile" > Profile </a>
+      <br>
       <a href="{%url 'calendar' %}">Calendar </a>
       <br>
       <a href="{% url 'manager_tools' %}">Manager Tools</a>
@@ -48,7 +50,6 @@
       <a  href= "/home/{{ employee.pk }}/request_time_off" > Request Time off </a>
       <p><a href="{% url 'logout' %}">Log Out</a></p>
       <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
-      <a  href= "/home/{{ employee.pk }}/profile" > Profile </a>
       </h5>
       </h6>
     </div>
