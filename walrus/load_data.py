@@ -20,12 +20,13 @@ Shift.objects.all().delete()
 update_1 = Task_Update(description="Task has been started")
 update_1.save()
 # Update 2
-update_2 = Task_Update(description="Task is 50 percent done")
+update_2 = Task_Update(description="Task is 50 percent done", venue_image="/images/entrance_display.jpg")
 update_2.save()
 # Project 1
-project = Project(project_name="Truck")
+project = Project(project_name="Display")
 project.save()
-
+project2 = Project(project_name="Truck")
+project2.save()
 # Task 1
 task = Task()
 task.task_name="set up entrance display"
@@ -44,6 +45,7 @@ task.task_update_set.add(update_2)
 # Task 2
 task2 = Task()
 task2.task_name="unload Truck"
+task2.project = project2
 task2.save()
 
 
