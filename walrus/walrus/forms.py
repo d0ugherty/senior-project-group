@@ -92,7 +92,7 @@ class employeeDropdownSearch(forms.Form):
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
 
 class updateTask(forms.Form):
-    description = forms.CharField(max_length=250)
+    description = forms.CharField(max_length=250, required=False)
     image = forms.ImageField(label="image",required=False)
 
 class scheduleEmployee(forms.Form):

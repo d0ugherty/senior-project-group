@@ -24,6 +24,8 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
+    <a href="{% url 'home' %}" class="return ">Go Back</a>
+
   </div>
   </div>
   </div>
@@ -35,6 +37,7 @@
     {% csrf_token %}
 
   <h3>Task Status Update</h3>
+ 
   <div class="card">
     <div class="tab-content p-4">
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">

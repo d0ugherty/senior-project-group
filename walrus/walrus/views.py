@@ -529,10 +529,12 @@ def update_task_status(request,task_id):
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
             print("HELA")
+            print(image)
             task = Task.objects.get(pk=task_id)
             
             update = Task_Update(description=description,task=task, venue_image=image)
             update.save()
+            return redirect('home')
 
 
     form = updateTask()
