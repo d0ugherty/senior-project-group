@@ -80,7 +80,7 @@ class editTask(forms.Form):
 
      
 class requestOffForm(forms.Form):
-    description = forms.CharField(max_length=250, required=False)
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     start_date = forms.DateField(label="Start Date", widget=DateInput, required=False)
     end_date = forms.DateField(label="End Date", widget=DateInput, required=False)
 

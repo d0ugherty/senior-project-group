@@ -42,11 +42,13 @@
       <a href="{%url 'calendar' %}">Calendar </a>
       <br>
       <a href="{% url 'manager_tools' %}">Manager Tools</a>
+      <br>
       <a  href= "/home/{{ employee.pk }}/availability" > Avilability </a>
       <br>
-      <a href="{%url 'list_tasks' %}">All Tasks </a>
+      <a  href= "/home/{{ employee.pk }}/request_time_off" > Request Time off </a>
       <p><a href="{% url 'logout' %}">Log Out</a></p>
       <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
+      <a  href= "/home/{{ employee.pk }}/profile" > Profile </a>
       </h5>
       </h6>
     </div>
