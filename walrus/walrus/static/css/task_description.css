@@ -1,0 +1,12 @@
+.description_card { 
+    width: 500px !important; 
+    height: 200px;
+    text-align:left;
+    position: relative 
+}
+
+.go_back{
+    position: absolute; 
+    top: 40px; 
+    left: 700px;
+}
