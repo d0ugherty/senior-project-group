@@ -77,6 +77,12 @@ class Availability(models.Model):
     saturday_start = models.CharField(max_length=255, blank=True, null=True)
     saturday_end = models.CharField(max_length=255, blank=True, null=True)
 
+class Role(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    def __str__(self):
+            return self.name
+    
 class Request_Off(models.Model):
     description = models.CharField(max_length=255, blank=True)
     start = models.CharField(max_length=255, blank=True, null=True)  
@@ -84,7 +90,6 @@ class Request_Off(models.Model):
 
 
 class Employee(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
     is_manager = models.CharField(
@@ -98,24 +103,27 @@ class Employee(models.Model):
         return name
 
     employee_id = models.IntegerField(null=True, blank=True)
+    dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
+    #role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    #Shifts = models.ManyToManyField(Shift, null=True, blank=True)
+    #availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
-    dept = models.CharField(max_length=255, blank=True, null=True)
-    Shifts = models.ManyToManyField(Shift, null=True, blank=True)
-    #Days_request_off = models.OneToManyField(Request_off)
-    availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
-    profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
-    phone_number = models.IntegerField(blank=True, null=True)
-    Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
+    #profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
+    #phone_number = models.IntegerField(blank=True, null=True)
+    #Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
+
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
         in_progress = models.BooleanField(default=False, null=True)
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
+
 class Notifications (models.Model):
      message = models.TextField()
      created_at = models.DateTimeField(auto_now_add=True)
 
-     def __str(self):
+     def __str__(self):
           return self.message
+     
      

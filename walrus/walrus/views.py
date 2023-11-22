@@ -346,8 +346,6 @@ def employee_stats(request):
             if (not is_valid_id(input_id)):
                 return render(request, 'employee_stats.html', {'form' : form,
                                                                 'show_error': True})
-
-
             # get tasks
             employee = Employee.objects.get(employee_id=input_id)
             tasks = employee.Tasks.all()
@@ -358,10 +356,28 @@ def employee_stats(request):
                                                            'employee_name': name})
     else:
         form = employeeIdSearch()
-
     return render(request, 'employee_stats.html', {'form' : form })
 
-
+"""
+    Create Role
+"""
+def create_role(request):
+    if request.method == 'POST':
+        form = createRole(request.POST)
+        if form.is_valid():
+            role_name = form.cleaned_data['role_name'].strip()
+            role_desc = form.cleaned_data['description'].strip()
+            ## prevent duplicates by checking if a role with the same name exists
+            if not is_valid_role(role_name):
+                # show error
+                pass
+            else:
+                new_role = Role.objects.create(name=role_name, description=role_desc)
+            return render(request, 'create_role.html', {'form': form,
+                                                        'role': new_role})
+    else:
+        form = createRole()
+        return render(request,'create_role.html',{'form' : form})
 
 """
     Add Task
