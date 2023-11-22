@@ -40,9 +40,10 @@
                 <legend><b>{{ employee.pk }}</b></legend>
                 <b>Date: {{ s.due_date }}   Start: {{ s.start }}   End: {{ s.end }}</b>
                 <br><br>
-                <b>Task: {{ s.task_description }}</b>
+                <b>Assigned Employee {{ s.user.first_name }}</b>
                 <br><br>
-                <a href="#" onclick="addShift(s);" class="button">Pick Up Shift</a>
+                <a href="{% url 'swap_shift/{{ employee.pk }}/{{ s.pk }}'}" class="button">Pick Up Shift</a>
+                <a href="/swap_shift/{{ employee.pk }}/{{ s.pk }}" class="button">Shift Switch</a>
                 <input id="clickMe" type="button" value="clickme" onclick="addShift(s);" />
                 <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
             </fieldset>

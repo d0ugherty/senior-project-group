@@ -531,7 +531,7 @@ def schedule_employee(request):
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
                    'select_week_form':select_week_form })
 
-def shift_switch(request,employee_id):
+def shift_switch(request, employee_id):
     employee = Employee.objects.get(pk=employee_id)
     eShifts = employee.Shifts.filter()
 
@@ -553,9 +553,14 @@ def shift_switch(request,employee_id):
 
 def swap_shifts(request, employee_id, shift_id):
     employee = Employee.objects.get(pk=employee_id)
-    shift = Task.objects.get(pk=shift_id)
-
+    shift = Shift.objects.get(pk=shift_id)
+    print("DO YOU EVEN GET HERE")
     #add the shift to the current employee
-    employee.Tasks.add(shift)
+    shift.to_be_taken = False
+    employee.Shifts.add(shift)
+    shifts = Shift.objects.filter(to_be_taken=True)
 
-    return home_redirect
+    return render(request, 'shift_switch.html', {
+        'employee' : employee,
+        'shifts' : shifts
+    })
