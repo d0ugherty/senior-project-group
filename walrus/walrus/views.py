@@ -1,5 +1,6 @@
 import calendar
 from django import forms
+from django.db import IntegrityError
 from django.views import generic
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect
@@ -81,7 +82,6 @@ def profile(request, employee_id):
 
     # getting and changing the profile pic
     if request.method == 'POST':
-        print(request.POST)
         if 'change picture' in request.POST:
             form = change_profile_image_Form(request.POST, request.FILES)
             if form.is_valid():
@@ -379,11 +379,14 @@ def manage_roles(request):
             role_name = create_role_form.cleaned_data['role_name'].strip()
             role_desc = create_role_form.cleaned_data['description'].strip()
             ## prevent duplicates by checking if a role with the same name exists
-            new_role = Role.objects.create(name=role_name, description=role_desc).validate_unique()
-            
+            try :
+                new_role = Role.objects.create(name=role_name, description=role_desc).validate_unique(exclude='role_desc')
+            except IntegrityError as error:
+                print(f'Role submission unsuccessful - {error}')
+            ## render blank forms upon submission
             create_role_form = createRole()
             assign_role_form = assignRole()
-        return render(request, 'create_role.html', {'create_role_form': create_role_form,
+            return render(request, 'create_role.html', {'create_role_form': create_role_form,
                                                         'assign_role_form' : assign_role_form,
                                                         'role': new_role})
     else:
