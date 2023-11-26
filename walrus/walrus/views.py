@@ -368,18 +368,22 @@ def employee_stats(request):
     return render(request, 'employee_stats.html', {'form' : form })
 
 """
-    Create Role
+    Create and manage employee positions
 """
 def manage_roles(request):
     if request.method == 'POST':
         create_role_form = createRole(request.POST)
         assign_role_form = assignRole(request.POST)
+
         if create_role_form.is_valid():
             role_name = create_role_form.cleaned_data['role_name'].strip()
             role_desc = create_role_form.cleaned_data['description'].strip()
             ## prevent duplicates by checking if a role with the same name exists
             new_role = Role.objects.create(name=role_name, description=role_desc).validate_unique()
-            return render(request, 'create_role.html', {'create_role_form': create_role_form,
+            
+            create_role_form = createRole()
+            assign_role_form = assignRole()
+        return render(request, 'create_role.html', {'create_role_form': create_role_form,
                                                         'assign_role_form' : assign_role_form,
                                                         'role': new_role})
     else:
