@@ -370,21 +370,25 @@ def employee_stats(request):
 """
 def create_role(request):
     if request.method == 'POST':
-        form = createRole(request.POST)
-        if form.is_valid():
-            role_name = form.cleaned_data['role_name'].strip()
-            role_desc = form.cleaned_data['description'].strip()
+        create_role_form = createRole(request.POST)
+        assign_role_form = assignRole(request.POST)
+        if create_role_form.is_valid():
+            role_name = create_role_form.cleaned_data['role_name'].strip()
+            role_desc = create_role_form.cleaned_data['description'].strip()
             ## prevent duplicates by checking if a role with the same name exists
             if not is_valid_role(role_name):
                 # show error
                 pass
             else:
                 new_role = Role.objects.create(name=role_name, description=role_desc)
-            return render(request, 'create_role.html', {'form': form,
+            return render(request, 'create_role.html', {'create_role_form': create_role_form,
+                                                        'assign_role_form' : assign_role_form,
                                                         'role': new_role})
     else:
-        form = createRole()
-        return render(request,'create_role.html',{'form' : form})
+        create_role_form = createRole()
+        assign_role_form = assignRole()
+        return render(request,'create_role.html',{  'create_role_form': create_role_form,
+                                                    'assign_role_form' : assign_role_form })
 
 """
     Add Task

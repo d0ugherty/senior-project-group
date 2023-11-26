@@ -1,9 +1,17 @@
 {% block content %}
+
 <head>
     <title>Create Role</title>
 </head>
 <body>
+    <form action="" method="post">
+        {% csrf_token %}
     <!-- TO DO: Finish this-->
-    {{ form }}
+    {{ create_role_form }}
+    <button type="submit" name="submit_role" value="Submit">SUBMIT</button>
+    </form>
+    {{ assign_role_form }}
+    {% csrf_token %}
+    <button type="submit" name="submit_role" value="Submit">SUBMIT</button>
 </body>
 {% endblock %}
