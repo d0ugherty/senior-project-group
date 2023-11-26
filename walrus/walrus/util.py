@@ -84,13 +84,6 @@ class Calendar(HTMLCalendar):
 def is_valid_id(input_id):
      return input_id.strip().isdigit()
      
-"""
-     Checks for duplicate role names in the database
-"""
-def  is_valid_role(input):
-     existing_roles = set()
-     existing_roles = Role.objects.filter(input)
-     return input in existing_roles
      
 def adjust_clock_in(time_record):
      print("boo")

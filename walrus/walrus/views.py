@@ -357,7 +357,7 @@ def employee_stats(request):
                 
                 tasks = employee.Tasks.all()
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
-                return render(request, 'employee_stats.html', {'form': form, 
+                return redirect(request, 'employee_stats.html', {'form': form, 
                                                             'tasks': tasks, 
                                                             'employee': employee,
                                                             'employee_name': name})
@@ -376,11 +376,7 @@ def create_role(request):
             role_name = create_role_form.cleaned_data['role_name'].strip()
             role_desc = create_role_form.cleaned_data['description'].strip()
             ## prevent duplicates by checking if a role with the same name exists
-            if not is_valid_role(role_name):
-                # show error
-                pass
-            else:
-                new_role = Role.objects.create(name=role_name, description=role_desc)
+            new_role = Role.objects.create(name=role_name, description=role_desc).validate_unique()
             return render(request, 'create_role.html', {'create_role_form': create_role_form,
                                                         'assign_role_form' : assign_role_form,
                                                         'role': new_role})
