@@ -103,8 +103,8 @@ class Employee(models.Model):
         return name
 
     employee_id = models.IntegerField(null=True, blank=True)
-    #dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
-    #role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
