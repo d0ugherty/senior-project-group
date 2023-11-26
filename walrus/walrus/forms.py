@@ -112,10 +112,14 @@ class projectForm(forms.Form):
 class createRole(forms.Form):
     role_name = forms.CharField(label="Role/Position", max_length=50)
     description = forms.CharField(label="Description", max_length=255)
+
+class assignRole(forms.Form):
     assign_emloyee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",
                                             to_field_name="role",
                                             required=False)
+
+
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
     
