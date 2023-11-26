@@ -47,14 +47,14 @@ def availability(request, employee_id):
             'tuesday_start' : employee.availability.tuesday_start, 'tuesday_end' : employee.availability.tuesday_end,
             'wednesday_start' : employee.availability.wednesday_start, 'wednesday_end' : employee.availability.wednesday_end,
             'thursday_start' : employee.availability.thursday_start, 'thursday_end' : employee.availability.thursday_end,
-            'friday_start' : employee.availability.friday_start, 'friday_end' : employee.availability.friday_end,
+            'friday_start' : employee.availability.friday_start, 'friday_end': employee.availability.friday_end,
             'saturday_start' : employee.availability.saturday_start, 'saturday_end' : employee.availability.saturday_end,
              }
     else:
         dict = {}
 #    page = 'home/' + str(request.user.pk)
     #redirect('page')
-
+ 
 
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
@@ -142,7 +142,7 @@ def home_redirect(request):
      return redirect(url)
     return render(request, 'home.html')
 
-
+ 
 
 def list_tasks(request):
     try:
@@ -310,7 +310,7 @@ def load_manager_tools(request):
     Currently, the un-implemented pages will default to "invalid destination"
 
     TO DO: Add more redirects as project progresses
-"""
+""" 
 def manager_tools_redirect(request):
     destination = request.POST.get('destination')
     match destination:
@@ -323,6 +323,8 @@ def manager_tools_redirect(request):
         case "/create_project/":
             return HttpResponseRedirect(destination)
         case "/schedule_employee/":
+            return HttpResponseRedirect(destination)
+        case "/manage_roles/":
             return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
@@ -368,7 +370,7 @@ def employee_stats(request):
 """
     Create Role
 """
-def create_role(request):
+def manage_roles(request):
     if request.method == 'POST':
         create_role_form = createRole(request.POST)
         assign_role_form = assignRole(request.POST)

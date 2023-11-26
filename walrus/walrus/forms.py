@@ -119,7 +119,6 @@ class assignRole(forms.Form):
                                             to_field_name="role",
                                             required=False)
 
-
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
     
