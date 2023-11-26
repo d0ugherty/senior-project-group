@@ -8,8 +8,14 @@
         {% csrf_token %}
     <!-- TO DO: Finish this-->
     {{ create_role_form }}
+    {% if msg %}
+        <p> {{ msg }}</p>
+    {% endif %}
+   
     <button type="submit" name="submit_role" value="Submit">SUBMIT</button>
+    
     </form>
+    
     {{ assign_role_form }}
     {% csrf_token %}
     <button type="submit" name="submit_role" value="Submit">SUBMIT</button>

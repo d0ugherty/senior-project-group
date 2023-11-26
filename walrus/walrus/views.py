@@ -369,11 +369,17 @@ def employee_stats(request):
 
 """
     Create and manage employee positions
+    TO DO:    
+    > Remove roles and positions
+
 """
 def manage_roles(request):
+    context = {}
     if request.method == 'POST':
         create_role_form = createRole(request.POST)
         assign_role_form = assignRole(request.POST)
+        context['create_role_form'] = create_role_form
+        context['assign_role_form'] = assign_role_form
 
         if create_role_form.is_valid():
             role_name = create_role_form.cleaned_data['role_name'].strip()
@@ -381,19 +387,26 @@ def manage_roles(request):
             ## prevent duplicates by checking if a role with the same name exists
             try :
                 new_role = Role.objects.create(name=role_name, description=role_desc).validate_unique(exclude='role_desc')
+                context['role'] = new_role
+                context['msg'] = f'Role {role_name} successfully submitted'
+                print(context['msg'])
+                # reinitialize forms to clear previous data 
+                return blank_role_form(request, 'manage_roles.html', context)
+
             except IntegrityError as error:
-                print(f'Role submission unsuccessful - {error}')
-            ## render blank forms upon submission
-            create_role_form = createRole()
-            assign_role_form = assignRole()
-            return render(request, 'create_role.html', {'create_role_form': create_role_form,
-                                                        'assign_role_form' : assign_role_form,
-                                                        'role': new_role})
+                context['msg'] = f'Role submission unsuccessful - {error} - {role_name} already exists'
+                print(context['msg'])
+                return blank_role_form(request, 'manage_roles.html', context)
     else:
-        create_role_form = createRole()
-        assign_role_form = assignRole()
-        return render(request,'create_role.html',{  'create_role_form': create_role_form,
-                                                    'assign_role_form' : assign_role_form })
+        return blank_role_form(request, 'manage_roles.html', context)
+"""
+    Reduce code duplication. Broke my rule of three
+"""
+def blank_role_form(request, template, context): 
+    context['create_role_form'] = createRole()
+    context['assign_role_form'] = assignRole()
+    return render(request,template, context)
+    
 
 """
     Add Task
