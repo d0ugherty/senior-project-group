@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'walrus',
     'channels',
     'employee.apps.EmployeeConfig',
+    'htmxapp.apps.HtmxappConfig',
 ]
 
 MIDDLEWARE = [

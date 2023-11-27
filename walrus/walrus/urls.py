@@ -24,6 +24,8 @@ from walrus import views
 
 from walrus.consumer import NotificationConsumer
 
+app_name='htmxapp'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list_tasks/', views.list_tasks, name='list_tasks'),
@@ -51,6 +53,7 @@ urlpatterns = [
         path('home/<int:employee_id>/profile/edit_profile', views.edit_profile, name='edit_profile'),
     path('home/<int:employee_id>/request_time_off', views.request_time_off, name='request_time_off'),
   
+    path("notification", views.notify, name="notification"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

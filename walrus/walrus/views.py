@@ -22,6 +22,7 @@ from walrus.admin import SendNotificationForm
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+from django.views.decorators.http import require_GET, require_POST
 
 
 def availability(request, employee_id):
@@ -646,3 +647,10 @@ def task_failure(request, task_id):
     form = failureForm()
     return render(request, 'task_failure.html',
                   { 'fail_form':form })
+
+@require_POST
+def notify(request):
+    try:
+        return render(request, "htmxapp/templates/partials/notification.html", {'notification': "testing" })
+    except:
+        return render(request, "htmxapp/templates/partials/notification.html", {'notification': "No new notifications" })
