@@ -1,7 +1,8 @@
 import calendar
 from django import forms
-from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.db import transaction
 from django.views import generic
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect
@@ -374,6 +375,8 @@ def employee_stats(request):
     > Remove roles and positions
 
 """
+
+
 def manage_roles(request):
     context = {}
     if request.method == 'POST':
@@ -385,29 +388,31 @@ def manage_roles(request):
         if create_role_form.is_valid():
             role_name = create_role_form.cleaned_data['role_name'].strip()
             role_desc = create_role_form.cleaned_data['description'].strip()
-            ## prevent duplicates by checking if a role with the same name exists
-            try :
-                new_role = Role.objects.create(name=role_name, description=role_desc).validate_unique(exclude='role_desc')
-                context['role'] = new_role
-                context['msg'] = f'Role {role_name} successfully submitted'
-                print(context['msg'])
-                # reinitialize forms to clear previous data 
-                return blank_role_form(request, 'manage_roles.html', context)
 
-            except (IntegrityError, ValidationError) as error:
-                context['msg'] = f'Role submission unsuccessful - {error} - {role_name} already exists'
-                print(context['msg'])
-                return blank_role_form(request, 'manage_roles.html', context)
+            # Check if a role with the same name already exists
+            if not Role.objects.filter(name=role_name).exists():
+                context = create_role(context, role_name, role_desc)
+            else:
+                context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
+            return blank_role_form(request, 'manage_roles.html', context)
     else:
         return blank_role_form(request, 'manage_roles.html', context)
-"""
-    Reduce code duplication. Broke my rule of three
-"""
+
 def blank_role_form(request, template, context): 
     context['create_role_form'] = createRole()
     context['assign_role_form'] = assignRole()
-    return render(request,template, context)
-    
+    return render(request, template, context)
+
+def create_role(context,name,desc):
+    try:
+        with transaction.atomic():
+            new_role = Role.objects.create(name=name, description=desc)
+            context['role'] = new_role
+            context['msg'] = f'Role {role_name} successfully created'
+        return context
+    except ValidationError as error:
+        context['msg'] = f'Role submission unsuccessful: {error}'
+        return context
 
 """
     Add Task
