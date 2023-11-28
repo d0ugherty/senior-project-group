@@ -255,6 +255,9 @@ def home_page(request, employee_id, day, month, year):
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
+                return redirect('home')
+               
+
 #    if request.htmx:
  #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
