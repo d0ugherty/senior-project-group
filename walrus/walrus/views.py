@@ -389,30 +389,34 @@ def manage_roles(request):
             role_name = create_role_form.cleaned_data['role_name'].strip()
             role_desc = create_role_form.cleaned_data['description'].strip()
 
-            # Check if a role with the same name already exists
             if not Role.objects.filter(name=role_name).exists():
-                context = create_role(context, role_name, role_desc)
+                create_role(request, context, role_name, role_desc)
+                return redirect('manage_roles')
             else:
                 context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
             return blank_role_form(request, 'manage_roles.html', context)
     else:
+        if 'msg' in request.session:
+            context['msg'] = request.session.pop('msg')
         return blank_role_form(request, 'manage_roles.html', context)
+"""
+    Helper functions to reduce code duplication
+    and make the manage_roles view more readable
 
+"""
 def blank_role_form(request, template, context): 
     context['create_role_form'] = createRole()
     context['assign_role_form'] = assignRole()
     return render(request, template, context)
 
-def create_role(context,name,desc):
+def create_role(request,context,name,desc):
     try:
         with transaction.atomic():
-            new_role = Role.objects.create(name=name, description=desc)
+            new_role = Role.objects.create(name=name, description=desc).validate_unique()
             context['role'] = new_role
-            context['msg'] = f'Role {role_name} successfully created'
-        return context
+            request.session['msg'] = f'Role {name} successfully created'
     except ValidationError as error:
-        context['msg'] = f'Role submission unsuccessful: {error}'
-        return context
+        request.session['msg'] = f'Role submission unsuccessful: {error}'
 
 """
     Add Task
