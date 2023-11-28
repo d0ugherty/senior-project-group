@@ -372,10 +372,21 @@ def employee_stats(request):
                 
                 tasks = employee.Tasks.all()
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
+                time_spent = []
+                for t in tasks:
+                    if (Time_Spent.objects.filter(employee=employee.pk,task=t.pk)):
+                       time_record = Time_Spent.objects.get(employee=employee.pk,task=t.pk)
+                       time_spent.append(time_record.total_time)
+                    else:
+                       time_spent.append(None)
+                print(time_spent)
+
+
                 return render(request, 'employee_stats.html', {'form': form, 
                                                             'tasks': tasks, 
                                                             'employee': employee,
-                                                            'employee_name': name})
+                                                            'employee_name': name,
+                                                            'time_spent' : time_spent})
     else:
         form = employeeIdSearch()
     return render(request, 'employee_stats.html', {'form' : form })

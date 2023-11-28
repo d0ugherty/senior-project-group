@@ -88,6 +88,7 @@
     </tr>
     </thead>
     <tbody>
+      {% load index %}
     {% for t in tasks %}
     <tr>
                 <!-- Task Name -->
@@ -106,8 +107,9 @@
                 <!-- Due Date -->
                 <td>{{ t.date_assigned_to }} </td>
                 <td>{{ t.due_date }} </td>
-                <!-- Task Status -->
-                <td> None</td>
+                <!-- Time clocked -->
+                
+                <td> {{ time_spent|index:forloop.counter0 }}</td>
                 <!-- Assigned Employees -->
                
             </tr>
