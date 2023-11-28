@@ -301,6 +301,12 @@ def next_month(d):
     TO DO: Check for user type
 """
 def load_manager_tools(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
+
+
     return render(request, 'manager_tools.html')
 
 """
