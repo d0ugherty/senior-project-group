@@ -114,6 +114,7 @@ class createRole(forms.Form):
     description = forms.CharField(label="Description", max_length=255)
 
 class assignRole(forms.Form):
+    roles = forms.ModelChoiceField(queryset=Role.objects.all())
     assign_emloyee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",
                                             to_field_name="role",
