@@ -557,6 +557,7 @@ def swap_shifts(request, employee_id, shift_id):
     print("DO YOU EVEN GET HERE")
     #add the shift to the current employee
     shift.to_be_taken = False
+    shift.save()
     employee.Shifts.add(shift)
     shifts = Shift.objects.filter(to_be_taken=True)
 
