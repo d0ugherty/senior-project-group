@@ -179,6 +179,11 @@ def list_tasks(request):
     })
 
 def create_project(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
+
     if request.method == 'POST':
         name = request.POST.get('name')
         date = request.POST.get('due_date')
@@ -336,6 +341,10 @@ def manager_tools_redirect(request):
 """
 
 def employee_stats(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+    
     if request.method == 'POST':
         
         form = employeeIdSearch(request.POST)
@@ -388,6 +397,9 @@ def create_role(request):
 """
 
 def add_task(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
     if request.method=='POST':
         form = addTask(request.POST)
         if form.is_valid():
@@ -449,6 +461,11 @@ Employee will need to be changed to allow for multiple employees to appear
 
 
 def edit_task(request, task_id):
+
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
 
     task = Task.objects.get(pk=task_id) 
     if request.method=='POST':
@@ -545,6 +562,9 @@ def update_task_status(request,task_id):
     return render(request, 'update_task_status.html', {'form':form})
 
 def schedule_employee(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
     avil = None
     employees = None
     shifts = None
