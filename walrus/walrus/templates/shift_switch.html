@@ -23,11 +23,12 @@
         border-left: 1px solid #CCCCCC;
     }
 
-    .buttonGB {float: right;}
+    .buttonGB {text-align: center;}
 </style>
 
 <body>
     <div id="form">
+        <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
         <h3>Shifts Available:</h3>
         {% for s in shifts %}
             <fieldset>
@@ -37,7 +38,6 @@
                 <b>Assigned Employee {{ s.user.first_name }}</b>
                 <br><br>
                 <a href="/swap_shift/{{ employee.pk }}/{{ s.pk }}" class="button">Pick Up Shift</a>
-                <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
             </fieldset>
         {% endfor %}
     </div>
