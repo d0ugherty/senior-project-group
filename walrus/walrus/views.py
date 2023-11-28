@@ -1,6 +1,7 @@
 import calendar
 from django import forms
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 from django.views import generic
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect
@@ -393,7 +394,7 @@ def manage_roles(request):
                 # reinitialize forms to clear previous data 
                 return blank_role_form(request, 'manage_roles.html', context)
 
-            except IntegrityError as error:
+            except (IntegrityError, ValidationError) as error:
                 context['msg'] = f'Role submission unsuccessful - {error} - {role_name} already exists'
                 print(context['msg'])
                 return blank_role_form(request, 'manage_roles.html', context)
