@@ -90,31 +90,50 @@
             <table class="table align-middle table-nowrap table-hover mb-0 ">
                 <thead class="table-light">
                 <tr>
-                <th scope="col">Task Name</th>
-                <th scope="col">Project Name</th>
-                <th scope="col">Due Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Employees</th>
-        
-          
+                <th scope="col">Name</th>
+                <th scope="col">Sunday</th>
+                <th scope="col">Monday</th>
+                <th scope="col">Tuesday</th>
+                <th scope="col">Wednesday</th>
+                <th scope="col">Thursday</th>
+                <th scope="col">Friday</th>
+                <th scope="col">Saturday</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+
                     {% for key, list in dict.items %} 
+
+                    
                         {%for attribute in list%}
-        
-                        {% if forloop.first %}
-                        {{attribute}}
-        
-                        {%else%}
-                        {{attribute.day_of_week}}
-                        {{attribute.start}} - {{attribute.end}}
+                        
+                          {% if forloop.first %}
+                          <td>{{attribute}}</td>
+                          
+                          {%else%}
+
+                            {% if attribute == None %}
+                            <td></td>
+                            {%else%}
+                            {{attribute.day_of_week}}
+                            <td>{{attribute.start}} - {{attribute.end}} </td>
+                            {% endif %}
                         {% endif %}
         
                         {% endfor %}
                         <br>
+                      </tr>
                   {% endfor %}
 
 
 
-
+                
+    
+              </div>
+              </tbody>
+              </table>
 
 
     </div>

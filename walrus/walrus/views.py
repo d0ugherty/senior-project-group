@@ -661,25 +661,49 @@ def schedule_employee(request):
                     end_date = date + timedelta(6)
 
 
-                    print(start_date)
-                    print(end_date)
-            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1)))).order_by('date')
+                #    print(start_date)
+               #     print(end_date)
+            shiftsThisWeek = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1)))).order_by('date')
             
-            for i in shifts:
-                print(i.day_of_week())
+            #for i in shifts:
+            # print(i.day_of_week())
             employees = Employee.objects.all()
-
+        '''
             for e in employees:
                 print(e)
                 list = []
                 list.append(e)
-                for s in shifts:
+                for s in shiftsThisWeek:
                         if s in e.Shifts.all():
-                            print("found a shift")
+                            #print("found a shift")
                             list.append(s)
                 dict[str(e.pk)] = (list) 
-              
-            print (dict)
+            '''
+        for e in employees:
+                print(e)
+                list = [None, None, None, None, None, None, None,None]
+                list[0]=e
+                for s in shiftsThisWeek:
+                        if s in e.Shifts.all():
+                            temp = s.day_of_week()
+                            if temp == 6:
+                                list[1] = s
+                            if temp == 0:
+                                list[2] = s
+                            if temp == 1:
+                                list[3] = s
+                            if temp == 2:
+                                list[4] = s
+                            if temp == 3:
+                                list[5] = s
+                            if temp == 4:
+                                list[6] = s
+                            if temp == 5:
+                                list[7] = s
+
+                dict[str(e.pk)] = (list) 
+        
+                #print (dict)
             #print(shifts)
             #print(employees)
 
