@@ -354,9 +354,6 @@ def employee_stats(request):
             if (not is_valid_id(input_id)):
                 return render(request, 'employee_stats.html', {'form' : form,
                                                                 'show_error': True})
-            # get tasks
-            print(input_id)
-            
             if  (Employee.objects.filter(pk=input_id)):
                 employee = Employee.objects.get(pk=input_id)
                 
@@ -385,8 +382,8 @@ def manage_roles(request):
         assign_role_form = assignRole(request.POST)
         context['create_role_form'] = create_role_form
         context['assign_role_form'] = assign_role_form
-
-        if create_role_form.is_valid():
+        # Role creation/deletion
+        if create_role_form.is_valid() or assign_role_form.is_valid():
             role_name = create_role_form.cleaned_data['role_name'].strip()
             role_desc = create_role_form.cleaned_data['description'].strip()
 
@@ -396,10 +393,18 @@ def manage_roles(request):
             else:
                 context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
             return blank_role_form(request, 'manage_roles.html', context)
+       # Employee assignment 
+            role = assign_role_form.cleaned_date['roles'].strip()
+            employee = assign_role_Form.cleaned_data['assign_employee'].strip()
+             
+            employee.role = role
+            print(f'Employee {employee} assigned to {role}')
+            return redirect('manage_roles')
     else:
         if 'msg' in request.session:
             context['msg'] = request.session.pop('msg')
         return blank_role_form(request, 'manage_roles.html', context)
+
 """
     Helper functions to reduce code duplication
     and make the manage_roles view more readable

@@ -109,11 +109,18 @@ class projectForm(forms.Form):
     name = forms.CharField(label="Project Name",max_length=250)
     due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)
 
-class createRole(forms.Form):
+
+"""
+    A parent form to properly handle multiple forms on the role management page
+"""
+class RoleMgmtForm(forms.Form):
+  action = forms.CharField(max_length=60, widget=forms.HiddenInput()) 
+
+class createRole(RoleMgmtForm):
     role_name = forms.CharField(label="Role/Position", max_length=50)
     description = forms.CharField(label="Description", max_length=255, required=False)
 
-class assignRole(forms.Form):
+class assignRole(RoleMgmtForm):
     roles = forms.ModelChoiceField(queryset=Role.objects.all())
     assign_emloyee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",

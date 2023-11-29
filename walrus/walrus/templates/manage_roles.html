@@ -6,18 +6,19 @@
 <body>
     <form action="" method="post">
         {% csrf_token %}
-    <!-- TO DO: Finish this-->
-    {{ create_role_form }}
-    {% if msg %}
-        <p> {{ msg }}</p>
-    {% endif %}
+        <!-- TO DO: Finish this-->
+        {{ create_role_form }}
+        {% if msg %}
+           <p> {{ msg }}</p>
+        {% endif %}
    
-    <button type="submit" name="submit_role" value="Submit">SUBMIT</button>
+        <button type="submit" name="submit_role" value="Submit">SUBMIT</button>
     
     </form>
-    
-    {{ assign_role_form }}
-    {% csrf_token %}
-    <button type="submit" name="submit_role" value="Submit">SUBMIT</button>
+
+    <form action="" method="post"> 
+        {% csrf_token %}
+        {{ assign_role_form }}
+    <button type="submit" name="assign_role" value="assign">Assign Position</button>
 </body>
 {% endblock %}
