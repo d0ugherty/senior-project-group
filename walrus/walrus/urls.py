@@ -52,7 +52,7 @@ urlpatterns = [
     path('home/<int:employee_id>/profile', views.profile, name='profile'),
     path('home/<int:employee_id>/profile/edit_profile', views.edit_profile, name='edit_profile'),
     path('home/<int:employee_id>/request_time_off', views.request_time_off, name='request_time_off'),
-  
+    path('create_role/', views.create_role, name='create_role')
     
     path("notification", views.notify, name="notification"),
 
