@@ -64,8 +64,7 @@ def availability(request, employee_id):
 
 def request_time_off(request, employee_id):
     user = request.user
-    if request.method == 'POST':
-        
+    if request.method == 'POST': 
         form = requestOffForm(request.POST)
         if form.is_valid():
             
@@ -78,6 +77,7 @@ def request_time_off(request, employee_id):
                 user.employee.Request_Offs.add(new_request_off)
     form = requestOffForm()
     return render(request, 'request_time_off.html', {'form':form})
+
 
 def profile(request, employee_id):
     user = request.user
@@ -144,8 +144,9 @@ def home_redirect(request):
      return redirect(url)
     return render(request, 'home.html')
 
- 
-
+def python_test(request):
+    user = datetime.d
+    
 def list_tasks(request):
     try:
         tasks = Task.objects.all()
@@ -404,17 +405,16 @@ def manage_roles(request):
     and make the manage_roles view more readable
 
 """
-def blank_role_form(request, template, context): 
+def blank_role_form(request, template, context):  
     context['create_role_form'] = createRole()
     context['assign_role_form'] = assignRole()
     return render(request, template, context)
 
 def create_role(request,context,name,desc):
     try:
-        with transaction.atomic():
-            new_role = Role.objects.create(name=name, description=desc).validate_unique()
-            context['role'] = new_role
-            request.session['msg'] = f'Role {name} successfully created'
+        new_role = Role.objects.create(name=name, description=desc).validate_unique()
+        context['role'] = new_role
+        request.session['msg'] = f'Role {name} successfully created'
     except ValidationError as error:
         request.session['msg'] = f'Role submission unsuccessful: {error}'
 
