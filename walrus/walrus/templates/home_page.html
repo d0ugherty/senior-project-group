@@ -43,9 +43,10 @@
       <br>
       <a href="{%url 'calendar' %}">Calendar </a>
       <br>
-      {%if user.employee.is_manager == 'Yes' %}
       <a href="/shift_switch/{{ employee.pk }}">Shift Switch</a>
-<a href="{% url 'manager_tools' %}">Manager Tools</a>
+      <br>
+      {%if user.employee.is_manager == 'Yes' %}
+      <a href="{% url 'manager_tools' %}">Manager Tools</a>
       <br>
       {%endif%}
       <a  href= "/home/{{ employee.pk }}/availability" > Avilability </a>
