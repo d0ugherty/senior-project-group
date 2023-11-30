@@ -554,10 +554,7 @@ def shift_switch(request, employee_id):
 def swap_shifts(request, employee_id, shift_id):
     employee = Employee.objects.get(pk=employee_id)
     shift = Shift.objects.get(pk=shift_id)
-    print("DO YOU EVEN GET HERE")
-
     employees = Employee.objects.all()
-    shifts = Shift.objects.filter(to_be_taken=True)
 
     #find shift from existing employee and remove it
     #there HAS to be a better way to do this but I can't find anything
@@ -568,12 +565,11 @@ def swap_shifts(request, employee_id, shift_id):
                 break
 
     #add the shift to the current employee
+    #and alter the shift+save it
     shift.to_be_taken = False
     shift.save()
     employee.Shifts.add(shift)
     shifts = Shift.objects.filter(to_be_taken=True)
-
-    
 
     return render(request, 'shift_switch.html', {
         'employee' : employee,
