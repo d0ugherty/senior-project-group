@@ -26,17 +26,12 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     is_complete = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    
+
     date_created = models.DateTimeField(blank=True, auto_now_add=True)
     date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
     due_date = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
-
-    #Shift stuff, gonna see if this works better
-    #start = models.CharField(max_length=255, blank=True, null=True)  
-    #end = models.CharField(max_length=255, blank=True, null=True)  
-    #to_be_taken = models.BooleanField(default=False)
-
+    wont_complete = models.BooleanField(default=False, null=True)
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
     def time_on_task(self):
@@ -63,7 +58,9 @@ class Shift(models.Model):
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
      to_be_taken = models.BooleanField(default=False) 
-
+     def day_of_week(self):
+        return self.date.weekday()
+         
 class Availability(models.Model):
     sunday_start = models.CharField(max_length=255, blank=True, null=True)
     sunday_end = models.CharField(max_length=255, blank=True, null=True)
@@ -80,11 +77,19 @@ class Availability(models.Model):
     saturday_start = models.CharField(max_length=255, blank=True, null=True)
     saturday_end = models.CharField(max_length=255, blank=True, null=True)
 
-
+class Role(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    def __str__(self):
+            return self.name
+    
+class Request_Off(models.Model):
+    description = models.CharField(max_length=255, blank=True)
+    start = models.CharField(max_length=255, blank=True, null=True)  
+    end = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Employee(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
     is_manager = models.CharField(
@@ -94,16 +99,18 @@ class Employee(models.Model):
     )
 
     def __str__(self):
-        return self.user.username
+        name = self.user.first_name + " " + self.user.last_name
+        return name
 
     employee_id = models.IntegerField(null=True, blank=True)
-
-    dept = models.CharField(max_length=255, blank=True, null=True)
+    #dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
+    #role = models.ForeignKey(Role, on_delete=models.CASCADE)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
-    #Days_request_off = models.OneToManyField(Request_off)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
-
+    profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")
+    phone_number = models.IntegerField(blank=True, null=True)
+    Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
 
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
@@ -111,9 +118,12 @@ class Time_Spent(models.Model):
         in_progress = models.BooleanField(default=False, null=True)
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
+
 class Notifications (models.Model):
      message = models.TextField()
      created_at = models.DateTimeField(auto_now_add=True)
 
-     def __str(self):
+     def __str__(self):
           return self.message
+     
+     

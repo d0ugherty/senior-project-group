@@ -1,21 +1,23 @@
+{% load static %}
+
+<head>
+  
+  <link rel="stylesheet" href="{% static '/css/manager_tools.css' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
 {% block content %}
-
 <title>Manager Tools</title>
-<h3>Manager Tools</h3>
 
-<div>
-    <form action="{% url 'manager_tools_redirect' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" name="destination" value="/add_task/">Add Tasks</button>
-        <button type="submit" name="destination" value="/create_project/">Create Project</button>
-        <button type="submit" name="destination" value="/list_tasks/">View All Tasks</button>
-        <button type="submit" name="destination" value="/schedule_employee/">Scheduling</button>
-        <button type="submit" name="destination" value="/employee_stats/">Employee Statistics</button>
-        <button type="submit" name="destination" value="/edit_user_info/">Edit User Information</button>
+<body class="parent-container">
+        <form class="button-container" action="{% url 'manager_tools_redirect' %}" method="post">
+        <h1 class="heading">Manager Tools</h1>
+          {% csrf_token %}
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/add_task/">Add Tasks</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/create_project/">Create Project</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/list_tasks/">View All Tasks</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/schedule_employee/">Scheduling</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/employee_stats/">Employee Statistics</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/edit_user_info/">Edit User Information</button>
       </form>
-      
-
-
-</div>
-
+</body>
 {% endblock %}

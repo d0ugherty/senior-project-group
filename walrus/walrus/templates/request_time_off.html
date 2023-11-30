@@ -1,6 +1,5 @@
+
 <html>
-
-
 
 {% load static %}
 <html lang="en"><head>
@@ -13,7 +12,12 @@
   </head>
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link rel="stylesheet" href="{% static '/css/task_update.css' %}">
+  <link rel="stylesheet" href="{% static '/css/form.css' %}">
+
+
+  <form method="POST">
+    {% csrf_token %}
+  
   <div class="container">
   <div class="row">
   <div class="col-xl-9">
@@ -24,40 +28,51 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'home' %}" class="return ">Go Back</a>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  <h4>Schedule Request</h4>
+  <a href="{% url 'home' %}" class="back_button">Go Back</a>
 
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-
-  <h3>Task Status Update</h3>
- 
   <div class="card">
     <div class="tab-content p-4">
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
     <div class="d-flex align-items-center">
     <div class="flex-1">
-      <textarea type="text" class="form-control update_textbox" id="description" name="description" value=""></textarea>
-    <h6 class="mb-0 text-muted">
+        
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
     
-    <div></div>
-            <button class="btn btn-primary  ">{{ form.image }}</button> 
-
-        </div>
-
-      </h6>
-      <input type="submit" class="btn btn-primary px-4 submit_task_update" value="submit Update">
+        <input type="Submit"  class = "btn btn-primary px-4" value="Submit Request" >
+     
+    </form>
     </div>
     </div>
+    </div>
+    </div>
+
+  </form>
+
+  
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+    </div>
+    
   </div>
-</form>
   </div>
+  
   </div>
   </div>
   </div>
@@ -67,6 +82,7 @@
   </ul>
   </div>
   </div>
+  
   </div>
   </div>
   </div>
@@ -79,3 +95,15 @@
   </body></html>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

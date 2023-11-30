@@ -1,0 +1,20 @@
+.button-container {
+  text-align: center;
+  margin: auto; /* Center the container */
+  padding: 1rem; 
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); /* Shadow effect */
+  border-radius: 10px; 
+  background-color: antiquewhite;
+  max-width: 100rem; 
+  min-width: 20rem;
+  width: 50%; 
+  box-sizing: border-box; 
+}
+
+.parent-container {
+  background-color:rgb(230, 236, 236) ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+}

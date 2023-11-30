@@ -23,6 +23,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
+
 def availability(request, employee_id):
     print("hello")
     employee = Employee.objects.get(pk=employee_id)
@@ -58,11 +59,77 @@ def availability(request, employee_id):
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
+def request_time_off(request, employee_id):
+    user = request.user
+    if request.method == 'POST':
+        
+        form = requestOffForm(request.POST)
+        if form.is_valid():
+            
+                description = form.cleaned_data['description']
+                start_date = form.cleaned_data['start_date']
+                end_date = form.cleaned_data['end_date']
+                print(start_date)
+                new_request_off = Request_Off(description=description, start=start_date, end=end_date)
+                new_request_off.save()
+                user.employee.Request_Offs.add(new_request_off)
+    form = requestOffForm()
+    return render(request, 'request_time_off.html', {'form':form})
+
+def profile(request, employee_id):
+    user = request.user
+
+    # getting and changing the profile pic
+    if request.method == 'POST':
+        print(request.POST)
+        if 'change picture' in request.POST:
+            form = change_profile_image_Form(request.POST, request.FILES)
+            if form.is_valid():
+                image = form.cleaned_data.get('profile_pic')
+                user.employee.profile_pic = image
+                user.employee.save()
+        if 'remove' in request.POST:
+            user.employee.profile_pic = None
+            user.employee.save()
+
+
+    
+    pic_form = change_profile_image_Form()
+    #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
+    return render (request, 'new_profile.html',{'user':user})
+    #return render (request, 'edit_profile.html',{'user':user})
+
+def edit_profile(request, employee_id):
+    user = request.user
+    if request.method == 'POST':
+        form = change_profile_image_Form(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.cleaned_data.get('profile_pic')
+            print(image)
+            if image != None:
+                user.employee.profile_pic = image
+                user.employee.save()
+        print("hello")
+        print(request.POST)    
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        phone_number = request.POST['phone_number']
+        # PUT PHONE NUMBER AND IMAGE
 
 
 
-
-
+        print(first_name)
+        print(user.first_name)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.employee.phone_number = phone_number
+        user.employee.save()
+        user.save()
+        
+    pic_form = change_profile_image_Form()
+    return render (request, 'edit_profile.html',{'user':user, 'form':pic_form})
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
@@ -112,6 +179,11 @@ def list_tasks(request):
     })
 
 def create_project(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
+
     if request.method == 'POST':
         name = request.POST.get('name')
         date = request.POST.get('due_date')
@@ -133,12 +205,14 @@ def task_detail (request, task_id):
     form = taskSearchForm()
 
     task = Task.objects.get(id=task_id)
+    employees = task.employee_set.all()
     updates = task.task_update_set.all()
     print(updates)
     return render (request, 'task_detail.html', {
         'task': task,
         'form' : form,
         'updates' : updates,
+        'employees':employees
     })
 
 def home_page(request, employee_id, day, month, year):
@@ -151,7 +225,7 @@ def home_page(request, employee_id, day, month, year):
     # date from url
     print(shift)
     print(screen_date)
-    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False) 
    #print(employee)
    # print(tasks)
     
@@ -178,8 +252,17 @@ def home_page(request, employee_id, day, month, year):
                     adjust_clock_in(time_record)
             
             elif str(x) + " complete" in request.POST:
+                print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
+                return redirect('home')
+               
+
+#    if request.htmx:
+ #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
+
+  #  else:
+
 
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
@@ -221,6 +304,12 @@ def next_month(d):
     TO DO: Check for user type
 """
 def load_manager_tools(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
+
+
     return render(request, 'manager_tools.html')
 
 """
@@ -261,6 +350,10 @@ def manager_tools_redirect(request):
 """
 
 def employee_stats(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+    
     if request.method == 'POST':
         
         form = employeeIdSearch(request.POST)
@@ -271,28 +364,51 @@ def employee_stats(request):
             if (not is_valid_id(input_id)):
                 return render(request, 'employee_stats.html', {'form' : form,
                                                                 'show_error': True})
-
-
             # get tasks
-            employee = Employee.objects.get(employee_id=input_id)
-            tasks = employee.Tasks.all()
-            name = f'{employee.user.first_name} {employee.user.last_name}' 
-            return render(request, 'employee_stats.html', {'form': form, 
-                                                           'tasks': tasks, 
-                                                           'employee': employee,
-                                                           'employee_name': name})
+            print(input_id)
+            
+            if  (Employee.objects.filter(pk=input_id)):
+                employee = Employee.objects.get(pk=input_id)
+                
+                tasks = employee.Tasks.all()
+                name = f'{employee.user.first_name} {employee.user.last_name}' 
+                return render(request, 'employee_stats.html', {'form': form, 
+                                                            'tasks': tasks, 
+                                                            'employee': employee,
+                                                            'employee_name': name})
     else:
         form = employeeIdSearch()
-
     return render(request, 'employee_stats.html', {'form' : form })
 
-
+"""
+    Create Role
+"""
+def create_role(request):
+    if request.method == 'POST':
+        form = createRole(request.POST)
+        if form.is_valid():
+            role_name = form.cleaned_data['role_name'].strip()
+            role_desc = form.cleaned_data['description'].strip()
+            ## prevent duplicates by checking if a role with the same name exists
+            if not is_valid_role(role_name):
+                # show error
+                pass
+            else:
+                new_role = Role.objects.create(name=role_name, description=role_desc)
+            return render(request, 'create_role.html', {'form': form,
+                                                        'role': new_role})
+    else:
+        form = createRole()
+        return render(request,'create_role.html',{'form' : form})
 
 """
     Add Task
 """
 
 def add_task(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
     if request.method=='POST':
         form = addTask(request.POST)
         if form.is_valid():
@@ -354,6 +470,11 @@ Employee will need to be changed to allow for multiple employees to appear
 
 
 def edit_task(request, task_id):
+
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
 
     task = Task.objects.get(pk=task_id) 
     if request.method=='POST':
@@ -421,6 +542,7 @@ def edit_task(request, task_id):
 
     #employee = task.Employee
     form = editTask(initial=nonEmptyFields)
+    print(nonEmptyFields['project'])
     return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
@@ -431,22 +553,33 @@ def delete_task(request, task_id):
 
 def update_task_status(request,task_id):
     if request.method == "POST":
+        print("we at post")
         form = updateTask(request.POST, request.FILES)
         if form.is_valid():
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
-            
+            print("HELA")
+            print(image)
             task = Task.objects.get(pk=task_id)
             
             update = Task_Update(description=description,task=task, venue_image=image)
             update.save()
+            return redirect('home')
 
 
     form = updateTask()
     return render(request, 'update_task_status.html', {'form':form})
 
 def schedule_employee(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
     avil = None
+    employees = None
+    shifts = None
+    requests_off = None
+    dict = {}
+
     if request.method == "POST":
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
@@ -456,6 +589,8 @@ def schedule_employee(request):
                 print(employee.pk)
                 avil = employee.availability
                 print(avil)
+                print(datetime.today())
+                requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
         if "save_shift" in request.POST:
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
@@ -515,12 +650,32 @@ def schedule_employee(request):
                     end_date = date + timedelta(6)
 
 
-
                     print(start_date)
                     print(end_date)
-            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1))))
+            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1)))).order_by('date')
+            
+            for i in shifts:
+                print(i.day_of_week())
+            employees = Employee.objects.all()
 
-            print(shifts)
+            for e in employees:
+                print(e)
+                list = []
+                list.append(e)
+                for s in shifts:
+                        if s in e.Shifts.all():
+                            print("found a shift")
+                            list.append(s)
+                dict[str(e.pk)] = (list) 
+              
+            print (dict)
+            #print(shifts)
+            #print(employees)
+
+            #Restructruring data
+
+            
+
 
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
@@ -529,7 +684,24 @@ def schedule_employee(request):
     return render(request, 'schedule_employee.html', 
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
-                   'select_week_form':select_week_form })
+                   'select_week_form':select_week_form, 
+                    'employees':employees, 'shifts':shifts, 'dict':dict,
+                    'requests_off':requests_off,
+                    })
+
+def task_failure(request, task_id):
+    if request.method=='POST':
+        form = failureForm(request.POST)
+        task = Task.objects.get(id=task_id)
+        if form['failure']:
+            task.wont_complete = True
+        task.save()
+        return HttpResponseRedirect(reverse('list_tasks'))
+    
+    form = failureForm()
+    return render(request, 'task_failure.html',
+                  { 'fail_form':form })
+
 
 def shift_switch(request, employee_id):
     employee = Employee.objects.get(pk=employee_id)

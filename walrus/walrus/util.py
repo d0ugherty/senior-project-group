@@ -82,28 +82,34 @@ class Calendar(HTMLCalendar):
      just help to make sure that data entered is valid
 """
 def is_valid_id(input_id):
-       return input_id.strip().isdigit()
+     return input_id.strip().isdigit()
      
-
+"""
+     Checks for duplicate role names in the database
+"""
+def  is_valid_role(input):
+     existing_roles = set()
+     existing_roles = Role.objects.filter(input)
+     return input in existing_roles
+     
 def adjust_clock_in(time_record):
-                    print("boo")
-                    # When employee clocks in 
-                    if (time_record.in_progress == False):
-                        time_record.in_progress=True
-                        time_record.last_clock_in = datetime.now()
-                        time_record.last_clock_in = datetime.now(timezone.utc)
-                        time_record.save()
-                        print("clock")
-                    else:
-                    # When employee clocks out 
-
-                        additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
-                        print(additionalTime)
-                        time_record.total_time = time_record.total_time + additionalTime
+     print("boo")
+     # When employee clocks in 
+     if (time_record.in_progress == False):
+          time_record.in_progress=True
+          time_record.last_clock_in = datetime.now()
+          time_record.last_clock_in = datetime.now(timezone.utc)
+          time_record.save()
+          print("clock")
+     else:
+          # When employee clocks out 
+          additionalTime = datetime.now(timezone.utc) - time_record.last_clock_in
+          print(additionalTime)
+          time_record.total_time = time_record.total_time + additionalTime
                        
-                        time_record.in_progress = False
-                        time_record.save()
-                        print("clock2")
+          time_record.in_progress = False
+          time_record.save()
+          print("clock2")
 
 def set_availability(request,employee):
      print("called")
