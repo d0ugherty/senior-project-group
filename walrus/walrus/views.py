@@ -7,7 +7,7 @@ from django.views import generic
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import datetime
 from datetime import datetime, timedelta
 from calendar import month_name
@@ -16,7 +16,7 @@ from calendar import HTMLCalendar
 from .models import Task
 from .forms import *
 from .util import *
-
+from .multiforms import MultiFormView
 from datetime import datetime,timezone
 
 from django.contrib import messages
@@ -372,7 +372,7 @@ def employee_stats(request):
     TO DO:    
     > Remove roles and positions
 
-"""
+
 
 
 def manage_roles(request):
@@ -404,6 +404,29 @@ def manage_roles(request):
         if 'msg' in request.session:
             context['msg'] = request.session.pop('msg')
         return blank_role_form(request, 'manage_roles.html', context)
+"""
+class RoleManagementView(MultiFormView):
+    template_name = 'templates/manage_roles.html'
+    form_classs = {'create' : CreateRole,
+                   'assign' : AssignRole
+                   }
+
+    success_urls = {
+            'create': reverse_lazy('manage_roles'),
+        'assign': reverse_lazy('manage_roles')
+    }
+    
+    def create_form_valid(self, form):
+        role_name = form.cleaned_data['role_name'].strip()
+        role_desc = form.cleaned_data['description'].strip()
+
+        if not Role.objects.filter(name=role_name).exists():
+            create_role(request, context, role_name, role_desc)
+            return HttpResponseRedirect(self.get_success_url(form_name))
+        else:
+            context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
+            return blank_role_form(request, 'manage_roles.html', context)
+ 
 
 """
     Helper functions to reduce code duplication

@@ -59,8 +59,7 @@ class MultiformMixin(ContextMixin):
         return form
 
 
- class ProcessMultipleFormsView(ProcessFormView):
-
+class ProcessMultipleFormsView(ProcessFormView):
      def get(self, request, *args, **kwargs):
          forms_classes = self.get_form_classes()
          forms = self.get_forms(form_classes)
@@ -81,4 +80,8 @@ class MultiformMixin(ContextMixin):
          else:
              return self.forms_invalid(forms)
 
+class BaseMultipleFormsView(MultiformMixin, ProcessMultipleFormsView):
+    pass
 
+class MultiFormView(TemplateResponseMixin, BaseMultipleFormsView):
+    pass
