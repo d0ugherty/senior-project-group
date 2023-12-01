@@ -1,46 +1,46 @@
 {% block content %}
+<html>
+    {% load static %}
+    <html lang="en"><head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    </head>
+    <body style="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{% static '/css/shift_switch.css' %}">
 
-<style>
-    h3 {text-align: center;}
+    <div class="container">
+    <div class="row">
+    <div class="col-xl-9">
+    <div class="card-body pb-0">
+    <div class="row align-items-center">
+    <div class="col-md-9">
+    <div class="ms-3">
+    <div class="row my-4">
+    <div class="col-md-12">
 
-    .center {text-align: center;}
-
-    fieldset {
-        border: 2px solid rgb(0, 0, 0);
-        width: 400px;
-        margin:auto;
-    }
-
-    .button {
-        font: 16px Arial;
-        text-decoration: none;
-        background-color: #EEEEEE;
-        color: #333333;
-        padding: 6px 12px 6px 12px;
-        border-top: 1px solid #CCCCCC;
-        border-right: 1px solid #333333;
-        border-bottom: 1px solid #333333;
-        border-left: 1px solid #CCCCCC;
-    }
-
-    .buttonGB {text-align: center;}
-</style>
-
-<body>
-    <div id="form">
-        <a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
-        <h3>Shifts Available:</h3>
-        {% for s in shifts %}
-            <fieldset>
-                <legend><b>{{ s.pk }}</b></legend>
-                <b>Date: {{ s.due_date }}   Start: {{ s.start }}   End: {{ s.end }}</b>
-                <br><br>
-                <b>Assigned Employee {{ s.user.first_name }}</b>
-                <br><br>
-                <a href="/swap_shift/{{ employee.pk }}/{{ s.pk }}" class="button">Pick Up Shift</a>
-            </fieldset>
-        {% endfor %}
-    </div>
-</body>
-
+    <a href="{% url 'home' %}" class="btn btn-primary go_back">Go Back</a>
+    <h3>Shifts Available:</h3>
+    {% for s in shifts %}
+        <div class="card">
+            <div class="tab-content p-4">
+            <div class="tab-pane active show" id="description-tab" role="tabpanel">
+            <div class="d-flex align-items-center">
+            <div class="flex-1">
+                <h6 class="mb-0 text-muted">
+                <h6>Date: {{ s.date }}</h6>
+                <h6>Start: {{ s.start }}</h6>
+                <h6>End: {{ s.end }}</h6>
+                <br>
+                <h6>Assigned Employee: {{ s.user.first_name }}</h6>
+                <br>
+                <a href="/swap_shift/{{ employee.pk }}/{{ s.pk }}" class="btn btn-primary swap">Pick Up Shift</a>
+            </div></div></div></div>
+        </div>
+    {% endfor %}
+    </div></div></div></div></div></div></div></div></div>
+    </html>
+</html>
 {% endblock %}
