@@ -39,9 +39,9 @@
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
     <div class="d-flex align-items-center">
     <div class="flex-1">
-        
+        {%if user.employee.is_manager == 'Yes' %}
         <a  href="/manager_tools/edit_task/{{ task.pk }}" class ="btn btn-primary px-4 clock_in" type="submit" name="{{x}} clock"> Edit Task </a>
-
+        {%endif%}
         <h4>Description</h4>
         <div class="card description_card">
             <div class="tab-content p-4">

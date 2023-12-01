@@ -1,59 +1,170 @@
-<form method="POST">
-    <h3>enter employee id</h3>
+<html>
 
+{% load static %}
+<html lang="en"><head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static '/css/home_page.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+  </head>
+  <body style="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="{% static '/css/form.css' %}">
+
+
+  <form method="POST">
     {% csrf_token %}
-{{ search_form.as_p }}
-<button name="search"> Submit </button>
-</form>
+  
+  <div class="container">
+  <div class="row">
+  <div class="col-xl-9">
+  <div class="card-body pb-0">
+  <div class="row align-items-center">
+  <div class="col-md-9">
+  <div class="ms-3">
+  <div class="row my-4">
+  <div class="col-md-12">
+  <div>
+    <a href="{% url 'home' %}" class="back_button">Go Back</a>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  <h4>Add Task</h4>
 
-<h3>Employees avilabilty</h3>
-    {{ avil.sunday_start }} - {{avil.sunday_end}} {{ avil.monday_start }} - {{avil.monday_end}} {{ avil.tuesday_start }} - {{avil.tuesday_end}}
-    {{ avil.wednesday_start }} - {{avil.wednesday_end}} {{ avil.thursday_start }} - {{avil.thursday_end}} 
-    {{ avil.friday_start }} - {{avil.friday_end}}     {{ avil.saturday_start }} - {{avil.saturday_end}}
-    
-    <br>
-    {%for request in requests_off%}
+  <div class="card">
+    <div class="tab-content p-4">
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+        <form method="POST">
+            enter employee id
+        
+            {% csrf_token %}
+        {{ search_form.as_p }}
+        <button name="search"> Submit </button>
+        </form>
+        
+        Employees avilabilty
+        <br>
+            {{ avil.sunday_start }} - {{avil.sunday_end}} {{ avil.monday_start }} - {{avil.monday_end}} {{ avil.tuesday_start }} - {{avil.tuesday_end}}
+            {{ avil.wednesday_start }} - {{avil.wednesday_end}} {{ avil.thursday_start }} - {{avil.thursday_end}} 
+            {{ avil.friday_start }} - {{avil.friday_end}}     {{ avil.saturday_start }} - {{avil.saturday_end}}
+            
+            <br>
+            {%for request in requests_off%}
+        
+            {{request.start}} to {{request.end}}
+            {{request.description}}
+        
+            <br>
+            {% endfor %}
+     
+            <form method="POST">
 
     {{request.start}} to {{request.end}}
     {{request.description}}
 
     <br>
-    {% endfor %}
+                <h3>schedule an employee</h3>
+            
+                {% csrf_token %}
+            {{ schedule_form.as_p }}
+            <button name="save_shift"> Submit </button>
+            </form>
+        
+        
+            <form method="POST">
+        
+                <h3>All shifts for the week of: </h3>
+            
+                {% csrf_token %}
+            {{ select_week_form.as_p }}
+            <button name="select_week_form"> Submit </button>
+            </form>
+            <table class="table align-middle table-nowrap table-hover mb-0 ">
+                <thead class="table-light">
+                <tr>
+                <th scope="col">Task Name</th>
+                <th scope="col">Project Name</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Employees</th>
+        
+          
+                    {% for key, list in dict.items %} 
+                        {%for attribute in list%}
+        
+                        {% if forloop.first %}
+                        {{attribute}}
+        
+                        {%else%}
+                        {{attribute.day_of_week}}
+                        {{attribute.start}} - {{attribute.end}}
+                        {% endif %}
+        
+                        {% endfor %}
+                        <br>
+                  {% endfor %}
 
 
-    <form method="POST">
-
-        <h3>schedule an employee</h3>
-    
-        {% csrf_token %}
-    {{ schedule_form.as_p }}
-    <button name="save_shift"> Submit </button>
-    </form>
 
 
-    <form method="POST">
 
-        <h3>All shifts for the week of: </h3>
-    
-        {% csrf_token %}
-    {{ select_week_form.as_p }}
-    <button name="select_week_form"> Submit </button>
-    </form>
 
+    </div>
+    </div>
+    </div>
+    </div>
+
+  </form>
 
   
-            {% for key, list in dict.items %} 
-                {%for attribute in list%}
 
-                {% if forloop.first %}
-                {{attribute}}
+    </div>
+</div>
+</div>
+</div>
+</div>
 
-                {%else%}
-                {{attribute.day_of_week}}
-                {{attribute.start}} - {{attribute.end}}
-                {% endif %}
 
-                {% endfor %}
-                <br>
-          {% endfor %}
+    </div>
+    </div>
+    
+  </div>
+  </div>
+  
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  </ul>
+  </div>
+  </div>
+  
+  </div>
+  </div>
+  </div>
+  </div>
+ </script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript"> 
+  </script>
+  </form>
+  </body></html>
+</body>
+</html>
+
+
+
+
+
+    
 
