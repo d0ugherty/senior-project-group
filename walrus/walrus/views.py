@@ -448,8 +448,9 @@ def handle_role_assignment(request,context):
             
         msg = get_assign_msg(employee, role)
 
-        employee.role_id = role.id
-        
+        employee.role = role
+        employee.save()
+        print(f' role id {role.id}') 
         print(msg)
         request.session['msg'] = msg
         return redirect('manage_roles')
