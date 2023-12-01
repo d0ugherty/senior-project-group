@@ -186,7 +186,7 @@ def task_detail (request, task_id):
     task = Task.objects.get(id=task_id)
     employees = task.employee_set.all()
     updates = task.task_update_set.all()
-    print(updates)
+
     return render (request, 'task_detail.html', {
         'task': task,
         'form' : form,
@@ -195,25 +195,20 @@ def task_detail (request, task_id):
     })
 
 def home_page(request, employee_id, day, month, year):
+  
     screen_date = date(year,month,day)
     employee = Employee.objects.get(pk=employee_id)
     shift = employee.Shifts.filter(date=screen_date)
     if shift.first() != None:
         shift = shift.first()
+    
     # should filter all tasks that have not been completed
     # date from url
-    print(shift)
-    print(screen_date)
-    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False) 
-   #print(employee)
-   # print(tasks)
-    
-
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False)
+   
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
-        # I just have the buttons named as the task object they are associated with
-        print(request.POST)
-       
+        # I just have the buttons named as the task object they are associated with       
         for x in tasks:
             # print(str(x) + " complete")            
             # each button is labeled with either clock or complete so we know what to do
@@ -230,18 +225,13 @@ def home_page(request, employee_id, day, month, year):
                     time_record.save()
                     adjust_clock_in(time_record)
             
+            # if the task was selected as completed
             elif str(x) + " complete" in request.POST:
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
                 return redirect('home')
                
-
-#    if request.htmx:
- #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
-
-  #  else:
-
 
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
@@ -254,6 +244,7 @@ class CalendarView(generic.ListView):
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
+        
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
@@ -340,20 +331,19 @@ def employee_stats(request):
         form = employeeIdSearch(request.POST)
         
         if form.is_valid():
-           
+
             input_id = form.cleaned_data['employee_id'].strip()
             if (not is_valid_id(input_id)):
                 return render(request, 'employee_stats.html', {'form' : form,
                                                                 'show_error': True})
             # get tasks
-            print(input_id)
-            
             if  (Employee.objects.filter(pk=input_id)):
                 employee = Employee.objects.get(pk=input_id)
                 
                 tasks = employee.Tasks.all()
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
 
+                # looping through all of the time_spent objects associated with the tasks
                 time_spent = []
                 for t in tasks:
                     if (Time_Spent.objects.filter(employee=employee.pk,task=t.pk)):
@@ -361,8 +351,6 @@ def employee_stats(request):
                        time_spent.append(time_record.total_time)
                     else:
                        time_spent.append(None)
-                print(time_spent)
-
 
                 return render(request, 'employee_stats.html', {'form': form, 
                                                             'tasks': tasks, 
@@ -475,6 +463,7 @@ def add_task(request):
     user = request.user
     if user.employee.is_manager == 'No':
          return render(request, 'notAManager.html')
+    
     if request.method=='POST':
         form = addTask(request.POST)
         if form.is_valid():
@@ -485,8 +474,8 @@ def add_task(request):
             due_date = form.cleaned_data['due_date']
             assign_date = form.cleaned_data['assign_date']
 
-       
             # Going to loop through each field to make sure its not empty
+            # Was having issues when theses were empty
             fields ={
                     'task_name': task_name,
                     'task_description': task_description,
@@ -503,20 +492,6 @@ def add_task(request):
             newTask = Task(**nonEmptyFields)
             newTask.save()
 
-            print(employee)
-            if employee != None:
-                employee.Tasks.add(newTask)
-                message = "You have been assigned a new task: " + str(newTask.task_name)
-                channel_layer = get_channel_layer()
-                # Trigger message sent to group
-                async_to_sync(channel_layer.group_send)(
-                    str(employee.pk), # uses an employees primary key
-                    {
-                        "type": "send_notification",
-                        "message": message
-                    }
-                )
-
             return HttpResponseRedirect('/manager_tools')
     else:
         form = addTask()
@@ -531,8 +506,6 @@ def add_task(request):
 '''
 Employee will need to be changed to allow for multiple employees to appear
 '''
-
-
 
 
 def edit_task(request, task_id):
@@ -564,22 +537,9 @@ def edit_task(request, task_id):
             else:
                 employee.Tasks.add(task)
 
-            # Used for notifications
-                message = "Your task '" + str(task.task_name) + "' has been edited"
-                channel_layer = get_channel_layer()
-                # Trigger message sent to group
-                async_to_sync(channel_layer.group_send)(
-                    str(employee.pk), # uses an employees primary key
-                    {
-                        "type": "send_notification",
-                        "message": message
-                    }
-                )
-
             task.save()
             # Going to loop through each field to make sure its not empty
             
-
         return HttpResponseRedirect('/task_detail/' + str(task_id))
    
     # employee will need to be fixed later when we allow for multiple employees
@@ -619,19 +579,15 @@ def delete_task(request, task_id):
 
 def update_task_status(request,task_id):
     if request.method == "POST":
-        print("we at post")
         form = updateTask(request.POST, request.FILES)
         if form.is_valid():
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
-            print("HELA")
-            print(image)
             task = Task.objects.get(pk=task_id)
             
             update = Task_Update(description=description,task=task, venue_image=image)
             update.save()
             return redirect('home')
-
 
     form = updateTask()
     return render(request, 'update_task_status.html', {'form':form})
@@ -647,18 +603,19 @@ def schedule_employee(request):
     dict = {}
 
     if request.method == "POST":
+        # Employee Avilability was searched
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
                 employee = form.cleaned_data['employee']
                
 
-               
-                print(employee.pk)
-                avil = employee.availability
-                print(avil)
-                print(datetime.today())
-                requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
+                if employee != None:
+                    avil = employee.availability
+                    print(datetime.today())
+                    requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
+
+        # Shift was created
         if "save_shift" in request.POST:
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
@@ -669,97 +626,42 @@ def schedule_employee(request):
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
             employee.Shifts.add(shift)
+
         if "select_week_form" in request.POST:
             form = selectWeek(request.POST)
             if form.is_valid():
-                date = form.cleaned_data['date']
-                print(date.weekday())
-                
-                start_date = None
-                end_date = None
-                if (date.weekday() == 0):
-                    start_date = date-timedelta(1)
-                    end_date = date + timedelta(5)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 1):
-                    start_date = date-timedelta(2)
-                    end_date = date + timedelta(4)
-
-                    print(start_date)
-                    print(end_date)
-
-                if (date.weekday() == 2):
-                    start_date = date-timedelta(3)
-                    end_date = date + timedelta(3)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 3):
-                    start_date = date-timedelta(4)
-                    end_date = date + timedelta(2)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 4):
-                    start_date = date-timedelta(5)
-                    end_date = date + timedelta(1)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 5):
-                    start_date = date-timedelta(6)
-                    end_date = date 
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 6):
-                    start_date = date
-                    end_date = date + timedelta(6)
-
-
-            print("start and end", start_date, "   ", end_date)
-            print(end_date)
-            print("date change: ", end_date + timedelta(1))
-            shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
-            print(shiftsThisWeek)
-            #for i in shifts:
-            # print(i.day_of_week())
-            employees = Employee.objects.all()
-    
-        for e in employees:
-                print(e)
-                list = [None, None, None, None, None, None, None,None]
-                list[0]=e
-                for s in shiftsThisWeek:
-                        if s in e.Shifts.all():
-                            temp = s.day_of_week()
-                            if temp == 6:
-                                list[1] = s
-                            if temp == 0:
-                                list[2] = s
-                            if temp == 1:
-                                list[3] = s
-                            if temp == 2:
-                                list[4] = s
-                            if temp == 3:
-                                list[5] = s
-                            if temp == 4:
-                                list[6] = s
-                            if temp == 5:
-                                list[7] = s
-
-                dict[str(e.pk)] = (list) 
-        
-                #print (dict)
-            #print(shifts)
-            #print(employees)
-
-            #Restructruring data
-
+                date = form.cleaned_data['date']     
+                start_date, end_date = get_start_and_end(date)
+ 
+                shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
             
+                employees = Employee.objects.all()
+        
+                for e in employees:
+                        print(e)
+                        list = [None, None, None, None, None, None, None,None]
+                        list[0]=e
+                        for s in shiftsThisWeek:
+                                if s in e.Shifts.all():
+                                    temp = s.day_of_week()
+                                    if temp == 6:
+                                        list[1] = s
+                                    if temp == 0:
+                                        list[2] = s
+                                    if temp == 1:
+                                        list[3] = s
+                                    if temp == 2:
+                                        list[4] = s
+                                    if temp == 3:
+                                        list[5] = s
+                                    if temp == 4:
+                                        list[6] = s
+                                    if temp == 5:
+                                        list[7] = s
 
-
+                        dict[str(e.pk)] = (list) 
+        
+    
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
     select_week_form = selectWeek()
