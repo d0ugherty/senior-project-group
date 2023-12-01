@@ -380,9 +380,7 @@ def manage_roles(request):
     if request.method == 'POST':
         print(request.POST)
         if "submit_role" in request.POST:
-            print("attempting to submit role")
             # Role creation/deletion
-            #return blank_role_form(request, 'manage_roles.html', context)
             handle_role_submission(request, context)
        # Employee assignment 
         if "assign_role" in request.POST:
@@ -414,23 +412,27 @@ def blank_role_form(request, template, context):
 def handle_role_submission(request, context):
     create_role_form = CreateRoleForm(request.POST)
     context['create_role_form'] = create_role_form
-    print("handling role submission") 
+
     if create_role_form.is_valid():
-        print("form is valid, cleaning data")
         role_name = create_role_form.cleaned_data['role_name'].strip()
         role_desc = create_role_form.cleaned_data['description'].strip()
 
         if not Role.objects.filter(name=role_name).exists():
-            print("entry does not exist yet, creating it")
             create_role(request, context, role_name, role_desc)
             return redirect('manage_roles')
+    
         else:
             context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
-           # return context
             return blank_role_form(request, 'manage_roles.html', context)
-    print("form is not valid")
-    print(create_role_form.errors)
     return blank_role_form(request, 'manage_roles.html', context)
+
+def create_role(request,context,name,desc):
+    try:
+        new_role = Role.objects.create(name=name, description=desc).validate_unique()
+        context['role'] = new_role
+        request.session['msg'] = f'Role {name} successfully created'
+    except ValidationError as error:
+        request.session['msg'] = f'Role submission unsuccessful: {error}'
 
 """
     Handles the assignment of roles and positions to employees
@@ -441,23 +443,17 @@ def handle_role_assignment(request,context):
     context['assign_role_form'] = assign_role_form
     
     if assign_role_form.is_valid():
-        role = assign_role_form.cleaned_date['roles'].strip()
-        employee = assign_role_Form.cleaned_data['assign_employee'].strip()
-         
+        role = assign_role_form.cleaned_data['roles']
+        employee = assign_role_form.cleaned_data['assign_employee']
         employee.role = role
-        print(f'Employee {employee} assigned to {role}')
+
+        msg = f'Employee {employee} assigned to {role}'
+        print(msg)
+        request.session['msg'] = msg
         return redirect('manage_roles')
     else:
+        print(f'form not valid :{assign_role_form.errors}')
         return blank_role_form(request, 'manage_roles.html', context)
-
-def create_role(request,context,name,desc):
-    try:
-        print("creating new role")
-        new_role = Role.objects.create(name=name, description=desc).validate_unique()
-        context['role'] = new_role
-        request.session['msg'] = f'Role {name} successfully created'
-    except ValidationError as error:
-        request.session['msg'] = f'Role submission unsuccessful: {error}'
 
 """
     Add Task
