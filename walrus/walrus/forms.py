@@ -114,13 +114,14 @@ class projectForm(forms.Form):
     A parent form to properly handle multiple forms on the role management page
 """
 class RoleMgmtForm(forms.Form):
-  action = forms.CharField(max_length=60, widget=forms.HiddenInput()) 
+ # action = forms.CharField(max_length=60, widget=forms.HiddenInput()) 
+    pass
 
-class CreateRole(RoleMgmtForm):
+class CreateRoleForm(RoleMgmtForm):
     role_name = forms.CharField(label="Role/Position", max_length=50)
     description = forms.CharField(label="Description", max_length=255, required=False)
 
-class AssignRole(RoleMgmtForm):
+class AssignRoleForm(RoleMgmtForm):
     roles = forms.ModelChoiceField(queryset=Role.objects.all())
     assign_emloyee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",

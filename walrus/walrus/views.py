@@ -372,61 +372,25 @@ def employee_stats(request):
     TO DO:    
     > Remove roles and positions
 
-
+"""
 
 
 def manage_roles(request):
     context = {}
     if request.method == 'POST':
-        create_role_form = createRole(request.POST)
-        assign_role_form = assignRole(request.POST)
-        context['create_role_form'] = create_role_form
-        context['assign_role_form'] = assign_role_form
-        # Role creation/deletion
-        if create_role_form.is_valid() or assign_role_form.is_valid():
-            role_name = create_role_form.cleaned_data['role_name'].strip()
-            role_desc = create_role_form.cleaned_data['description'].strip()
-
-            if not Role.objects.filter(name=role_name).exists():
-                create_role(request, context, role_name, role_desc)
-                return redirect('manage_roles')
-            else:
-                context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
-            return blank_role_form(request, 'manage_roles.html', context)
+        print(request.POST)
+        if "submit_role" in request.POST:
+            print("attempting to submit role")
+            # Role creation/deletion
+            #return blank_role_form(request, 'manage_roles.html', context)
+            handle_role_submission(request, context)
        # Employee assignment 
-            role = assign_role_form.cleaned_date['roles'].strip()
-            employee = assign_role_Form.cleaned_data['assign_employee'].strip()
-             
-            employee.role = role
-            print(f'Employee {employee} assigned to {role}')
-            return redirect('manage_roles')
-    else:
-        if 'msg' in request.session:
-            context['msg'] = request.session.pop('msg')
-        return blank_role_form(request, 'manage_roles.html', context)
-"""
-class RoleManagementView(MultiFormView):
-    template_name = 'templates/manage_roles.html'
-    form_classs = {'create' : CreateRole,
-                   'assign' : AssignRole
-                   }
-
-    success_urls = {
-            'create': reverse_lazy('manage_roles'),
-        'assign': reverse_lazy('manage_roles')
-    }
+        if "assign_role" in request.POST:
+            handle_role_assignment(request, context)
     
-    def create_form_valid(self, form):
-        role_name = form.cleaned_data['role_name'].strip()
-        role_desc = form.cleaned_data['description'].strip()
-
-        if not Role.objects.filter(name=role_name).exists():
-            create_role(request, context, role_name, role_desc)
-            return HttpResponseRedirect(self.get_success_url(form_name))
-        else:
-            context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
-            return blank_role_form(request, 'manage_roles.html', context)
- 
+    if 'msg' in request.session:
+        context['msg'] = request.session.pop('msg')
+    return blank_role_form(request, 'manage_roles.html', context)
 
 """
     Helper functions to reduce code duplication
@@ -434,12 +398,61 @@ class RoleManagementView(MultiFormView):
 
 """
 def blank_role_form(request, template, context):  
-    context['create_role_form'] = createRole()
-    context['assign_role_form'] = assignRole()
+    context['create_role_form'] = CreateRoleForm()
+    context['assign_role_form'] = AssignRoleForm()
     return render(request, template, context)
+
+"""
+    Handles the creation of new role and position entries
+    into the database. 
+
+    Validity is checked by by getting names of
+    existing roles. The Role model has a one to many relationship with 
+    Employee so only one of each name is required for each position in the store.
+"""
+
+def handle_role_submission(request, context):
+    create_role_form = CreateRoleForm(request.POST)
+    context['create_role_form'] = create_role_form
+    print("handling role submission") 
+    if create_role_form.is_valid():
+        print("form is valid, cleaning data")
+        role_name = create_role_form.cleaned_data['role_name'].strip()
+        role_desc = create_role_form.cleaned_data['description'].strip()
+
+        if not Role.objects.filter(name=role_name).exists():
+            print("entry does not exist yet, creating it")
+            create_role(request, context, role_name, role_desc)
+            return redirect('manage_roles')
+        else:
+            context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
+           # return context
+            return blank_role_form(request, 'manage_roles.html', context)
+    print("form is not valid")
+    print(create_role_form.errors)
+    return blank_role_form(request, 'manage_roles.html', context)
+
+"""
+    Handles the assignment of roles and positions to employees
+"""
+
+def handle_role_assignment(request,context):
+    assign_role_form = AssignRoleForm(request.POST)
+    context['assign_role_form'] = assign_role_form
+    
+    if assign_role_form.is_valid():
+        role = assign_role_form.cleaned_date['roles'].strip()
+        employee = assign_role_Form.cleaned_data['assign_employee'].strip()
+         
+        employee.role = role
+        print(f'Employee {employee} assigned to {role}')
+        return redirect('manage_roles')
+    else:
+        return blank_role_form(request, 'manage_roles.html', context)
 
 def create_role(request,context,name,desc):
     try:
+        print("creating new role")
         new_role = Role.objects.create(name=name, description=desc).validate_unique()
         context['role'] = new_role
         request.session['msg'] = f'Role {name} successfully created'
