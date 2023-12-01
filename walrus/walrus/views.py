@@ -389,7 +389,7 @@ def employee_stats(request):
                 print(time_spent)
 
 
-                return redirect(request, 'employee_stats.html', {'form': form, 
+                return render(request, 'employee_stats.html', {'form': form, 
                                                             'tasks': tasks, 
                                                             'employee': employee,
                                                             'employee_name': name,
