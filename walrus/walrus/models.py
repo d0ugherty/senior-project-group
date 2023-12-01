@@ -29,11 +29,13 @@ class Task(models.Model):
 
     date_created = models.DateTimeField(blank=True, auto_now_add=True)
     date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
-    due_date = models.DateTimeField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     wont_complete = models.BooleanField(default=False, null=True)
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
+    
+    '''
     def time_on_task(self):
         if self.date_assigned_to == None:
             return None
@@ -41,7 +43,7 @@ class Task(models.Model):
             return self.date_completed - self.date_assigned_to
         elif self.date_assigned_to != None and self.date_completed == None:
             return datetime.now(timezone.utc) - self.date_assigned_to
-        
+    ''' 
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)

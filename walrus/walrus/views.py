@@ -96,43 +96,39 @@ def edit_profile(request, employee_id):
         form = change_profile_image_Form(request.POST, request.FILES)
         if form.is_valid():
             image = form.cleaned_data.get('profile_pic')
-            print(image)
             if image != None:
                 user.employee.profile_pic = image
                 user.employee.save()
-        print("hello")
-        print(request.POST)    
+
+        # Reading from form
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         phone_number = request.POST['phone_number']
         # PUT PHONE NUMBER AND IMAGE
 
-
-
-        print(first_name)
-        print(user.first_name)
+        # Assigning new attributes to user
         user.first_name = first_name
         user.last_name = last_name
         user.email = email
         user.employee.phone_number = phone_number
         user.employee.save()
         user.save()
-        pic_form = change_profile_image_Form()
+
         return render (request, 'new_profile.html',{'user':user})
-    pic_form = change_profile_image_Form()
     
+    pic_form = change_profile_image_Form()
     return render (request, 'edit_profile.html',{'user':user, 'form':pic_form})
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
     if user.is_authenticated:
+     
      today = datetime.today()
      url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
        
-
-
      return redirect(url)
+    
     return render(request, 'home.html')
 
 def python_test(request):
@@ -150,24 +146,13 @@ def list_tasks(request):
         project_name = request.POST.get('project_name')
         status = request.POST.get('status')
         due_date = request.POST.get('date')
-       # print(due_date)
-       # print(Task.objects.filter(due_date=due_date))
-
-        
+        print(due_date)
+        # Getting the list of tasks that 
         tasks = find_tasks(task_name, project_name, due_date, status)
-         #print(Task.objects.filter(project=project_object))
-       # print(task_name)
-       # print(project_name)
-       # print(due_date)
-       #print(status)
-       
-       # Null case 
-       # if (task_name == ""):
-
+        print(tasks[0].due_date)
 
     form = taskSearchForm()
-    
-    
+        
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
     })
