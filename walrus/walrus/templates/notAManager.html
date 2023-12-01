@@ -1,6 +1,5 @@
+
 <html>
-
-
 
 {% load static %}
 <html lang="en"><head>
@@ -13,7 +12,8 @@
   </head>
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link rel="stylesheet" href="{% static '/css/task_update.css' %}">
+  <link rel="stylesheet" href="{% static '/css/task_description.css' %}">
+  
   <div class="container">
   <div class="row">
   <div class="col-xl-9">
@@ -24,40 +24,33 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'home' %}" class="return ">Go Back</a>
+    <div>
+    </div>
+  </div>
 
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+</div>
 
-  <h3>Task Status Update</h3>
- 
-  <div class="card">
-    <div class="tab-content p-4">
-    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
-    <div class="d-flex align-items-center">
-    <div class="flex-1">
-      <textarea type="text" class="form-control update_textbox" id="description" name="description" value=""></textarea>
-    <h6 class="mb-0 text-muted">
+        <div class="card description_card">
+            <div class="tab-content p-4">
+            <div class="tab-pane active show" id="description-tab" role="tabpanel">
+            <div class="d-flex align-items-center">
+            <div class="flex-1">
+        <h4>You do not have access to this page</h4>
+        <br>
+        <a href="{% url 'home' %}">Go To Home Page</a>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+    </div>
     
-    <div></div>
-            <button class="btn btn-primary  ">{{ form.image }}</button> 
-
-        </div>
-
-      </h6>
-      <input type="submit" class="btn btn-primary px-4 submit_task_update" value="submit Update">
-    </div>
-    </div>
   </div>
-</form>
   </div>
+  
   </div>
   </div>
   </div>
@@ -67,6 +60,7 @@
   </ul>
   </div>
   </div>
+  
   </div>
   </div>
   </div>
@@ -79,3 +73,6 @@
   </body></html>
 </body>
 </html>
+
+
+

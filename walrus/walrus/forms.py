@@ -63,7 +63,7 @@ class taskSearchForm(forms.Form):
 
 class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250, required=False)
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
     due_date = forms.DateField(label="Due Date", widget=DateInput, required=False)
@@ -71,8 +71,8 @@ class addTask(forms.Form):
     
 class editTask(forms.Form):
     task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250, required=False)
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
+    description = forms.CharField(max_length=250, required=False,  widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
     due_date = forms.DateField(label="Due Date", widget=DateInput, required=False)
     assign_date = forms.DateField(label="Assignment Date", widget=DateInput, required=False)
@@ -80,7 +80,7 @@ class editTask(forms.Form):
 
      
 class requestOffForm(forms.Form):
-    description = forms.CharField(max_length=250, required=False)
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     start_date = forms.DateField(label="Start Date", widget=DateInput, required=False)
     end_date = forms.DateField(label="End Date", widget=DateInput, required=False)
 
@@ -92,7 +92,7 @@ class employeeDropdownSearch(forms.Form):
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
 
 class updateTask(forms.Form):
-    description = forms.CharField(max_length=250)
+    description = forms.CharField(max_length=250, required=False)
     image = forms.ImageField(label="image",required=False)
 
 class scheduleEmployee(forms.Form):
