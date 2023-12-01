@@ -465,12 +465,9 @@ def handle_role_assignment(request,context):
 
         employee.role = role
         employee.save()
-        print(f' role id {role.id}') 
-        print(msg)
         request.session['msg'] = msg
         return redirect('manage_roles')
     else:
-        print(f'form not valid :{assign_role_form.errors}')
         return blank_role_form(request, 'manage_roles.html', context)
 
 def get_assign_msg(employee, role):
