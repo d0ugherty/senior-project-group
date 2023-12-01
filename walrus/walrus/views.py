@@ -28,21 +28,25 @@ from asgiref.sync import async_to_sync
 
 
 def availability(request, employee_id):
-    print("hello")
+
     employee = Employee.objects.get(pk=employee_id)
+
+    # If employee updates availability
     if request.method == "POST":
-        employee = Employee.objects.get(pk=employee_id)
+        
         if employee.availability == None:
-                #print("does not")
                 availability = Availability()
                 availability.save()
                 employee.availability = availability
                 employee.save()
+        
+        # Sets availability
         set_availability(request, employee)
         # returning to home page
         today = datetime.today()
         return HttpResponseRedirect('/home/' + str(employee_id) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year))
 
+    #   If the employee already has availability set this will load the page with the correct availability
     if employee.availability != None:
         dict = {
             'sunday_start' : employee.availability.sunday_start, 'sunday_end' : employee.availability.sunday_end,
@@ -55,15 +59,15 @@ def availability(request, employee_id):
              }
     else:
         dict = {}
-#    page = 'home/' + str(request.user.pk)
-    #redirect('page')
-
 
     form = availabilityForm(initial=dict)
+
     return render(request, 'availability.html', {'form':form})
 
 def request_time_off(request, employee_id):
     user = request.user
+   
+   # if user submits a request off form
     if request.method == 'POST':
         
         form = requestOffForm(request.POST)
@@ -77,30 +81,14 @@ def request_time_off(request, employee_id):
                 new_request_off.save()
                 user.employee.Request_Offs.add(new_request_off)
     form = requestOffForm()
+
     return render(request, 'request_time_off.html', {'form':form})
 
 def profile(request, employee_id):
     user = request.user
 
-    # getting and changing the profile pic
-    if request.method == 'POST':
-        print(request.POST)
-        if 'change picture' in request.POST:
-            form = change_profile_image_Form(request.POST, request.FILES)
-            if form.is_valid():
-                image = form.cleaned_data.get('profile_pic')
-                user.employee.profile_pic = image
-                user.employee.save()
-        if 'remove' in request.POST:
-            user.employee.profile_pic = None
-            user.employee.save()
-
-
     
-    pic_form = change_profile_image_Form()
-    #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
     return render (request, 'new_profile.html',{'user':user})
-    #return render (request, 'edit_profile.html',{'user':user})
 
 def edit_profile(request, employee_id):
     user = request.user
@@ -130,8 +118,10 @@ def edit_profile(request, employee_id):
         user.employee.phone_number = phone_number
         user.employee.save()
         user.save()
-        
+        pic_form = change_profile_image_Form()
+        return render (request, 'new_profile.html',{'user':user})
     pic_form = change_profile_image_Form()
+    
     return render (request, 'edit_profile.html',{'user':user, 'form':pic_form})
 # after user logs in this redirects them to home page
 def home_redirect(request):

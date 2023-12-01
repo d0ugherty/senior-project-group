@@ -105,7 +105,6 @@ def adjust_clock_in(time_record):
           print("clock2")
 
 def set_availability(request,employee):
-     print("called")
             
      employee.availability.sunday_start = request.POST.get('sunday_start')
      employee.availability.sunday_end = request.POST.get('sunday_end')
@@ -128,9 +127,7 @@ def set_availability(request,employee):
      employee.availability.saturday_start = request.POST.get('saturday_start')
      employee.availability.saturday_end = request.POST.get('saturday_end')
 
-     #print( employee.availability.sunday_start)
      employee.availability.save()
-     #print(sunday_start)
 
 
 
