@@ -445,15 +445,23 @@ def handle_role_assignment(request,context):
     if assign_role_form.is_valid():
         role = assign_role_form.cleaned_data['roles']
         employee = assign_role_form.cleaned_data['assign_employee']
-        employee.role = role
+            
+        msg = get_assign_msg(employee, role)
 
-        msg = f'Employee {employee} assigned to {role}'
+        employee.role_id = role.id
+        
         print(msg)
         request.session['msg'] = msg
         return redirect('manage_roles')
     else:
         print(f'form not valid :{assign_role_form.errors}')
         return blank_role_form(request, 'manage_roles.html', context)
+
+def get_assign_msg(employee, role):
+    if employee.role_id == role.id:
+        return  f'Employee {employee} is already assigned to {role}!'
+    else:
+        return f'Employee {employee} has been assigned to {role}'
 
 """
     Add Task
