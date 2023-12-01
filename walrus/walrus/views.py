@@ -50,21 +50,22 @@ def availability(request, employee_id):
             'tuesday_start' : employee.availability.tuesday_start, 'tuesday_end' : employee.availability.tuesday_end,
             'wednesday_start' : employee.availability.wednesday_start, 'wednesday_end' : employee.availability.wednesday_end,
             'thursday_start' : employee.availability.thursday_start, 'thursday_end' : employee.availability.thursday_end,
-            'friday_start' : employee.availability.friday_start, 'friday_end': employee.availability.friday_end,
+            'friday_start' : employee.availability.friday_start, 'friday_end' : employee.availability.friday_end,
             'saturday_start' : employee.availability.saturday_start, 'saturday_end' : employee.availability.saturday_end,
              }
     else:
         dict = {}
 #    page = 'home/' + str(request.user.pk)
     #redirect('page')
- 
+
 
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
 def request_time_off(request, employee_id):
     user = request.user
-    if request.method == 'POST': 
+    if request.method == 'POST':
+        
         form = requestOffForm(request.POST)
         if form.is_valid():
             
@@ -78,12 +79,12 @@ def request_time_off(request, employee_id):
     form = requestOffForm()
     return render(request, 'request_time_off.html', {'form':form})
 
-
 def profile(request, employee_id):
     user = request.user
 
     # getting and changing the profile pic
     if request.method == 'POST':
+        print(request.POST)
         if 'change picture' in request.POST:
             form = change_profile_image_Form(request.POST, request.FILES)
             if form.is_valid():
@@ -324,7 +325,7 @@ def load_manager_tools(request):
     Currently, the un-implemented pages will default to "invalid destination"
 
     TO DO: Add more redirects as project progresses
-""" 
+"""
 def manager_tools_redirect(request):
     destination = request.POST.get('destination')
     match destination:
@@ -369,12 +370,15 @@ def employee_stats(request):
             if (not is_valid_id(input_id)):
                 return render(request, 'employee_stats.html', {'form' : form,
                                                                 'show_error': True})
+            # get tasks
+            print(input_id)
+            
             if  (Employee.objects.filter(pk=input_id)):
                 employee = Employee.objects.get(pk=input_id)
                 
                 tasks = employee.Tasks.all()
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
-<<<<<<< HEAD
+
                 time_spent = []
                 for t in tasks:
                     if (Time_Spent.objects.filter(employee=employee.pk,task=t.pk)):
@@ -385,10 +389,7 @@ def employee_stats(request):
                 print(time_spent)
 
 
-                return render(request, 'employee_stats.html', {'form': form, 
-=======
                 return redirect(request, 'employee_stats.html', {'form': form, 
->>>>>>> main
                                                             'tasks': tasks, 
                                                             'employee': employee,
                                                             'employee_name': name,
@@ -675,6 +676,8 @@ def schedule_employee(request):
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
                 employee = form.cleaned_data['employee']
+               
+
                
                 print(employee.pk)
                 avil = employee.availability
