@@ -1,0 +1,24 @@
+{% block content %}
+
+<head>
+    <title>Roles/Groups Management</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <!-- TO DO: Finish this-->
+        {{ create_role_form }}
+        {% if msg %}
+           <p> {{ msg }}</p>
+        {% endif %}
+   
+        <button type="submit" name="submit_role" value="submit">SUBMIT</button>
+    
+    </form>
+
+    <form action="" method="post"> 
+        {% csrf_token %}
+        {{ assign_role_form }}
+    <button type="submit" name="assign_role" value="assign">Assign Position</button>
+</body>
+{% endblock %}
