@@ -332,15 +332,19 @@ def employee_stats(request):
         
         if form.is_valid():
 
-            input_id = form.cleaned_data['employee_id'].strip()
-            if (not is_valid_id(input_id)):
-                return render(request, 'employee_stats.html', {'form' : form,
-                                                                'show_error': True})
+            employee = form.cleaned_data['employee'] 
+            status = form.cleaned_data['status']
+            print(status)
+            if employee != None:
             # get tasks
-            if  (Employee.objects.filter(pk=input_id)):
-                employee = Employee.objects.get(pk=input_id)
-                
-                tasks = employee.Tasks.all()
+                if status == 'n/a':
+                    tasks = employee.Tasks.all()
+                else:
+                    if status == "complete":
+                        status = True
+                    elif status == "incomplete":
+                        status = False
+                    tasks = employee.Tasks.filter(is_complete=status)
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
 
                 # looping through all of the time_spent objects associated with the tasks

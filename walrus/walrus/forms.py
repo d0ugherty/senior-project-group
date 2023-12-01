@@ -85,7 +85,7 @@ class requestOffForm(forms.Form):
     end_date = forms.DateField(label="End Date", widget=DateInput, required=False)
 
 class employeeIdSearch(forms.Form):
-    employee_id = forms.CharField(label="Enter Employee ID Number",max_length=100, required=False)
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=True)
     status = forms.ChoiceField(choices=STATUS_CHOICES)
 
 class employeeDropdownSearch(forms.Form):
