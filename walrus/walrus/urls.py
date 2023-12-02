@@ -50,6 +50,10 @@ urlpatterns = [
     path('home/<int:employee_id>/profile', views.profile, name='profile'),
     path('home/<int:employee_id>/profile/edit_profile', views.edit_profile, name='edit_profile'),
     path('home/<int:employee_id>/request_time_off', views.request_time_off, name='request_time_off'),
+    path('create_role/', views.create_role, name='create_role'),
+    
+    path('shift_switch/<employee_id>', views.shift_switch, name='shift_switch'),
+    path('swap_shift/<employee_id>/<shift_id>', views.swap_shifts, name='swap_shift'),
     
     path('manage_roles/', views.manage_roles, name='manage_roles')
 

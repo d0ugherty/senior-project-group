@@ -84,6 +84,7 @@ task5.date_assigned_to = '2023-10-25 09:30:59'
 task5.due_date = '2023-10-26 23:59:59'
 task5.date_completed = None
 task5.is_complete = False
+task5.to_be_taken= True
 task5.save()
 
 #Task6 
@@ -99,7 +100,9 @@ task6.save()
 # shift 1
 
 shift_1 = Shift(date=datetime.datetime.today(), start="7:00am", end="12:00pm")
+shift_1.to_be_taken=True
 shift_1.save()
+
 # User/Employee 1
 user = User.objects.create_user(username="test", 
                                 email="oconno65@students.rowan.edu", 
