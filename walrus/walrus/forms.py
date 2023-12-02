@@ -18,7 +18,7 @@ TIME_CHOICES = (
 ('7:00pm', '7:00pm'),
 ('8:00pm', '8:00pm'),
 ('9:00pm', '9:00pm'),
-('19:00pm', '10:00pm'),
+('10:00pm', '10:00pm'),
 
 )
 class availabilityForm(forms.Form):
