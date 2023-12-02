@@ -1,15 +1,18 @@
 {% load static %}
-
+<div>
+  </div>
 <head>
   
   <link rel="stylesheet" href="{% static '/css/manager_tools.css' %}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
+
 {% block content %}
 <title>Manager Tools</title>
-
 <body class="parent-container">
+
         <form class="button-container" action="{% url 'manager_tools_redirect' %}" method="post">
+          
         <h1 class="heading">Manager Tools</h1>
           {% csrf_token %}
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/add_task/">Add Tasks</button>
