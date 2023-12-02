@@ -1,10 +1,13 @@
 import calendar
 from django import forms
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.db import transaction
 from django.views import generic
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import datetime
 from datetime import datetime, timedelta
 from calendar import month_name
@@ -13,7 +16,7 @@ from calendar import HTMLCalendar
 from .models import Task, Shift
 from .forms import *
 from .util import *
-
+from .multiforms import MultiFormView
 from datetime import datetime,timezone
 
 from django.contrib import messages
@@ -47,22 +50,21 @@ def availability(request, employee_id):
             'tuesday_start' : employee.availability.tuesday_start, 'tuesday_end' : employee.availability.tuesday_end,
             'wednesday_start' : employee.availability.wednesday_start, 'wednesday_end' : employee.availability.wednesday_end,
             'thursday_start' : employee.availability.thursday_start, 'thursday_end' : employee.availability.thursday_end,
-            'friday_start' : employee.availability.friday_start, 'friday_end' : employee.availability.friday_end,
+            'friday_start' : employee.availability.friday_start, 'friday_end': employee.availability.friday_end,
             'saturday_start' : employee.availability.saturday_start, 'saturday_end' : employee.availability.saturday_end,
              }
     else:
         dict = {}
 #    page = 'home/' + str(request.user.pk)
     #redirect('page')
-
+ 
 
     form = availabilityForm(initial=dict)
     return render(request, 'availability.html', {'form':form})
 
 def request_time_off(request, employee_id):
     user = request.user
-    if request.method == 'POST':
-        
+    if request.method == 'POST': 
         form = requestOffForm(request.POST)
         if form.is_valid():
             
@@ -76,12 +78,12 @@ def request_time_off(request, employee_id):
     form = requestOffForm()
     return render(request, 'request_time_off.html', {'form':form})
 
+
 def profile(request, employee_id):
     user = request.user
 
     # getting and changing the profile pic
     if request.method == 'POST':
-        print(request.POST)
         if 'change picture' in request.POST:
             form = change_profile_image_Form(request.POST, request.FILES)
             if form.is_valid():
@@ -142,8 +144,9 @@ def home_redirect(request):
      return redirect(url)
     return render(request, 'home.html')
 
-
-
+def python_test(request):
+    user = datetime.d
+    
 def list_tasks(request):
     try:
         tasks = Task.objects.all()
@@ -321,7 +324,7 @@ def load_manager_tools(request):
     Currently, the un-implemented pages will default to "invalid destination"
 
     TO DO: Add more redirects as project progresses
-"""
+""" 
 def manager_tools_redirect(request):
     destination = request.POST.get('destination')
     match destination:
@@ -334,6 +337,8 @@ def manager_tools_redirect(request):
         case "/create_project/":
             return HttpResponseRedirect(destination)
         case "/schedule_employee/":
+            return HttpResponseRedirect(destination)
+        case "/manage_roles/":
             return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
@@ -364,15 +369,12 @@ def employee_stats(request):
             if (not is_valid_id(input_id)):
                 return render(request, 'employee_stats.html', {'form' : form,
                                                                 'show_error': True})
-            # get tasks
-            print(input_id)
-            
             if  (Employee.objects.filter(pk=input_id)):
                 employee = Employee.objects.get(pk=input_id)
                 
                 tasks = employee.Tasks.all()
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
-                return render(request, 'employee_stats.html', {'form': form, 
+                return redirect(request, 'employee_stats.html', {'form': form, 
                                                             'tasks': tasks, 
                                                             'employee': employee,
                                                             'employee_name': name})
@@ -381,25 +383,98 @@ def employee_stats(request):
     return render(request, 'employee_stats.html', {'form' : form })
 
 """
-    Create Role
+    Create and manage employee positions
+    TO DO:    
+    > Remove roles and positions
+
 """
-def create_role(request):
+
+
+def manage_roles(request):
+    context = {}
     if request.method == 'POST':
-        form = createRole(request.POST)
-        if form.is_valid():
-            role_name = form.cleaned_data['role_name'].strip()
-            role_desc = form.cleaned_data['description'].strip()
-            ## prevent duplicates by checking if a role with the same name exists
-            if not is_valid_role(role_name):
-                # show error
-                pass
-            else:
-                new_role = Role.objects.create(name=role_name, description=role_desc)
-            return render(request, 'create_role.html', {'form': form,
-                                                        'role': new_role})
+        print(request.POST)
+        if "submit_role" in request.POST:
+            # Role creation/deletion
+            handle_role_submission(request, context)
+       # Employee assignment 
+        if "assign_role" in request.POST:
+            handle_role_assignment(request, context)
+    
+    if 'msg' in request.session:
+        context['msg'] = request.session.pop('msg')
+    return blank_role_form(request, 'manage_roles.html', context)
+
+"""
+    Helper functions to reduce code duplication
+    and make the manage_roles view more readable
+
+"""
+def blank_role_form(request, template, context):  
+    context['create_role_form'] = CreateRoleForm()
+    context['assign_role_form'] = AssignRoleForm()
+    return render(request, template, context)
+
+"""
+    Handles the creation of new role and position entries
+    into the database. 
+
+    Validity is checked by by getting names of
+    existing roles. The Role model has a one to many relationship with 
+    Employee so only one of each name is required for each position in the store.
+"""
+
+def handle_role_submission(request, context):
+    create_role_form = CreateRoleForm(request.POST)
+    context['create_role_form'] = create_role_form
+
+    if create_role_form.is_valid():
+        role_name = create_role_form.cleaned_data['role_name'].strip()
+        role_desc = create_role_form.cleaned_data['description'].strip()
+
+        if not Role.objects.filter(name=role_name).exists():
+            create_role(request, context, role_name, role_desc)
+            return redirect('manage_roles')
+    
+        else:
+            context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
+            return blank_role_form(request, 'manage_roles.html', context)
+    return blank_role_form(request, 'manage_roles.html', context)
+
+def create_role(request,context,name,desc):
+    try:
+        new_role = Role.objects.create(name=name, description=desc).validate_unique()
+        context['role'] = new_role
+        request.session['msg'] = f'Role {name} successfully created'
+    except ValidationError as error:
+        request.session['msg'] = f'Role submission unsuccessful: {error}'
+
+"""
+    Handles the assignment of roles and positions to employees
+"""
+
+def handle_role_assignment(request,context):
+    assign_role_form = AssignRoleForm(request.POST)
+    context['assign_role_form'] = assign_role_form
+    
+    if assign_role_form.is_valid():
+        role = assign_role_form.cleaned_data['roles']
+        employee = assign_role_form.cleaned_data['assign_employee']
+            
+        msg = get_assign_msg(employee, role)
+
+        employee.role = role
+        employee.save()
+        request.session['msg'] = msg
+        return redirect('manage_roles')
     else:
-        form = createRole()
-        return render(request,'create_role.html',{'form' : form})
+        return blank_role_form(request, 'manage_roles.html', context)
+
+def get_assign_msg(employee, role):
+    if employee.role_id == role.id:
+        return  f'Employee {employee} is already assigned to {role}!'
+    else:
+        return f'Employee {employee} has been assigned to {role}'
 
 """
     Add Task

@@ -78,7 +78,7 @@ class Availability(models.Model):
     saturday_end = models.CharField(max_length=255, blank=True, null=True)
 
 class Role(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255,unique=True)
     description = models.TextField()
     def __str__(self):
             return self.name
@@ -103,8 +103,8 @@ class Employee(models.Model):
         return name
 
     employee_id = models.IntegerField(null=True, blank=True)
-    #dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
-    #role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 
