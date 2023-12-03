@@ -234,7 +234,12 @@ def home_page(request, employee_id, day, month, year):
         if "to_be_taken" in request.POST:
             shift_pk = request.POST['to_be_taken']
             shift = Shift.objects.get(pk=shift_pk)
-            shift.to_be_taken=True
+            
+            if shift.to_be_taken == False:
+                 shift.to_be_taken = True
+            else:
+                shift.to_be_taken = False
+            print(shift.to_be_taken)
             shift.save()   
             return redirect('home')
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})

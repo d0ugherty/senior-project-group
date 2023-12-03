@@ -51,7 +51,7 @@ class Task_Update(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True, null=True)
     venue_image = models.ImageField(null=True, blank=True, upload_to="images/")
 
-
+ 
     
     #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
 
