@@ -66,6 +66,8 @@
     <div class="flex-1">
       {% if shift.start is not None %}
     <h4 class="card-title mb-4">Todays Shift {{shift.start}} -  {{shift.end}}</h4>
+    <button class ="btn btn-primary px-4 clock_in" type="submit" name="to_be_taken" value="{{shift.pk}}"> Request to be taken </button>
+
       {%else%}
       <h4 class="card-title mb-4">Todays Shift </h4>
       {%endif%}
