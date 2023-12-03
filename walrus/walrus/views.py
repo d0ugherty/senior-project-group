@@ -728,22 +728,40 @@ def swap_shifts(request, employee_id, shift_id):
     shift = Shift.objects.get(pk=shift_id)
     employees = Employee.objects.all()
 
-    #find shift from existing employee and remove it
-    #there HAS to be a better way to do this but I can't find anything
-    for e in employees:
-        for s in e.Shifts.filter():
-            if (s == shift):
-                e.Shifts.get(pk=shift.pk).delete()
-                break
+    # Need to verify that the employee picking up a shift does not work that day
+    date = shift.date
+    print(date)
+    if employee.Shifts.filter(date=date) == None:
 
-    #add the shift to the current employee
-    #and alter the shift+save it
-    shift.to_be_taken = False
-    shift.save()
-    employee.Shifts.add(shift)
-    shifts = Shift.objects.filter(to_be_taken=True)
+        #find shift from existing employee and remove it
+        #there HAS to be a better way to do this but I can't find anything
+        
+        
 
-    return render(request, 'shift_switch.html', {
-        'employee' : employee,
-        'shifts' : shifts
-    })
+
+        for e in employees:
+            for s in e.Shifts.filter():
+                if (s == shift):
+                    e.Shifts.get(pk=shift.pk).delete()
+                    break
+
+        #add the shift to the current employee
+        #and alter the shift+save it
+        shift.to_be_taken = False
+        shift.save()
+        employee.Shifts.add(shift)
+        shifts = Shift.objects.filter(to_be_taken=True)
+        return render(request, 'shift_switch.html', {
+            'employee' : employee,
+            'shifts' : shifts
+        })
+
+        
+    else:
+        shifts = Shift.objects.filter(to_be_taken=True)
+        return render(request, 'shift_switch.html', {
+            'employee' : employee,
+            'shifts' : shifts
+        })
+        
+        
