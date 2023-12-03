@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from calendar import month_name
 from calendar import HTMLCalendar
 
-from .models import Task
+from .models import Task, Shift
 from .forms import *
 from .util import *
 from .multiforms import MultiFormView
@@ -696,3 +696,49 @@ def task_failure(request, task_id):
     form = failureForm()
     return render(request, 'task_failure.html',
                   { 'fail_form':form })
+
+
+def shift_switch(request, employee_id):
+    employee = Employee.objects.get(pk=employee_id)
+    eShifts = employee.Shifts.filter()
+
+    shifts = Shift.objects.filter(to_be_taken=True)
+
+    for e in eShifts:
+        for s in shifts:
+            #check for shift discrepancies
+            #dont show shifts employees can't take
+            if e == s:
+                #shifts.exclude(s) #I will not be able to test this very well until we have a lot of data
+                ""
+
+
+    return render(request, 'shift_switch.html', {
+        'employee' : employee,
+        'shifts' : shifts
+    })
+
+def swap_shifts(request, employee_id, shift_id):
+    employee = Employee.objects.get(pk=employee_id)
+    shift = Shift.objects.get(pk=shift_id)
+    employees = Employee.objects.all()
+
+    #find shift from existing employee and remove it
+    #there HAS to be a better way to do this but I can't find anything
+    for e in employees:
+        for s in e.Shifts.filter():
+            if (s == shift):
+                e.Shifts.get(pk=shift.pk).delete()
+                break
+
+    #add the shift to the current employee
+    #and alter the shift+save it
+    shift.to_be_taken = False
+    shift.save()
+    employee.Shifts.add(shift)
+    shifts = Shift.objects.filter(to_be_taken=True)
+
+    return render(request, 'shift_switch.html', {
+        'employee' : employee,
+        'shifts' : shifts
+    })
