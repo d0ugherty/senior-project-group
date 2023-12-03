@@ -709,6 +709,23 @@ def shift_switch(request, employee_id):
 
     shifts = Shift.objects.filter(to_be_taken=True)
 
+    # This works
+    if request.method=='POST':
+        shift_pk = request.POST['button']
+        
+        shift = Shift.objects.get(pk=shift_pk)
+        date = shift.date
+        
+        # checking if employee already has a shift on that day
+        if employee.Shifts.filter(date=date).exists() == False:
+
+            shift.to_be_taken = False
+            shift.employee_set.clear()
+            shift.save()
+            employee.Shifts.add(shift)
+
+
+
     for e in eShifts:
         for s in shifts:
             #check for shift discrepancies
@@ -716,6 +733,7 @@ def shift_switch(request, employee_id):
             if e == s:
                 #shifts.exclude(s) #I will not be able to test this very well until we have a lot of data
                 ""
+    
 
 
     return render(request, 'shift_switch.html', {
