@@ -118,7 +118,10 @@
                             <td></td>
                             {%else%}
                             {{attribute.day_of_week}}
-                            <td>{{attribute.start}} - {{attribute.end}} </td>
+                            <td>{{attribute.start}} - {{attribute.end}}
+                              <br>
+                              <button class ="btn btn-primary px-4" type="submit" name="delete" value="{{attribute.pk}}">Delete </button>
+                             </td>
                             {% endif %}
                         {% endif %}
         

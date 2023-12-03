@@ -205,7 +205,7 @@ def home_page(request, employee_id, day, month, year):
     # should filter all tasks that have not been completed
     # date from url
     tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False)
-   
+    
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
         # I just have the buttons named as the task object they are associated with       
@@ -626,7 +626,6 @@ def schedule_employee(request):
             date = request.POST.get('date')
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
-            print(employee)
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
             employee.Shifts.add(shift)
@@ -665,7 +664,10 @@ def schedule_employee(request):
 
                         dict[str(e.pk)] = (list) 
         
-    
+        if "delete" in request.POST:
+            shift_pk = request.POST['delete']
+            shift = Shift.objects.filter(pk=shift_pk)
+            shift.delete()
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
     select_week_form = selectWeek()
