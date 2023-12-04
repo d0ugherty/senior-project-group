@@ -705,7 +705,6 @@ def task_failure(request, task_id):
 
 @require_POST
 def notify(request):
-    try:
-        return render(request, "htmxapp/templates/partials/notification.html", {'notification': "testing" })
-    except:
-        return render(request, "htmxapp/templates/partials/notification.html", {'notification': "No new notifications" })
+    newTasks = 0
+    return render(request, "htmxapp/templates/partials/notification.html", {'notification': newTasks })
+   

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Notifications {% endblock %}
+
+{% block content %}
+
+<div class="container px-5 gap-6">
+  <h1 class="py-2 font-semibold text-xl">New Notifications:</h1>
+    <div class="px-2">
+      <div class="flex py-2">
+       You have: <label class="font-medium mb-6" id = "notification"> </label> new Tasks
+  
+        <div hx-post="{% url 'walrus:notify' %}" hx-trigger="every 4s" hx-target="#notification"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
