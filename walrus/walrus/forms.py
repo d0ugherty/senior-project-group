@@ -120,6 +120,9 @@ class AssignRoleForm(forms.Form):
     assign_employee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",
                                             required=False)
+class DeleteRoleForm(forms.Form):
+    role = forms.ModelChoiceField(queryset=Role.objects.all(),
+                                   label="Roles/Positions")
 
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
