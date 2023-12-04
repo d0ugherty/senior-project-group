@@ -398,7 +398,7 @@ def manage_roles(request):
         if "assign_role" in request.POST:
             handle_role_assignment(request, context)
         # Role removal
-        if "remove_role" in request.POST:
+        if "delete_role" in request.POST:
             handle_role_removal(request, context)
 
     if 'msg' in request.session:
@@ -494,17 +494,21 @@ def handle_role_removal(request, context):
         # If employees are found to be assigned to the position,
         # the user is alerted to remove those assignments before deleting
         check_employees(request, role, context)
-        
+        print("deleting role") 
         role.delete()
+        print("role deleted")
         request.session['msg'] = "position deleted"
         return redirect('manage_roles')
     else:
+        print(delete_role_form.errors)
         return blank_role_form(request, 'manage_roles.html', context)
 
 def check_employees(request, role, context):
-    employees = Employee.objects.filter(role)
+    employees = []
+    employees = Employee.objects.filter(role=role)
     if employees:
         context['msg'] = f'Please unassign employees from {role} before deleting!'
+        print(context['msg'])
         return blank_role_form(request, 'manage_roles.html', context)
     
 """
