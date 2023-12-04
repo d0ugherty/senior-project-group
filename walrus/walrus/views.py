@@ -391,14 +391,16 @@ def employee_stats(request):
 def manage_roles(request):
     context = {}
     if request.method == 'POST':
-        print(request.POST)
+        # Role creation/deletion
         if "submit_role" in request.POST:
-            # Role creation/deletion
             handle_role_submission(request, context)
        # Employee assignment 
         if "assign_role" in request.POST:
             handle_role_assignment(request, context)
-    
+        # Role removal
+        if "remove_role" in request.POST:
+            handle_role_removal(request, context)
+
     if 'msg' in request.session:
         context['msg'] = request.session.pop('msg')
     return blank_role_form(request, 'manage_roles.html', context)
@@ -474,6 +476,33 @@ def get_assign_msg(employee, role):
     else:
         return f'Employee {employee} has been assigned to {role}'
 
+"""
+    Handles the removal of positions and roles from the database
+
+"""
+def handle_role_removal(request, context):
+    delete_role_form = DeleteRoleForm(request.POST)
+    context['delete_role_form'] = delete_role_form
+
+    if delete_role_form.is_valid():
+        role = delete_role_form.cleaned_data['role']
+    
+        # If employees are found to be assigned to the position,
+        # the user is alerted to remove those assignments before deleting
+        check_employees(request, role, context)
+
+        role.delete()
+        request.session['msg'] = "position deleted"
+        return redirect('manage_roles')
+    else:
+        return blank_role_form(request, 'manage_roles.html', context)
+
+def check_employees(request, role, context):
+    employees = Employee.objects.filter(role)
+    if employees:
+        context['msg'] = f'Please unassign employees from {role} before deleting!'
+        return blank_role_form(request, 'manage_roles.html', context)
+    
 """
     Add Task
 """
