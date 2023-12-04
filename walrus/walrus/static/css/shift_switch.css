@@ -1,0 +1,30 @@
+.description_card { 
+    width: 500px !important; 
+    height: 200px;
+    text-align:left;
+    position: relative 
+}
+
+.go_back{
+    position: absolute; 
+    top: 20px; 
+    left: 700px;
+    background-color:#038edc !important;
+    color: #FFFFFF !important;
+}
+
+.card {
+    margin-bottom: 20px;
+    -webkit-box-shadow: 0 2px 3px #eaedf2;
+    box-shadow: 0 2px 3px #eaedf2;
+}
+
+.swap { 
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px; 
+    width: 130px;
+
+    background-color:#038edc !important;
+    color: #FFFFFF !important;
+}

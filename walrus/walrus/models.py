@@ -29,19 +29,12 @@ class Task(models.Model):
 
     date_created = models.DateTimeField(blank=True, auto_now_add=True)
     date_assigned_to = models.DateTimeField(blank=True, null=True) # when the employee is supposed to start working on it
-    due_date = models.DateTimeField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     wont_complete = models.BooleanField(default=False, null=True)
     # Calculates how long an employee has spend on a task
     # Might use the time_spent model instead
-    def time_on_task(self):
-        if self.date_assigned_to == None:
-            return None
-        if self.is_complete:
-            return self.date_completed - self.date_assigned_to
-        elif self.date_assigned_to != None and self.date_completed == None:
-            return datetime.now(timezone.utc) - self.date_assigned_to
-        
+
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)
@@ -49,7 +42,7 @@ class Task_Update(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True, null=True)
     venue_image = models.ImageField(null=True, blank=True, upload_to="images/")
 
-
+ 
     
     #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
 
@@ -57,7 +50,8 @@ class Shift(models.Model):
      date = models.DateField(null=True)
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
-     to_be_taken = models.BooleanField(default=False)
+     to_be_taken = models.BooleanField(default=False) 
+     clocked_in = models.BooleanField(default=False)
      def day_of_week(self):
         return self.date.weekday()
          
@@ -78,7 +72,7 @@ class Availability(models.Model):
     saturday_end = models.CharField(max_length=255, blank=True, null=True)
 
 class Role(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255,unique=True)
     description = models.TextField()
     def __str__(self):
             return self.name
@@ -103,8 +97,8 @@ class Employee(models.Model):
         return name
 
     employee_id = models.IntegerField(null=True, blank=True)
-    #dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
-    #role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    dept = models.CharField(max_length=255, blank=True, null=True) ## this could possibly be model
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True)
     Shifts = models.ManyToManyField(Shift, null=True, blank=True)
     availability = models.OneToOneField(Availability, on_delete=models.CASCADE, null=True, blank=True)
 

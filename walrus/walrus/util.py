@@ -84,13 +84,6 @@ class Calendar(HTMLCalendar):
 def is_valid_id(input_id):
      return input_id.strip().isdigit()
      
-"""
-     Checks for duplicate role names in the database
-"""
-def  is_valid_role(input):
-     existing_roles = set()
-     existing_roles = Role.objects.filter(input)
-     return input in existing_roles
      
 def adjust_clock_in(time_record):
      print("boo")
@@ -112,7 +105,6 @@ def adjust_clock_in(time_record):
           print("clock2")
 
 def set_availability(request,employee):
-     print("called")
             
      employee.availability.sunday_start = request.POST.get('sunday_start')
      employee.availability.sunday_end = request.POST.get('sunday_end')
@@ -135,9 +127,43 @@ def set_availability(request,employee):
      employee.availability.saturday_start = request.POST.get('saturday_start')
      employee.availability.saturday_end = request.POST.get('saturday_end')
 
-     #print( employee.availability.sunday_start)
      employee.availability.save()
-     #print(sunday_start)
 
 
+
+def get_start_and_end(date):
+     start_date = None
+     end_date = None
+     if (date.weekday() == 0):
+          start_date = date-timedelta(1)
+          end_date = date + timedelta(5)
+
+     if (date.weekday() == 1):
+          start_date = date-timedelta(2)
+          end_date = date + timedelta(4)
+
+
+
+     if (date.weekday() == 2):
+          start_date = date-timedelta(3)
+          end_date = date + timedelta(3)
+
+     if (date.weekday() == 3):
+          start_date = date-timedelta(4)
+          end_date = date + timedelta(2)
+
+     if (date.weekday() == 4):
+          start_date = date-timedelta(5)
+          end_date = date + timedelta(1)
+
+     
+     if (date.weekday() == 5):
+          start_date = date-timedelta(6)
+          end_date = date 
+ 
+     if (date.weekday() == 6):
+          start_date = date
+          end_date = date + timedelta(6)
+
+     return start_date, end_date
 

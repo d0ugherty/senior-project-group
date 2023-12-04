@@ -159,6 +159,11 @@ body{margin-top:20px;
         right: 10px; 
        
       } 
+    .shift_in { 
+        position: absolute; 
+        bottom: 10px; 
+        right: 10px;
+    } 
     .task_completion_button { 
         position: absolute; 
         bottom: 0px; 

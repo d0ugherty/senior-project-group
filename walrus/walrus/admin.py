@@ -23,6 +23,7 @@ admin.site.register(Task_Update)
 admin.site.register(Availability)
 admin.site.register(Shift)
 admin.site.register(Request_Off)
+admin.site.register(Role)
 
 class EmployeeInLine(admin.StackedInline):
     model = Employee
