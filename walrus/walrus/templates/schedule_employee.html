@@ -43,34 +43,67 @@
     <div class="d-flex align-items-center">
     <div class="flex-1">
         <form method="POST">
-            enter employee id
-        
+          <h3>Employees avilabilty</h3>
             {% csrf_token %}
         {{ search_form.as_p }}
         <button name="search"> Submit </button>
         </form>
         
-        Employees avilabilty
         <br>
-            {{ avil.sunday_start }} - {{avil.sunday_end}} {{ avil.monday_start }} - {{avil.monday_end}} {{ avil.tuesday_start }} - {{avil.tuesday_end}}
-            {{ avil.wednesday_start }} - {{avil.wednesday_end}} {{ avil.thursday_start }} - {{avil.thursday_end}} 
-            {{ avil.friday_start }} - {{avil.friday_end}}     {{ avil.saturday_start }} - {{avil.saturday_end}}
+        <table class="table align-middle table-nowrap table-hover mb-0 ">
+          <thead class="table-light">
+              <tr>
+                  <th></th>
+                  <th>Sunday</th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                  <th>Saturday</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+          <td>Start</td>
+          <td>{{ avil.sunday_start }}</td>
+          <td>{{ avil.monday_start }}</td>
+          <td>{{ avil.tuesday_start }}</td>
+          <td>{{ avil.wednesday_start }}</td>
+          <td>{{ avil.thursday_start }}</td>
+          <td>{{ avil.friday_start }}</td>
+          <td>{{ avil.saturday_start }}</td>
+          </tr>
+
+          <tr>
+              <td>End</td>
+              <td>{{ avil.sunday_end }}</td>
+              <td>{{ avil.monday_end }}</td>
+              <td>{{ avil.tuesday_end }}</td>
+              <td>{{ avil.wednesday_end }}</td>
+              <td>{{ avil.thursday_end }}</td>
+              <td>{{ avil.friday_end }}</td>
+              <td>{{ avil.saturday_end }}</td>
+              </tr>
+          </tbody>
+          </table>
+           
             
             <br>
+            <h5>Requests offs:</h5>
+            
             {%for request in requests_off%}
-        
             {{request.start}} to {{request.end}}
-            {{request.description}}
-        
+            <br>
+            Reason: {{request.description}}
             <br>
             {% endfor %}
-     
+            
             <form method="POST">
 
-    {{request.start}} to {{request.end}}
-    {{request.description}}
+   
 
-    <br>
+    <br> 
                 <h3>schedule an employee</h3>
             
                 {% csrf_token %}

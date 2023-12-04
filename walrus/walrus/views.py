@@ -633,7 +633,7 @@ def schedule_employee(request):
                     avil = employee.availability
                     print(datetime.today())
                     requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
-
+                    print(requests_off)
         # Shift was created
         if "save_shift" in request.POST:
             employee_pk = request.POST.get('employee')
