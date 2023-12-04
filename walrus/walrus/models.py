@@ -60,6 +60,7 @@ class Shift(models.Model):
      start = models.CharField(max_length=255, blank=True, null=True)  
      end = models.CharField(max_length=255, blank=True, null=True)  
      to_be_taken = models.BooleanField(default=False) 
+     clocked_in = models.BooleanField(default=False)
      def day_of_week(self):
         return self.date.weekday()
          

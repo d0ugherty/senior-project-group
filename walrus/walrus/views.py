@@ -242,6 +242,12 @@ def home_page(request, employee_id, day, month, year):
             print(shift.to_be_taken)
             shift.save()   
             return redirect('home')
+        if "shift_clock_in" in request.POST:
+            shift_pk = request.POST['shift_clock_in']
+            shift = Shift.objects.get(pk=shift_pk)
+            shift.clocked_in = True
+            shift.save()
+            return redirect('home')
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
