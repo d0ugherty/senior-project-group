@@ -413,6 +413,7 @@ def manage_roles(request):
 def blank_role_form(request, template, context):  
     context['create_role_form'] = CreateRoleForm()
     context['assign_role_form'] = AssignRoleForm()
+    context['delete_role_form'] = DeleteRoleForm()
     return render(request, template, context)
 
 """
@@ -441,6 +442,9 @@ def handle_role_submission(request, context):
             return blank_role_form(request, 'manage_roles.html', context)
     return blank_role_form(request, 'manage_roles.html', context)
 
+"""
+    Creates the role record in the database 
+"""
 def create_role(request,context,name,desc):
     try:
         new_role = Role.objects.create(name=name, description=desc).validate_unique()
@@ -486,11 +490,11 @@ def handle_role_removal(request, context):
 
     if delete_role_form.is_valid():
         role = delete_role_form.cleaned_data['role']
-    
+         
         # If employees are found to be assigned to the position,
         # the user is alerted to remove those assignments before deleting
         check_employees(request, role, context)
-
+        
         role.delete()
         request.session['msg'] = "position deleted"
         return redirect('manage_roles')
