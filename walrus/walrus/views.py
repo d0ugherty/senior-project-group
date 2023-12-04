@@ -509,8 +509,9 @@ def add_task(request):
             print(nonEmptyFields)
 
             newTask = Task(**nonEmptyFields)
+            
             newTask.save()
-
+            employee.Tasks.add(newTask)
             return HttpResponseRedirect('/manager_tools')
     else:
         form = addTask()
@@ -699,11 +700,15 @@ def task_failure(request, task_id):
     if request.method=='POST':
         form = failureForm(request.POST)
         task = Task.objects.get(id=task_id)
+
         if form['failure']:
             task.wont_complete = True
+            description = request.POST.get('description')
+            update = Task_Update(description=description,task=task)
+            update.save()
         task.save()
         return HttpResponseRedirect(reverse('list_tasks'))
-    
+     
     form = failureForm()
     return render(request, 'task_failure.html',
                   { 'fail_form':form })

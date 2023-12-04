@@ -123,7 +123,7 @@ class AssignRoleForm(forms.Form):
 
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
-    
+    description = forms.CharField(max_length=250, required=False)
 class change_profile_image_Form(forms.Form):
     profile_pic = forms.ImageField(label="image",required=False)
 
