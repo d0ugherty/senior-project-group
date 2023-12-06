@@ -32,8 +32,8 @@ task = Task()
 task.task_name="set up entrance display"
 task.task_description="At the entrance of the store, prepare the new seasonal display."
 task.project = project
-task.date_assigned_to = '2023-10-25 09:30:59'
-task.due_date = '2023-11-23'
+task.date_assigned_to = '2023-12-05 09:30:59'
+task.due_date = '2023-12-07'
 
 task.save()
 
@@ -59,19 +59,19 @@ task2.save()
 task3 = Task()
 task3.task_name = "Setup Christmas light display"
 task3.is_complete = True
-task3.date_created = '2023-11-24 11:25:20'
-task3.date_assigned_to = '2023-10-25 09:30:59'
-task3.due_date = '2023-11-26'
-task3.date_completed = '2023-11-25 14:13:27'
+task3.date_created = '2023-12-05 11:25:20'
+task3.date_assigned_to = '2023-12-05 09:30:59'
+task3.due_date = '2023-12-07'
+task3.date_completed = '2023-12-05 14:13:27'
 task3.save()
 
 # Task 4
 # This task is in progress
 task4 = Task()
 task4.task_name = "Setup reindeer display"
-task4.date_created = '2023-10-24 11:25:20'
-task4.date_assigned_to = '2023-11-25 09:30:59'
-task4.due_date = '2023-10-26'
+task4.date_created = '2023-12-05 11:25:20'
+task4.date_assigned_to = '2023-12-05 09:30:59'
+task4.due_date = '2023-12-07'
 task4.date_completed = None
 task4.is_complete = False
 task4.save()
@@ -79,9 +79,9 @@ task4.save()
 #Task 5
 task5 = Task()
 task5.task_name = "Setup Santa Clause display"
-task5.date_created = '2023-10-24 11:25:20'
-task5.date_assigned_to = '2023-10-25 09:30:59'
-task5.due_date = '2023-10-26'
+task5.date_created = '2023-12-02 1:25:20'
+task5.date_assigned_to = '2023-12-05 09:30:59'
+task5.due_date = '2023-12-07'
 task5.date_completed = None
 task5.is_complete = False
 task5.to_be_taken= True
