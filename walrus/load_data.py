@@ -20,26 +20,32 @@ Shift.objects.all().delete()
 update_1 = Task_Update(description="Task has been started")
 update_1.save()
 # Update 2
-update_2 = Task_Update(description="Task is 50 percent done")
+update_2 = Task_Update(description="Task is 50 percent done", venue_image="/images/entrance_display.jpg")
 update_2.save()
 # Project 1
-project = Project(project_name="Truck")
+project = Project(project_name="Display")
 project.save()
-
+project2 = Project(project_name="Truck")
+project2.save()
 # Task 1
 task = Task()
 task.task_name="set up entrance display"
 task.task_description="At the entrance of the store, prepare the new seasonal display."
 task.project = project
 task.date_assigned_to = '2023-10-25 09:30:59'
+task.due_date = '2023-11-23'
+
 task.save()
 
 task.task_update_set.add(update_1)
 task.task_update_set.add(update_2)
 
+
+
 # Task 2
 task2 = Task()
 task2.task_name="unload Truck"
+task2.project = project2
 task2.save()
 
 
@@ -53,10 +59,10 @@ task2.save()
 task3 = Task()
 task3.task_name = "Setup Christmas light display"
 task3.is_complete = True
-task3.date_created = '2023-10-24 11:25:20'
+task3.date_created = '2023-11-24 11:25:20'
 task3.date_assigned_to = '2023-10-25 09:30:59'
-task3.due_date = '2023-10-26 23:59:59'
-task3.date_completed = '2023-10-25 14:13:27'
+task3.due_date = '2023-11-26'
+task3.date_completed = '2023-11-25 14:13:27'
 task3.save()
 
 # Task 4
@@ -64,8 +70,8 @@ task3.save()
 task4 = Task()
 task4.task_name = "Setup reindeer display"
 task4.date_created = '2023-10-24 11:25:20'
-task4.date_assigned_to = '2023-10-25 09:30:59'
-task4.due_date = '2023-10-26 23:59:59'
+task4.date_assigned_to = '2023-11-25 09:30:59'
+task4.due_date = '2023-10-26'
 task4.date_completed = None
 task4.is_complete = False
 task4.save()
@@ -75,15 +81,28 @@ task5 = Task()
 task5.task_name = "Setup Santa Clause display"
 task5.date_created = '2023-10-24 11:25:20'
 task5.date_assigned_to = '2023-10-25 09:30:59'
-task5.due_date = '2023-10-26 23:59:59'
+task5.due_date = '2023-10-26'
 task5.date_completed = None
 task5.is_complete = False
+task5.to_be_taken= True
 task5.save()
+
+#Task6 
+task6 = Task()
+task6.task_name="Update Registers"
+task6.task_description="Registers have a new update. Please restart the systems."
+task6.date_assigned_to = '2023-10-25 09:30:59'
+task6.due_date = '2023-11-23'
+
+task6.save()
+
 
 # shift 1
 
 shift_1 = Shift(date=datetime.datetime.today(), start="7:00am", end="12:00pm")
+shift_1.to_be_taken=True
 shift_1.save()
+
 # User/Employee 1
 user = User.objects.create_user(username="test", 
                                 email="oconno65@students.rowan.edu", 
@@ -96,8 +115,10 @@ user.save()
 e = Employee(user=user, employee_id = 1)
 
 e.save()
+e.is_manager = "Yes"
 e.Tasks.add(task)
 e.Tasks.add(task2)
+e.Tasks.add(task6)
 e.Shifts.add(shift_1)
 # avil
 availability = Availability(sunday_start='Not available', sunday_end = 'Not available', monday_start = '7:00am', monday_end = '12:00pm')

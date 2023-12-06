@@ -39,12 +39,21 @@
     <div class="flex-1">
       <h4 class="card-title mb-4">Hello {{ user.first_name }}! </h4>
     <h6 class="mb-0 text-muted">
+      <a  href= "/home/{{ employee.pk }}/profile" > Profile </a>
+      <br>
       <a href="{%url 'calendar' %}">Calendar </a>
       <br>
-      <a href="{% url 'manager_tools' %}">Manager Tools</a>
-      <a  href= "/home/{{ employee.pk }}/availability" > Avilability </a>
+      <a href= "/list_tasks/" > All Tasks </a>
       <br>
-      <a href="{%url 'list_tasks' %}">All Tasks </a>
+      <a href="/shift_switch/{{ employee.pk }}">Shift Switch</a>
+      <br>
+      {%if user.employee.is_manager == 'Yes' %}
+      <a href="{% url 'manager_tools' %}">Manager Tools</a>
+      <br>
+      {%endif%}
+      <a  href= "/home/{{ employee.pk }}/availability" > Availability </a>
+      <br>
+      <a  href= "/home/{{ employee.pk }}/request_time_off" > Request Time off </a>
       <p><a href="{% url 'logout' %}">Log Out</a></p>
       <p><a href="{%url 'password_reset' %}">Reset Password</a></p>
       </h5>
@@ -61,6 +70,14 @@
     <div class="flex-1">
       {% if shift.start is not None %}
     <h4 class="card-title mb-4">Todays Shift {{shift.start}} -  {{shift.end}}</h4>
+    
+        {% if shift.to_be_taken == False %}
+    
+        <button class ="btn btn-primary px-4 clock_in" type="submit" name="to_be_taken" value="{{shift.pk}}"> Request to be taken </button>
+        {%else%}
+        <button class ="btn btn-primary px-4 clock_in" type="submit" name="to_be_taken" value="{{shift.pk}}"> Cancel to be taken </button>
+        {%endif%}
+        <button class ="btn btn-primary px-4 shift_in" type="submit" name="shift_clock_in" value="{{shift.pk}}"> clock in</button>
       {%else%}
       <h4 class="card-title mb-4">Todays Shift </h4>
       {%endif%}
@@ -119,24 +136,8 @@
   </div>
   </div>
   </div>
-  </div>
-  </div>
-  </div>
   </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
   </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
   </script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript"> 

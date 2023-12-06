@@ -1,15 +1,19 @@
 {% load static %}
-
+<div>
+  </div>
 <head>
-  
+   
   <link rel="stylesheet" href="{% static '/css/manager_tools.css' %}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
+
 {% block content %}
 <title>Manager Tools</title>
-
 <body class="parent-container">
+
         <form class="button-container" action="{% url 'manager_tools_redirect' %}" method="post">
+          <a href="{% url 'home' %}" class="back_button">Go Back</a>
+
         <h1 class="heading">Manager Tools</h1>
           {% csrf_token %}
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/add_task/">Add Tasks</button>
@@ -18,7 +22,7 @@
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/schedule_employee/">Scheduling</button>
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/employee_stats/">Employee Statistics</button>
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/edit_user_info/">Edit User Information</button>
-          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/create_role/">Manage Employee Roles and Positions</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/manage_roles/">Manage Employee Roles and Positions</button>
       </form>
 </body>
 {% endblock %}

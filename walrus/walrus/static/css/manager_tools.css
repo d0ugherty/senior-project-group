@@ -11,8 +11,16 @@
   box-sizing: border-box; 
 }
 
+
+.back_button {
+  position: absolute; 
+  top: 125px; 
+  right: 450px; 
+}
+
+
 .parent-container {
-  background-color:lightseagreen ;
+  background-color:rgb(230, 236, 236) ;
   display: flex;
   justify-content: center;
   align-items: center;

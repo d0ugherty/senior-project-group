@@ -1,5 +1,5 @@
 from django import forms
-
+from django.core.exceptions import ValidationError
 from .models import *
 TIME_CHOICES = (
 ('Not available', 'Not available'),
@@ -18,7 +18,7 @@ TIME_CHOICES = (
 ('7:00pm', '7:00pm'),
 ('8:00pm', '8:00pm'),
 ('9:00pm', '9:00pm'),
-('19:00pm', '10:00pm'),
+('10:00pm', '10:00pm'),
 
 )
 class availabilityForm(forms.Form):
@@ -63,7 +63,7 @@ class taskSearchForm(forms.Form):
 
 class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250, required=False)
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
     due_date = forms.DateField(label="Due Date", widget=DateInput, required=False)
@@ -71,8 +71,8 @@ class addTask(forms.Form):
     
 class editTask(forms.Form):
     task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250, required=False)
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
+    description = forms.CharField(max_length=250, required=False,  widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
     due_date = forms.DateField(label="Due Date", widget=DateInput, required=False)
     assign_date = forms.DateField(label="Assignment Date", widget=DateInput, required=False)
@@ -80,19 +80,19 @@ class editTask(forms.Form):
 
      
 class requestOffForm(forms.Form):
-    description = forms.CharField(max_length=250, required=False)
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
     start_date = forms.DateField(label="Start Date", widget=DateInput, required=False)
     end_date = forms.DateField(label="End Date", widget=DateInput, required=False)
 
 class employeeIdSearch(forms.Form):
-    employee_id = forms.CharField(label="Enter Employee ID Number",max_length=100, required=False)
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=True)
     status = forms.ChoiceField(choices=STATUS_CHOICES)
 
 class employeeDropdownSearch(forms.Form):
     employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
 
 class updateTask(forms.Form):
-    description = forms.CharField(max_length=250)
+    description = forms.CharField(max_length=250, required=False)
     image = forms.ImageField(label="image",required=False)
 
 class scheduleEmployee(forms.Form):
@@ -109,16 +109,24 @@ class projectForm(forms.Form):
     name = forms.CharField(label="Project Name",max_length=250)
     due_date = forms.DateField(label="Due Date (optional)", widget=DateInput, required=False)
 
-class createRole(forms.Form):
+
+
+class CreateRoleForm(forms.Form):
     role_name = forms.CharField(label="Role/Position", max_length=50)
-    description = forms.CharField(label="Description", max_length=255)
-    assign_emloyee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
+    description = forms.CharField(label="Description", max_length=255, required=False)
+
+class AssignRoleForm(forms.Form):
+    roles = forms.ModelChoiceField(queryset=Role.objects.all())
+    assign_employee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",
-                                            to_field_name="assigned_employee",
                                             required=False)
+class DeleteRoleForm(forms.Form):
+    role = forms.ModelChoiceField(queryset=(Role.objects.all()),
+                                   label="Roles/Positions")
+
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
-    
+    description = forms.CharField(max_length=250, required=False)
 class change_profile_image_Form(forms.Form):
     profile_pic = forms.ImageField(label="image",required=False)
 

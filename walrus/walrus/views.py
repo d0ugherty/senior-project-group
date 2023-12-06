@@ -1,19 +1,22 @@
 import calendar
 from django import forms
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.db import transaction
 from django.views import generic
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import datetime
 from datetime import datetime, timedelta
 from calendar import month_name
 from calendar import HTMLCalendar
 
-from .models import Task
+from .models import Task, Shift
 from .forms import *
 from .util import *
-
+from .multiforms import MultiFormView
 from datetime import datetime,timezone
 
 from django.contrib import messages
@@ -25,21 +28,25 @@ from asgiref.sync import async_to_sync
 
 
 def availability(request, employee_id):
-    print("hello")
+
     employee = Employee.objects.get(pk=employee_id)
+
+    # If employee updates availability
     if request.method == "POST":
-        employee = Employee.objects.get(pk=employee_id)
+        
         if employee.availability == None:
-                #print("does not")
                 availability = Availability()
                 availability.save()
                 employee.availability = availability
                 employee.save()
+        
+        # Sets availability
         set_availability(request, employee)
         # returning to home page
         today = datetime.today()
         return HttpResponseRedirect('/home/' + str(employee_id) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year))
 
+    #   If the employee already has availability set this will load the page with the correct availability
     if employee.availability != None:
         dict = {
             'sunday_start' : employee.availability.sunday_start, 'sunday_end' : employee.availability.sunday_end,
@@ -52,15 +59,15 @@ def availability(request, employee_id):
              }
     else:
         dict = {}
-#    page = 'home/' + str(request.user.pk)
-    #redirect('page')
-
 
     form = availabilityForm(initial=dict)
+
     return render(request, 'availability.html', {'form':form})
 
 def request_time_off(request, employee_id):
     user = request.user
+   
+   # if user submits a request off form
     if request.method == 'POST':
         
         form = requestOffForm(request.POST)
@@ -74,30 +81,14 @@ def request_time_off(request, employee_id):
                 new_request_off.save()
                 user.employee.Request_Offs.add(new_request_off)
     form = requestOffForm()
+
     return render(request, 'request_time_off.html', {'form':form})
 
 def profile(request, employee_id):
     user = request.user
 
-    # getting and changing the profile pic
-    if request.method == 'POST':
-        print(request.POST)
-        if 'change picture' in request.POST:
-            form = change_profile_image_Form(request.POST, request.FILES)
-            if form.is_valid():
-                image = form.cleaned_data.get('profile_pic')
-                user.employee.profile_pic = image
-                user.employee.save()
-        if 'remove' in request.POST:
-            user.employee.profile_pic = None
-            user.employee.save()
-
-
     
-    pic_form = change_profile_image_Form()
-    #return render (request, 'profile.html', {'user':user, 'pic_form':pic_form})
     return render (request, 'new_profile.html',{'user':user})
-    #return render (request, 'edit_profile.html',{'user':user})
 
 def edit_profile(request, employee_id):
     user = request.user
@@ -105,45 +96,44 @@ def edit_profile(request, employee_id):
         form = change_profile_image_Form(request.POST, request.FILES)
         if form.is_valid():
             image = form.cleaned_data.get('profile_pic')
-            print(image)
             if image != None:
                 user.employee.profile_pic = image
                 user.employee.save()
-        print("hello")
-        print(request.POST)    
+
+        # Reading from form
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         phone_number = request.POST['phone_number']
         # PUT PHONE NUMBER AND IMAGE
 
-
-
-        print(first_name)
-        print(user.first_name)
+        # Assigning new attributes to user
         user.first_name = first_name
         user.last_name = last_name
         user.email = email
         user.employee.phone_number = phone_number
         user.employee.save()
         user.save()
-        
+
+        return render (request, 'new_profile.html',{'user':user})
+    
     pic_form = change_profile_image_Form()
     return render (request, 'edit_profile.html',{'user':user, 'form':pic_form})
 # after user logs in this redirects them to home page
 def home_redirect(request):
     user=request.user
     if user.is_authenticated:
+     
      today = datetime.today()
      url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
        
-
-
      return redirect(url)
+    
     return render(request, 'home.html')
 
-
-
+def python_test(request):
+    user = datetime.d
+    
 def list_tasks(request):
     try:
         tasks = Task.objects.all()
@@ -156,29 +146,24 @@ def list_tasks(request):
         project_name = request.POST.get('project_name')
         status = request.POST.get('status')
         due_date = request.POST.get('date')
-       # print(due_date)
-       # print(Task.objects.filter(due_date=due_date))
-
-        
+        print(due_date)
+        # Getting the list of tasks that 
         tasks = find_tasks(task_name, project_name, due_date, status)
-         #print(Task.objects.filter(project=project_object))
-       # print(task_name)
-       # print(project_name)
-       # print(due_date)
-       #print(status)
-       
-       # Null case 
-       # if (task_name == ""):
-
+        if (tasks == None) :
+            print(tasks[0].due_date)
 
     form = taskSearchForm()
-    
-    
+        
     return render(request, 'task_list.html', {
         'tasks': tasks, 'form':form, 
     })
 
 def create_project(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
+
     if request.method == 'POST':
         name = request.POST.get('name')
         date = request.POST.get('due_date')
@@ -188,7 +173,7 @@ def create_project(request):
         else:
             project = Project(project_name=name,due_date=date)        
         project.save()
-        return HttpResponseRedirect('/manager_tools')
+        return HttpResponseRedirect('/create_project')
 
 
 
@@ -202,7 +187,7 @@ def task_detail (request, task_id):
     task = Task.objects.get(id=task_id)
     employees = task.employee_set.all()
     updates = task.task_update_set.all()
-    print(updates)
+
     return render (request, 'task_detail.html', {
         'task': task,
         'form' : form,
@@ -211,25 +196,20 @@ def task_detail (request, task_id):
     })
 
 def home_page(request, employee_id, day, month, year):
+  
     screen_date = date(year,month,day)
     employee = Employee.objects.get(pk=employee_id)
     shift = employee.Shifts.filter(date=screen_date)
     if shift.first() != None:
         shift = shift.first()
+    
     # should filter all tasks that have not been completed
     # date from url
-    print(shift)
-    print(screen_date)
-    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date)) 
-   #print(employee)
-   # print(tasks)
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False)
     
-
     if request.method == 'POST':
         # go through the tasks and find the object that was selected and clock in or out
-        # I just have the buttons named as the task object they are associated with
-        print(request.POST)
-       
+        # I just have the buttons named as the task object they are associated with       
         for x in tasks:
             # print(str(x) + " complete")            
             # each button is labeled with either clock or complete so we know what to do
@@ -246,16 +226,29 @@ def home_page(request, employee_id, day, month, year):
                     time_record.save()
                     adjust_clock_in(time_record)
             
+            # if the task was selected as completed
             elif str(x) + " complete" in request.POST:
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
-#    if request.htmx:
- #       return render(request, 'post/partials/bitcoin.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
-
-  #  else:
-
-
+                
+        if "to_be_taken" in request.POST:
+            shift_pk = request.POST['to_be_taken']
+            shift = Shift.objects.get(pk=shift_pk)
+            
+            if shift.to_be_taken == False:
+                 shift.to_be_taken = True
+            else:
+                shift.to_be_taken = False
+            print(shift.to_be_taken)
+            shift.save()   
+            return redirect('home')
+        if "shift_clock_in" in request.POST:
+            shift_pk = request.POST['shift_clock_in']
+            shift = Shift.objects.get(pk=shift_pk)
+            shift.clocked_in = True
+            shift.save()
+            return redirect('home')
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
 
 class CalendarView(generic.ListView):
@@ -267,6 +260,7 @@ class CalendarView(generic.ListView):
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
+        
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
@@ -296,6 +290,12 @@ def next_month(d):
     TO DO: Check for user type
 """
 def load_manager_tools(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
+
+
     return render(request, 'manager_tools.html')
 
 """
@@ -321,7 +321,7 @@ def manager_tools_redirect(request):
             return HttpResponseRedirect(destination)
         case "/schedule_employee/":
             return HttpResponseRedirect(destination)
-        case "/create_role/":
+        case "/manage_roles/":
             return HttpResponseRedirect(destination)
         case _:
             return HttpResponse("Invalid destination", status=400)
@@ -338,54 +338,189 @@ def manager_tools_redirect(request):
 """
 
 def employee_stats(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+    
     if request.method == 'POST':
         
         form = employeeIdSearch(request.POST)
         
         if form.is_valid():
-           
-            input_id = form.cleaned_data['employee_id'].strip()
-            if (not is_valid_id(input_id)):
-                return render(request, 'employee_stats.html', {'form' : form,
-                                                                'show_error': True})
+
+            employee = form.cleaned_data['employee'] 
+            status = form.cleaned_data['status']
+            print(status)
+            if employee != None:
             # get tasks
-            employee = Employee.objects.get(employee_id=input_id)
-            tasks = employee.Tasks.all()
-            name = f'{employee.user.first_name} {employee.user.last_name}' 
-            return render(request, 'employee_stats.html', {'form': form, 
-                                                           'tasks': tasks, 
-                                                           'employee': employee,
-                                                           'employee_name': name})
+                if status == 'n/a':
+                    tasks = employee.Tasks.all()
+                else:
+                    if status == "complete":
+                        status = True
+                    elif status == "incomplete":
+                        status = False
+                    tasks = employee.Tasks.filter(is_complete=status)
+                name = f'{employee.user.first_name} {employee.user.last_name}' 
+
+                # looping through all of the time_spent objects associated with the tasks
+                time_spent = []
+                for t in tasks:
+                    if (Time_Spent.objects.filter(employee=employee.pk,task=t.pk)):
+                       time_record = Time_Spent.objects.get(employee=employee.pk,task=t.pk)
+                       time_spent.append(time_record.total_time)
+                    else:
+                       time_spent.append(None)
+
+                return render(request, 'employee_stats.html', {'form': form, 
+                                                            'tasks': tasks, 
+                                                            'employee': employee,
+                                                            'employee_name': name,
+                                                            'time_spent' : time_spent})
     else:
         form = employeeIdSearch()
     return render(request, 'employee_stats.html', {'form' : form })
 
 """
-    Create Role
-"""
-def create_role(request):
-    if request.method == 'POST':
-        form = createRole(request.POST)
-        if form.is_valid():
-            role_name = form.cleaned_data['role_name'].strip()
-            role_desc = form.cleaned_data['description'].strip()
-            ## prevent duplicates by checking if a role with the same name exists
-            if not is_valid_role(role_name):
-                # show error
-                pass
-            else:
-                new_role = Role.objects.create(name=role_name, description=role_desc)
-            return render(request, 'create_role.html', {'form': form,
-                                                        'role': new_role})
-    else:
-        form = createRole()
-        return render(request,'create_role.html',{'form' : form})
+    Create and manage employee positions
+    TO DO:    
+    > Remove roles and positions
 
+"""
+
+
+def manage_roles(request):
+    context = {}
+    if request.method == 'POST':
+        # Role creation/deletion
+        if "submit_role" in request.POST:
+            handle_role_submission(request, context)
+       # Employee assignment 
+        if "assign_role" in request.POST:
+            handle_role_assignment(request, context)
+        # Role removal
+        if "delete_role" in request.POST:
+            handle_role_removal(request, context)
+
+    if 'msg' in request.session:
+        context['msg'] = request.session.pop('msg')
+    return blank_role_form(request, 'manage_roles.html', context)
+
+"""
+    Helper functions to reduce code duplication
+    and make the manage_roles view more readable
+
+"""
+def blank_role_form(request, template, context):  
+    context['create_role_form'] = CreateRoleForm()
+    context['assign_role_form'] = AssignRoleForm()
+    context['delete_role_form'] = DeleteRoleForm()
+    return render(request, template, context)
+
+"""
+    Handles the creation of new role and position entries
+    into the database. 
+
+    Validity is checked by by getting names of
+    existing roles. The Role model has a one to many relationship with 
+    Employee so only one of each name is required for each position in the store.
+"""
+
+def handle_role_submission(request, context):
+    create_role_form = CreateRoleForm(request.POST)
+    context['create_role_form'] = create_role_form
+
+    if create_role_form.is_valid():
+        role_name = create_role_form.cleaned_data['role_name'].strip()
+        role_desc = create_role_form.cleaned_data['description'].strip()
+
+        if not Role.objects.filter(name=role_name).exists():
+            create_role(request, context, role_name, role_desc)
+            return redirect('manage_roles')
+    
+        else:
+            context['msg'] = f'Role submission unsuccessful: Role {role_name} already exists'
+            return blank_role_form(request, 'manage_roles.html', context)
+    return blank_role_form(request, 'manage_roles.html', context)
+
+"""
+    Creates the role record in the database 
+"""
+def create_role(request,context,name,desc):
+    try:
+        new_role = Role.objects.create(name=name, description=desc).validate_unique()
+        context['role'] = new_role
+        request.session['msg'] = f'Role {name} successfully created'
+    except ValidationError as error:
+        request.session['msg'] = f'Role submission unsuccessful: {error}'
+
+"""
+    Handles the assignment of roles and positions to employees
+"""
+
+def handle_role_assignment(request,context):
+    assign_role_form = AssignRoleForm(request.POST)
+    context['assign_role_form'] = assign_role_form
+    
+    if assign_role_form.is_valid():
+        role = assign_role_form.cleaned_data['roles']
+        employee = assign_role_form.cleaned_data['assign_employee']
+            
+        msg = get_assign_msg(employee, role)
+
+        employee.role = role
+        employee.save()
+        request.session['msg'] = msg
+        return redirect('manage_roles')
+    else:
+        return blank_role_form(request, 'manage_roles.html', context)
+
+def get_assign_msg(employee, role):
+    if employee.role_id == role.id:
+        return  f'Employee {employee} is already assigned to {role}!'
+    else:
+        return f'Employee {employee} has been assigned to {role}'
+
+"""
+    Handles the removal of positions and roles from the database
+
+"""
+def handle_role_removal(request, context):
+    delete_role_form = DeleteRoleForm(request.POST)
+    context['delete_role_form'] = delete_role_form
+
+    if delete_role_form.is_valid():
+        role = delete_role_form.cleaned_data['role']
+         
+        # If employees are found to be assigned to the position,
+        # the user is alerted to remove those assignments before deleting
+        if check_employees(request, role, context):
+            context['msg'] = f'Please unassign employees from {role}' 
+            return blank_role_form(request, 'manage_roles.html', context)
+
+        else:
+            print("deleting role") 
+            role.delete()
+            print("role deleted")
+            request.session['msg'] = "position deleted"
+            return redirect('manage_roles')
+    else:
+        print(delete_role_form.errors)
+        return blank_role_form(request, 'manage_roles.html', context)
+
+def check_employees(request, role, context):
+    employees = []
+    employees = Employee.objects.filter(role=role)
+    return employees 
 """
     Add Task
 """
 
 def add_task(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+    
     if request.method=='POST':
         form = addTask(request.POST)
         if form.is_valid():
@@ -396,8 +531,8 @@ def add_task(request):
             due_date = form.cleaned_data['due_date']
             assign_date = form.cleaned_data['assign_date']
 
-       
             # Going to loop through each field to make sure its not empty
+            # Was having issues when theses were empty
             fields ={
                     'task_name': task_name,
                     'task_description': task_description,
@@ -412,23 +547,10 @@ def add_task(request):
             print(nonEmptyFields)
 
             newTask = Task(**nonEmptyFields)
+            
             newTask.save()
-
-            print(employee)
-            if employee != None:
-                employee.Tasks.add(newTask)
-                message = "You have been assigned a new task: " + str(newTask.task_name)
-                channel_layer = get_channel_layer()
-                # Trigger message sent to group
-                async_to_sync(channel_layer.group_send)(
-                    str(employee.pk), # uses an employees primary key
-                    {
-                        "type": "send_notification",
-                        "message": message
-                    }
-                )
-
-            return HttpResponseRedirect('/manager_tools')
+            employee.Tasks.add(newTask)
+            return HttpResponseRedirect('/list_tasks')
     else:
         form = addTask()
 
@@ -444,9 +566,12 @@ Employee will need to be changed to allow for multiple employees to appear
 '''
 
 
-
-
 def edit_task(request, task_id):
+
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
+
 
     task = Task.objects.get(pk=task_id) 
     if request.method=='POST':
@@ -470,22 +595,9 @@ def edit_task(request, task_id):
             else:
                 employee.Tasks.add(task)
 
-            # Used for notifications
-                message = "Your task '" + str(task.task_name) + "' has been edited"
-                channel_layer = get_channel_layer()
-                # Trigger message sent to group
-                async_to_sync(channel_layer.group_send)(
-                    str(employee.pk), # uses an employees primary key
-                    {
-                        "type": "send_notification",
-                        "message": message
-                    }
-                )
-
             task.save()
             # Going to loop through each field to make sure its not empty
             
-
         return HttpResponseRedirect('/task_detail/' + str(task_id))
    
     # employee will need to be fixed later when we allow for multiple employees
@@ -514,6 +626,7 @@ def edit_task(request, task_id):
 
     #employee = task.Employee
     form = editTask(initial=nonEmptyFields)
+    print(nonEmptyFields['project'])
     return render( request, 'edit_task.html', {'form':form})
 
 def delete_task(request, task_id):
@@ -524,124 +637,91 @@ def delete_task(request, task_id):
 
 def update_task_status(request,task_id):
     if request.method == "POST":
-        print("we at post")
         form = updateTask(request.POST, request.FILES)
         if form.is_valid():
             description = request.POST.get('description')
             image = form.cleaned_data.get('image')
-            print("HELA")
             task = Task.objects.get(pk=task_id)
             
             update = Task_Update(description=description,task=task, venue_image=image)
             update.save()
-
+            return redirect('home')
 
     form = updateTask()
     return render(request, 'update_task_status.html', {'form':form})
 
 def schedule_employee(request):
+    user = request.user
+    if user.employee.is_manager == 'No':
+         return render(request, 'notAManager.html')
     avil = None
     employees = None
     shifts = None
-
+    requests_off = None
     dict = {}
 
     if request.method == "POST":
+        # Employee Avilability was searched
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
                 employee = form.cleaned_data['employee']
                
-                print(employee.pk)
-                avil = employee.availability
-                print(avil)
+
+                if employee != None:
+                    avil = employee.availability
+                    print(datetime.today())
+                    requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
+                    print(requests_off)
+        # Shift was created
         if "save_shift" in request.POST:
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
             date = request.POST.get('date')
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
-            print(employee)
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
             employee.Shifts.add(shift)
+
         if "select_week_form" in request.POST:
             form = selectWeek(request.POST)
             if form.is_valid():
-                date = form.cleaned_data['date']
-                print(date.weekday())
-                
-                start_date = None
-                end_date = None
-                if (date.weekday() == 0):
-                    start_date = date-timedelta(1)
-                    end_date = date + timedelta(5)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 1):
-                    start_date = date-timedelta(2)
-                    end_date = date + timedelta(4)
-
-                    print(start_date)
-                    print(end_date)
-
-                if (date.weekday() == 2):
-                    start_date = date-timedelta(3)
-                    end_date = date + timedelta(3)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 3):
-                    start_date = date-timedelta(4)
-                    end_date = date + timedelta(2)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 4):
-                    start_date = date-timedelta(5)
-                    end_date = date + timedelta(1)
-
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 5):
-                    start_date = date-timedelta(6)
-                    end_date = date 
-                    print(start_date)
-                    print(end_date)
-                if (date.weekday() == 6):
-                    start_date = date
-                    end_date = date + timedelta(6)
-
-
-
-                    print(start_date)
-                    print(end_date)
-            shifts = Shift.objects.filter(date__range=(start_date, (end_date + timedelta(1)))).order_by('date')
+                date = form.cleaned_data['date']     
+                start_date, end_date = get_start_and_end(date)
+ 
+                shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
             
-            for i in shifts:
-                print(i.day_of_week())
-            employees = Employee.objects.all()
+                employees = Employee.objects.all()
+        
+                for e in employees:
+                        print(e)
+                        list = [None, None, None, None, None, None, None,None]
+                        list[0]=e
+                        for s in shiftsThisWeek:
+                                if s in e.Shifts.all():
+                                    temp = s.day_of_week()
+                                    if temp == 6:
+                                        list[1] = s
+                                    if temp == 0:
+                                        list[2] = s
+                                    if temp == 1:
+                                        list[3] = s
+                                    if temp == 2:
+                                        list[4] = s
+                                    if temp == 3:
+                                        list[5] = s
+                                    if temp == 4:
+                                        list[6] = s
+                                    if temp == 5:
+                                        list[7] = s
 
-            for e in employees:
-                print(e)
-                list = []
-                list.append(e)
-                for s in shifts:
-                        if s in e.Shifts.all():
-                            print("found a shift")
-                            list.append(s)
-                dict[str(e.pk)] = (list) 
-              
-            print (dict)
-            #print(shifts)
-            #print(employees)
-
-            #Restructruring data
-
-            
-
-
+                        dict[str(e.pk)] = (list) 
+        
+        if "delete" in request.POST:
+            shift_pk = request.POST['delete']
+            shift = Shift.objects.filter(pk=shift_pk)
+            shift.delete()
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
     select_week_form = selectWeek()
@@ -650,17 +730,105 @@ def schedule_employee(request):
                   {'search_form':search_form, 'avil':avil, 
                    'schedule_form':schedule_form, 'select_week_form':select_week_form,
                    'select_week_form':select_week_form, 
-                    'employees':employees, 'shifts':shifts, 'dict':dict})
+                    'employees':employees, 'shifts':shifts, 'dict':dict,
+                    'requests_off':requests_off,
+                    })
 
 def task_failure(request, task_id):
     if request.method=='POST':
         form = failureForm(request.POST)
         task = Task.objects.get(id=task_id)
+
         if form['failure']:
             task.wont_complete = True
+            description = request.POST.get('description')
+            update = Task_Update(description=description,task=task)
+            update.save()
         task.save()
         return HttpResponseRedirect(reverse('list_tasks'))
-    
+     
     form = failureForm()
     return render(request, 'task_failure.html',
                   { 'fail_form':form })
+
+
+def shift_switch(request, employee_id):
+    employee = Employee.objects.get(pk=employee_id)
+    eShifts = employee.Shifts.filter()
+
+    shifts = Shift.objects.filter(to_be_taken=True)
+
+    # This works
+    if request.method=='POST':
+        shift_pk = request.POST['button']
+        
+        shift = Shift.objects.get(pk=shift_pk)
+        date = shift.date
+        
+        # checking if employee already has a shift on that day
+        if employee.Shifts.filter(date=date).exists() == False:
+
+            shift.to_be_taken = False
+            shift.employee_set.clear()
+            shift.save()
+            employee.Shifts.add(shift)
+
+
+
+    for e in eShifts:
+        for s in shifts:
+            #check for shift discrepancies
+            #dont show shifts employees can't take
+            if e == s:
+                #shifts.exclude(s) #I will not be able to test this very well until we have a lot of data
+                ""
+    
+
+
+    return render(request, 'shift_switch.html', {
+        'employee' : employee,
+        'shifts' : shifts
+    })
+
+def swap_shifts(request, employee_id, shift_id):
+    employee = Employee.objects.get(pk=employee_id)
+    shift = Shift.objects.get(pk=shift_id)
+    employees = Employee.objects.all()
+
+    # Need to verify that the employee picking up a shift does not work that day
+    date = shift.date
+    print(date)
+    if employee.Shifts.filter(date=date) == None:
+
+        #find shift from existing employee and remove it
+        #there HAS to be a better way to do this but I can't find anything
+        
+        
+
+
+        for e in employees:
+            for s in e.Shifts.filter():
+                if (s == shift):
+                    e.Shifts.get(pk=shift.pk).delete()
+                    break
+
+        #add the shift to the current employee
+        #and alter the shift+save it
+        shift.to_be_taken = False
+        shift.save()
+        employee.Shifts.add(shift)
+        shifts = Shift.objects.filter(to_be_taken=True)
+        return render(request, 'shift_switch.html', {
+            'employee' : employee,
+            'shifts' : shifts
+        })
+
+        
+    else:
+        shifts = Shift.objects.filter(to_be_taken=True)
+        return render(request, 'shift_switch.html', {
+            'employee' : employee,
+            'shifts' : shifts
+        })
+        
+        
