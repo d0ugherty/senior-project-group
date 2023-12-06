@@ -717,7 +717,7 @@ def task_failure(request, task_id):
 @require_POST
 def notify(request):
     newTasks = 0
-    return render(request, "htmxapp/templates/partials/notification.html", {'notification': newTasks })
+    return render(request, "walrus/templates/partials/notification.html", {'notification': newTasks })
    
 
 def shift_switch(request, employee_id):

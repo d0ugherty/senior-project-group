@@ -20,7 +20,7 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
-from walrus import views
+from . import views
 
 from walrus.consumer import NotificationConsumer
 
@@ -59,7 +59,7 @@ urlpatterns = [
     
     path('manage_roles/', views.manage_roles, name='manage_roles'),
     
-    path("notification", views.notify, name="notification"),
+    path("notify", views.notify, name="notification"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
