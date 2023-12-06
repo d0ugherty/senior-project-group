@@ -20,7 +20,7 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
-from walrus import views
+from . import views
 
 from walrus.consumer import NotificationConsumer
 
@@ -30,7 +30,6 @@ urlpatterns = [
     path('task_detail/<task_id>', views.task_detail, name='task'),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", views.home_redirect, name="home"),
-    path('list_tasks/', views.list_tasks, name='list_tasks'),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
     path('add_task/', views.add_task, name='add_task'),
     path('delete_task/<int:task_id>', views.delete_task, name='delete_task'),
