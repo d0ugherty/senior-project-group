@@ -115,6 +115,7 @@ user.save()
 e = Employee(user=user, employee_id = 1)
 
 e.save()
+e.is_manager = "Yes"
 e.Tasks.add(task)
 e.Tasks.add(task2)
 e.Tasks.add(task6)
