@@ -149,7 +149,8 @@ def list_tasks(request):
         print(due_date)
         # Getting the list of tasks that 
         tasks = find_tasks(task_name, project_name, due_date, status)
-        print(tasks[0].due_date)
+        if (tasks == None) :
+            print(tasks[0].due_date)
 
     form = taskSearchForm()
         
@@ -172,7 +173,7 @@ def create_project(request):
         else:
             project = Project(project_name=name,due_date=date)        
         project.save()
-        return HttpResponseRedirect('/manager_tools')
+        return HttpResponseRedirect('/create_project')
 
 
 
@@ -549,7 +550,7 @@ def add_task(request):
             
             newTask.save()
             employee.Tasks.add(newTask)
-            return HttpResponseRedirect('/manager_tools')
+            return HttpResponseRedirect('/list_tasks')
     else:
         form = addTask()
 
