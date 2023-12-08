@@ -54,8 +54,10 @@ urlpatterns = [
     path('shift_switch/<employee_id>', views.shift_switch, name='shift_switch'),
     path('swap_shift/<employee_id>/<shift_id>', views.swap_shifts, name='swap_shift'),
     
-    path('manage_roles/', views.manage_roles, name='manage_roles')
+    path('manage_roles/', views.manage_roles, name='manage_roles'),
 
+
+    path('noti/', views.noti, name='noti')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

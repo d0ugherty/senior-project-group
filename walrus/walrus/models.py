@@ -83,6 +83,16 @@ class Request_Off(models.Model):
     end = models.CharField(max_length=255, blank=True, null=True)
 
 
+
+class Notification (models.Model):
+     message = models.TextField()
+     created_at = models.DateTimeField(auto_now_add=True)
+     marked_as_read = models.BooleanField(default=False)
+     def __str__(self):
+          return self.message
+
+
+
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     Tasks = models.ManyToManyField(Task, blank=True)
@@ -106,6 +116,8 @@ class Employee(models.Model):
     phone_number = models.CharField(max_length=255, blank=True, null=True)
     Request_Offs = models.ManyToManyField(Request_Off, null=True, blank=True)
 
+    notifications = models.ManyToManyField(Notification, blank=True)
+
 class Time_Spent(models.Model):
         task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True)
         employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
@@ -113,11 +125,6 @@ class Time_Spent(models.Model):
         total_time = models.DurationField(default=timedelta, blank=True)
         last_clock_in = models.DateTimeField(null=True)
 
-class Notifications (models.Model):
-     message = models.TextField()
-     created_at = models.DateTimeField(auto_now_add=True)
 
-     def __str__(self):
-          return self.message
      
      

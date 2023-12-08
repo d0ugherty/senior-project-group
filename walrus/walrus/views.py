@@ -20,10 +20,7 @@ from .multiforms import MultiFormView
 from datetime import datetime,timezone
 
 from django.contrib import messages
-# Imports for notifications
-from walrus.admin import SendNotificationForm
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+
 
 
 
@@ -87,7 +84,8 @@ def request_time_off(request, employee_id):
 def profile(request, employee_id):
     user = request.user
 
-    
+   # hello = "123"
+   # return render(request,'htmx_fragments/noti.html', {'hello':hello})
     return render (request, 'new_profile.html',{'user':user})
 
 def edit_profile(request, employee_id):
@@ -196,7 +194,7 @@ def task_detail (request, task_id):
     })
 
 def home_page(request, employee_id, day, month, year):
-  
+    
     screen_date = date(year,month,day)
     employee = Employee.objects.get(pk=employee_id)
     shift = employee.Shifts.filter(date=screen_date)
@@ -831,4 +829,18 @@ def swap_shifts(request, employee_id, shift_id):
             'shifts' : shifts
         })
         
+
+def noti(request):
+    user = request.user
+    employee = user.employee
+    notifications = employee.notifications.all().filter(marked_as_read=False)
+    #print(notifications)
+    #notifications=None
+    if request.method == "POST":
+        print("dasklfhj")
+        print(request.POST)
+
+
+
+    return render(request,'htmx_fragments/noti.html', {'notifications':notifications})
         
