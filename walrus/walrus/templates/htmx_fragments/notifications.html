@@ -1,3 +1,15 @@
+
+{% load static %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static '/css/home_page.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body style="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+
 <div id="notifications-container" hx-get="{%url 'notifications' %}" hx-trigger="every 1s">
     <form hx-post="{%url 'notifications' %}"
       hx-target="#notifications-container"
@@ -6,7 +18,8 @@
     {% csrf_token %} 
    {%for x in notifications%}
    {{x.message}}
-   <button type="submit" name="noti" value="{{x.pk}}"> Clock-in </button>
+   <button type="submit" class = "notification_read" name="noti" value="{{x.pk}}"> clear </button>
+   <br>
     {% endfor %}
     </form>
     </div>

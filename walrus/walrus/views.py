@@ -548,7 +548,10 @@ def add_task(request):
             
             newTask.save()
             employee.Tasks.add(newTask)
-            return HttpResponseRedirect('/list_tasks')
+            notification = Notification(message = "You have been assigned a new task: " + newTask.task_name)
+            notification.save()
+            employee.notifications.add(notification)
+            return HttpResponseRedirect('/add_task')
     else:
         form = addTask()
 
