@@ -661,20 +661,29 @@ def schedule_employee(request):
     dict = {}
     print("here") 
     if request.method == "POST":
+        print(request.POST)
         # Employee Avilability was searched
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
                 employee = form.cleaned_data['employee']
-               
+                
 
                 if employee != None:
                     avil = employee.availability
                     print(datetime.today())
                     requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
                     print(requests_off)
+                context = {'search_form':form,'avil':avil, 'requests_off':requests_off}
+                return render(request, 'htmx_fragments/avil_s.html', context)
+
+
+
         # Shift was created
         if "save_shift" in request.POST:
+
+            print("hello")
+
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
             date = request.POST.get('date')
@@ -683,6 +692,11 @@ def schedule_employee(request):
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
             employee.Shifts.add(shift)
+            
+            schedule_form = scheduleEmployee()
+            context = {'schedule_form':schedule_form}
+            return render(request, 'htmx_fragments/create_shift.html', context)
+
 
         if "select_week_form" in request.POST:
             form = selectWeek(request.POST)

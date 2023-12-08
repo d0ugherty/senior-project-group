@@ -1,0 +1,11 @@
+<div id="create-shift-form-container">
+<form hx-post="{%url 'schedule_employee' %}"
+hx-target="#create-shift-form-container"
+hx-swap="outerHTML">
+    <br> 
+                <h3>schedule an employee</h3>
+            
+            {{ schedule_form.as_p }}
+            <button name="save_shift"> Submit </button>
+            </form>
+</div>
