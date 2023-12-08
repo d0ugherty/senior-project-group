@@ -3,4 +3,5 @@ register = template.Library()
 
 @register.filter
 def index(indexable, i):
+    print(indexable[i])
     return indexable[i]

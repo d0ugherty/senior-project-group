@@ -731,7 +731,9 @@ def schedule_employee(request):
                                         list[7] = s
 
                         dict[str(e.pk)] = (list) 
-        
+                select_week_form = selectWeek()
+                context = { 'select_week_form':select_week_form,'dict':dict }
+                return render(request, 'htmx_fragments/week_schedule.html', context)
         if "delete" in request.POST:
             shift_pk = request.POST['delete']
             shift = Shift.objects.filter(pk=shift_pk)
