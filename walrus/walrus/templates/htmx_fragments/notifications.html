@@ -1,0 +1,12 @@
+<div id="notifications-container" hx-get="{%url 'notifications' %}" hx-trigger="every 1s">
+    <form hx-post="{%url 'notifications' %}"
+      hx-target="#notifications-container"
+      hx-swap="innerHTML" >
+
+    {% csrf_token %} 
+   {%for x in notifications%}
+   {{x.message}}
+   <button type="submit" name="noti" value="{{x.pk}}"> Clock-in </button>
+    {% endfor %}
+    </form>
+    </div>

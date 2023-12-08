@@ -830,17 +830,20 @@ def swap_shifts(request, employee_id, shift_id):
         })
         
 
-def noti(request):
+def notifications(request):
     user = request.user
     employee = user.employee
     notifications = employee.notifications.all().filter(marked_as_read=False)
     #print(notifications)
     #notifications=None
     if request.method == "POST":
-        print("dasklfhj")
-        print(request.POST)
+
+        key = request.POST.get("noti")
+        noti = Notification.objects.get(pk=key)
+        noti.marked_as_read = True
+        noti.save()
 
 
 
-    return render(request,'htmx_fragments/noti.html', {'notifications':notifications})
+    return render(request,'htmx_fragments/notifications.html', {'notifications':notifications})
         

@@ -57,7 +57,7 @@ urlpatterns = [
     path('manage_roles/', views.manage_roles, name='manage_roles'),
 
 
-    path('noti/', views.noti, name='noti')
+    path('notifications/', views.notifications, name='notifications')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
