@@ -681,7 +681,7 @@ def schedule_employee(request):
                 return render(request, 'htmx_fragments/avil_s.html', context)
 
 
-        if "save_shift" in request.POST or "select_week_form" in request.POST: 
+        if "save_shift" in request.POST or "select_week_form" in request.POST or "delete" in request.POST: 
             if "save_shift" in request.POST:
 
                 employee_pk = request.POST.get('employee')
@@ -698,7 +698,11 @@ def schedule_employee(request):
                 else:
                     print("error missing component")
                 dict = {}
-            
+            if "delete" in request.POST:
+                shift_pk = request.POST.get('delete')
+                shift = Shift.objects.filter(pk=shift_pk)
+                print(shift)
+                shift.delete()
 
             if 'week_date' in request.POST:
                     date = request.POST.get('week_date')    
@@ -717,6 +721,7 @@ def schedule_employee(request):
             select_week_form = selectWeek(initial={'week_date': date})
             context = { 'select_week_form':select_week_form,'dict':dict, 'schedule_form':schedule_form }
             return render(request, 'htmx_fragments/shift_week_schedule.html', context)
+        '''
         if "delete" in request.POST:
             form = selectWeek(request.POST)
           
@@ -732,6 +737,7 @@ def schedule_employee(request):
             dict = create_shift_table(shiftsThisWeek)
             context = { 'select_week_form':form,'dict':dict }
             return render(request, 'htmx_fragments/week_schedule.html', context)
+        '''
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
     select_week_form = selectWeek()
