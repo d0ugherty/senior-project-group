@@ -701,43 +701,37 @@ def schedule_employee(request):
         if "select_week_form" in request.POST:
             form = selectWeek(request.POST)
             if form.is_valid():
-                date = form.cleaned_data['date']     
+                date = form.cleaned_data['date']    
+                print (date) 
                 start_date, end_date = get_start_and_end(date)
  
+
+                
                 shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
             
-                employees = Employee.objects.all()
-        
-                for e in employees:
-                        print(e)
-                        list = [None, None, None, None, None, None, None,None]
-                        list[0]=e
-                        for s in shiftsThisWeek:
-                                if s in e.Shifts.all():
-                                    temp = s.day_of_week()
-                                    if temp == 6:
-                                        list[1] = s
-                                    if temp == 0:
-                                        list[2] = s
-                                    if temp == 1:
-                                        list[3] = s
-                                    if temp == 2:
-                                        list[4] = s
-                                    if temp == 3:
-                                        list[5] = s
-                                    if temp == 4:
-                                        list[6] = s
-                                    if temp == 5:
-                                        list[7] = s
+                dict = create_shift_table(shiftsThisWeek)
 
-                        dict[str(e.pk)] = (list) 
+
+                         
                 select_week_form = selectWeek()
-                context = { 'select_week_form':select_week_form,'dict':dict }
+                context = { 'select_week_form':form,'dict':dict }
                 return render(request, 'htmx_fragments/week_schedule.html', context)
+        
         if "delete" in request.POST:
+            form = selectWeek(request.POST)
+          
             shift_pk = request.POST['delete']
             shift = Shift.objects.filter(pk=shift_pk)
             shift.delete()
+
+            date = request.POST['date']    
+            date_object = datetime.strptime(date, '%Y-%m-%d').date()
+            start_date, end_date = get_start_and_end(date_object)
+            shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
+
+            dict = create_shift_table(shiftsThisWeek)
+            context = { 'select_week_form':form,'dict':dict }
+            return render(request, 'htmx_fragments/week_schedule.html', context)
     search_form = employeeDropdownSearch()
     schedule_form = scheduleEmployee()
     select_week_form = selectWeek()

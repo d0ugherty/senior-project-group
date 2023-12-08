@@ -129,7 +129,32 @@ def set_availability(request,employee):
 
      employee.availability.save()
 
+def create_shift_table(shiftsThisWeek):
+     employees = Employee.objects.all()
+     dict = {}
+     for e in employees:
+          list = [None, None, None, None, None, None, None,None]
+          list[0]=e
+          for s in shiftsThisWeek:
+                    if s in e.Shifts.all():
+                         temp = s.day_of_week()
+                         if temp == 6:
+                              list[1] = s
+                         if temp == 0:
+                              list[2] = s
+                         if temp == 1:
+                              list[3] = s
+                         if temp == 2:
+                              list[4] = s
+                         if temp == 3:
+                              list[5] = s
+                         if temp == 4:
+                              list[6] = s
+                         if temp == 5:
+                              list[7] = s
 
+          dict[str(e.pk)] = (list) 
+     return(dict)
 
 def get_start_and_end(date):
      start_date = None
