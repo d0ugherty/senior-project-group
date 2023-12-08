@@ -663,6 +663,10 @@ def schedule_employee(request):
     if request.method == "POST":
         print(request.POST)
         # Employee Avilability was searched
+        
+
+
+
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
@@ -701,7 +705,7 @@ def schedule_employee(request):
         if "select_week_form" in request.POST:
             form = selectWeek(request.POST)
             if form.is_valid():
-                date = form.cleaned_data['date']    
+                date = form.cleaned_data['week_date']    
                 print (date) 
                 start_date, end_date = get_start_and_end(date)
  

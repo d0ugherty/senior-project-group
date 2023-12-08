@@ -103,7 +103,7 @@ class scheduleEmployee(forms.Form):
 
 
 class selectWeek(forms.Form):
-    date = forms.DateField(label="Due Date", widget=DateInput, required=False)
+    week_date = forms.DateField(label="Due Date", widget=DateInput, required=False)
 
 class projectForm(forms.Form):
     name = forms.CharField(label="Project Name",max_length=250)
