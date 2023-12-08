@@ -659,7 +659,7 @@ def schedule_employee(request):
     shifts = None
     requests_off = None
     dict = {}
-    print("here") 
+
     if request.method == "POST":
         print(request.POST)
         # Employee Avilability was searched
@@ -668,7 +668,6 @@ def schedule_employee(request):
             if form.is_valid():
                 employee = form.cleaned_data['employee']
                 
-
                 if employee != None:
                     avil = employee.availability
                     print(datetime.today())
@@ -682,8 +681,6 @@ def schedule_employee(request):
         # Shift was created
         if "save_shift" in request.POST:
 
-            print("hello")
-
             employee_pk = request.POST.get('employee')
             employee = Employee.objects.get(pk=employee_pk)
             date = request.POST.get('date')
@@ -692,9 +689,12 @@ def schedule_employee(request):
             shift = Shift(date=date, start=start_time, end=end_time)
             shift.save()
             employee.Shifts.add(shift)
-            
+           
+            dict = {}
+           
             schedule_form = scheduleEmployee()
             context = {'schedule_form':schedule_form}
+
             return render(request, 'htmx_fragments/create_shift.html', context)
 
 
