@@ -96,10 +96,10 @@ class updateTask(forms.Form):
     image = forms.ImageField(label="image",required=False)
 
 class scheduleEmployee(forms.Form):
-    employee = forms.ModelChoiceField(queryset=Employee.objects.all())
-    date = forms.DateField(label="Date", widget=DateInput)
-    start_time = forms.ChoiceField(choices=TIME_CHOICES)
-    end_time = forms.ChoiceField(choices=TIME_CHOICES)
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all(),required=False)
+    date = forms.DateField(label="Date", widget=DateInput,required=False)
+    start_time = forms.ChoiceField(choices=TIME_CHOICES,required=False)
+    end_time = forms.ChoiceField(choices=TIME_CHOICES,required=False)
 
 
 class selectWeek(forms.Form):

@@ -666,7 +666,7 @@ def schedule_employee(request):
         
 
 
-
+        
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
@@ -681,46 +681,42 @@ def schedule_employee(request):
                 return render(request, 'htmx_fragments/avil_s.html', context)
 
 
+        if "save_shift" in request.POST or "select_week_form" in request.POST: 
+            if "save_shift" in request.POST:
 
-        # Shift was created
-        if "save_shift" in request.POST:
-
-            employee_pk = request.POST.get('employee')
-            employee = Employee.objects.get(pk=employee_pk)
-            date = request.POST.get('date')
-            start_time = request.POST.get('start_time')
-            end_time = request.POST.get('end_time')
-            shift = Shift(date=date, start=start_time, end=end_time)
-            shift.save()
-            employee.Shifts.add(shift)
-           
-            dict = {}
-           
-            schedule_form = scheduleEmployee()
-            context = {'schedule_form':schedule_form}
-
-            return render(request, 'htmx_fragments/create_shift.html', context)
-
-
-        if "select_week_form" in request.POST:
-            form = selectWeek(request.POST)
-            if form.is_valid():
-                date = form.cleaned_data['week_date']    
-                print (date) 
-                start_date, end_date = get_start_and_end(date)
- 
-
+                employee_pk = request.POST.get('employee')
                 
-                shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
+                date = request.POST.get('date')
+                start_time = request.POST.get('start_time')
+                end_time = request.POST.get('end_time')
+
+                if employee_pk !='' and date !='' and start_time !='' and end_time !='':
+                    employee = Employee.objects.get(pk=employee_pk)
+                    shift = Shift(date=date, start=start_time, end=end_time)
+                    shift.save()
+                    employee.Shifts.add(shift)
+                else:
+                    print("error missing component")
+                dict = {}
             
-                dict = create_shift_table(shiftsThisWeek)
 
-
-                         
-                select_week_form = selectWeek()
-                context = { 'select_week_form':form,'dict':dict }
-                return render(request, 'htmx_fragments/week_schedule.html', context)
+            if 'week_date' in request.POST:
+                    date = request.POST.get('week_date')    
+                    if date != '':
+                        date = datetime.strptime(date, '%Y-%m-%d').date()
+                        start_date, end_date = get_start_and_end(date)
         
+
+                        
+                        shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
+                    
+                        dict = create_shift_table(shiftsThisWeek)
+
+
+            schedule_form = scheduleEmployee()              
+            select_week_form = selectWeek(initial={'week_date': date})
+            context = { 'select_week_form':select_week_form,'dict':dict, 'schedule_form':schedule_form }
+            return render(request, 'htmx_fragments/shift_week_schedule.html', context)
         if "delete" in request.POST:
             form = selectWeek(request.POST)
           
