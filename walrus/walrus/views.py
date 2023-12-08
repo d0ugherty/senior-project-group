@@ -659,7 +659,7 @@ def schedule_employee(request):
     shifts = None
     requests_off = None
     dict = {}
-
+    print("here") 
     if request.method == "POST":
         # Employee Avilability was searched
         if "search" in request.POST:
