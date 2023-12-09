@@ -16,8 +16,8 @@
     <body style="">
     <div class="container">
     <div class="main-body">
-        &nbsp&nbsp&nbsp&nbsp<a href="{% url 'home' %}" class="button buttonGB">Go Back</a>
-
+ <a href="{% url 'home' %}" class="button buttonGB go_back">Go Back</a>
+    <br>
     <div class="row">
     <div class="col-lg-4">
     <div class="card">
@@ -74,10 +74,10 @@
     </div>
     <div class="row mb-3">
     <div class="col-sm-3">
-    <h6 class="mb-0">Phone</h6>
+    <h6 class="mb-0">Phone</h6><h7>include - and do not start with 1</h7>
     </div>
     <div class="col-sm-9 text-secondary">
-    <input type="text" class="form-control" maxlength="12" id=phone_number name=phone_number value="{{user.employee.phone_number}} " required>
+    <input type="tel" class="form-control" maxlength="12" id=phone_number name=phone_number  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" value="{{user.employee.phone_number}}" required>
     </div>
     </div>
    
