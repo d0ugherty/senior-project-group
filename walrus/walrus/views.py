@@ -597,6 +597,9 @@ def edit_task(request, task_id):
                 employee.Tasks.add(task)
 
             task.save()
+            notification = Notification(message = "Your task '"+task.task_name + "' has been edited")
+            notification.save()
+            employee.notifications.add(notification)
             # Going to loop through each field to make sure its not empty
             
         return HttpResponseRedirect('/task_detail/' + str(task_id))
