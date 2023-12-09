@@ -126,6 +126,8 @@ def home_redirect(request):
      url = 'home/' + str(user.employee.pk) + '/' + str(today.day) + '/' + str(today.month) + '/' + str(today.year)
        
      return redirect(url)
+    else:
+        return HttpResponseRedirect('/accounts/login/')
     
     return render(request, 'home.html')
 
