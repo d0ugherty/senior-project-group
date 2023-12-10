@@ -592,34 +592,42 @@ def edit_task(request, task_id):
 
     task = Task.objects.get(pk=task_id) 
     if request.method=='POST':
-        form = editTask(request.POST)
-        if form.is_valid():
-            task.task_name = form.cleaned_data['task_name']
-            task.task_description = form.cleaned_data['description']
-            task.project = form.cleaned_data['project']
-            employee = form.cleaned_data['employee']
-            task.due_date = form.cleaned_data['due_date']
-            task.date_assigned_to = form.cleaned_data['assign_date']
-            status = form.cleaned_data['status']
-           # adjusting status
-            if status == 'complete':
-                task.is_complete = True
-            else:
-                task.is_complete = False
-            # removing or adding employees to task
-            if employee == None:
-                task.employee_set.clear()
-            else:
-                employee.Tasks.add(task)
+        if "edit" in request.POST:
+            form = editTask(request.POST)
+            if form.is_valid():
+                task.task_name = form.cleaned_data['task_name']
+                task.task_description = form.cleaned_data['description']
+                task.project = form.cleaned_data['project']
+                employee = form.cleaned_data['employee']
+                task.due_date = form.cleaned_data['due_date']
+                task.date_assigned_to = form.cleaned_data['assign_date']
+                status = form.cleaned_data['status']
+            # adjusting status
+                if status == 'complete':
+                    task.is_complete = True
+                else:
+                    task.is_complete = False
+                # removing or adding employees to task
+                if employee == None:
+                    task.employee_set.clear()
+                else:
+                    employee.Tasks.add(task)
 
-            task.save()
-            notification = Notification(message = "Your task '"+task.task_name + "' has been edited")
-            notification.save()
-            employee.notifications.add(notification)
-            # Going to loop through each field to make sure its not empty
+                task.save()
+                notification = Notification(message = "Your task '"+task.task_name + "' has been edited")
+                notification.save()
+                employee.notifications.add(notification)
+                # Going to loop through each field to make sure its not empty
+                
+            return HttpResponseRedirect('/task_detail/' + str(task_id))
+        if "delete" in request.POST:
+            task = Task.objects.get(pk=task_id) 
+            task.delete()
+            #notification = Notification(message = "Your task '"+task.task_name + "' has been deleted")
+            #notification.save()
+            #employee.notifications.add(notification)
             
-        return HttpResponseRedirect('/task_detail/' + str(task_id))
-   
+            return redirect('home')
     # employee will need to be fixed later when we allow for multiple employees
     employees = task.employee_set.all()
     if task.is_complete == False:

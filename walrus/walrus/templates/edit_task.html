@@ -44,11 +44,13 @@
     <div class="d-flex align-items-center">
     <div class="flex-1">
         
+      <input type="Submit"  name="delete" class = "btn btn-primary px-4 delete-task" value="delete" >
+
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
     
-        <input type="Submit"  class = "btn btn-primary px-4" value="Complete Edit" >
+        <input type="Submit"  name="edit" class = "btn btn-primary px-4" value="Complete Edit" >
      
     </form>
     </div>

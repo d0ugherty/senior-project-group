@@ -5,8 +5,17 @@
 
 }
 
+.delete-task{
+
+  background-color:#fc1c03 !important;
+  color: rgb(0, 0, 0) !important;
+  position: absolute; 
+  top: 10px; 
+  right: 10px; 
+}
+
 .failure_button{
-  background-color:#bb1b09 !important;
+  background-color:#fc1c03 !important;
   color: rgb(0, 0, 0) !important;
 }
 
