@@ -126,7 +126,7 @@ class DeleteRoleForm(forms.Form):
 
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
-    description = forms.CharField(max_length=250, required=False)
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
 class change_profile_image_Form(forms.Form):
     profile_pic = forms.ImageField(label="image",required=False)
 

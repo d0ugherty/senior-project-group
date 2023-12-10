@@ -37,7 +37,7 @@
   </div>
   </div>
   <h4>Add Task</h4>
-
+  
   <div class="card">
     <div class="tab-content p-4">
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
@@ -60,6 +60,9 @@
     </div>
 </div>
 </div>
+{%if success_message %}
+    <h6>new task has been created successfully</h6>
+  {% endif %}
 </div>
 
   </ul>

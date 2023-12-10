@@ -164,7 +164,7 @@ def create_project(request):
     if user.employee.is_manager == 'No':
          return render(request, 'notAManager.html')
 
-
+    success_message = False
     if request.method == 'POST':
         name = request.POST.get('name')
         date = request.POST.get('due_date')
@@ -174,12 +174,11 @@ def create_project(request):
         else:
             project = Project(project_name=name,due_date=date)        
         project.save()
-        return HttpResponseRedirect('/create_project')
-
+        success_message = True
 
 
     form = projectForm()
-    return render(request, 'create_project.html', {'form':form})
+    return render(request, 'create_project.html', {'form':form,'success_message':success_message})
 
 
 def task_detail (request, task_id):
@@ -519,10 +518,13 @@ def check_employees(request, role, context):
 """
 
 def add_task(request):
+
     user = request.user
     if user.employee.is_manager == 'No':
          return render(request, 'notAManager.html')
-    
+    success_message = False
+
+
     if request.method=='POST':
         form = addTask(request.POST)
         if form.is_valid():
@@ -551,18 +553,20 @@ def add_task(request):
             newTask = Task(**nonEmptyFields)
             
             newTask.save()
+
+            success_message = True
+
             employee.Tasks.add(newTask)
             notification = Notification(message = "You have been assigned a new task: " + newTask.task_name)
             notification.save()
             employee.notifications.add(notification)
-            return HttpResponseRedirect('/add_task')
-    else:
-        form = addTask()
-
+            #return HttpResponseRedirect('/add_task')
+    
+    form = addTask()
     return render(
     request, 
     'add_task.html',
-    {'form': form}
+    {'form': form, 'success_message':success_message}
     )
 
 
@@ -744,14 +748,15 @@ def schedule_employee(request):
 
 def task_failure(request, task_id):
     if request.method=='POST':
-        form = failureForm(request.POST)
+        form = failureForm(request.POST, request.FILES)
         task = Task.objects.get(id=task_id)
-
-        if form['failure']:
-            task.wont_complete = True
-            description = request.POST.get('description')
-            update = Task_Update(description=description,task=task)
-            update.save()
+        if form.is_valid():
+            
+            if form['failure']:
+                task.wont_complete = True
+                description = request.POST.get('description')
+                update = Task_Update(description=description,task=task)
+                update.save()
         task.save()
         return HttpResponseRedirect(reverse('list_tasks'))
      
