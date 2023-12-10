@@ -239,7 +239,7 @@ def home_page(request, employee_id, day, month, year):
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
-                
+                return redirect('home')
         if "to_be_taken" in request.POST:
             shift_pk = request.POST['to_be_taken']
             shift = Shift.objects.get(pk=shift_pk)
