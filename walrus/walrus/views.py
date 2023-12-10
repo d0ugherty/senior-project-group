@@ -692,9 +692,6 @@ def schedule_employee(request):
         print(request.POST)
         # Employee Avilability was searched
         
-
-
-        
         if "search" in request.POST:
             form = employeeDropdownSearch(request.POST)
             if form.is_valid():
@@ -721,6 +718,10 @@ def schedule_employee(request):
                 if employee_pk !='' and date !='' and start_time !='' and end_time !='':
                     employee = Employee.objects.get(pk=employee_pk)
                     shift = Shift(date=date, start=start_time, end=end_time)
+                    
+                    if (employee.Shifts.filter(date=date)):
+                       old_shift = employee.Shifts.get(date=date)
+                       old_shift.delete()
                     shift.save()
                     employee.Shifts.add(shift)
                 else:
