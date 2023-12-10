@@ -763,6 +763,26 @@ def task_failure(request, task_id):
 def shift_switch(request, employee_id):
     employee = Employee.objects.get(pk=employee_id)
     eShifts = employee.Shifts.filter()
+    already_have_shift_error = False
+
+
+    if request.method=='POST':
+            shift_pk = request.POST['button']
+            
+            shift = Shift.objects.get(pk=shift_pk)
+            date = shift.date
+            
+            # checking if employee already has a shift on that day
+            if employee.Shifts.filter(date=date).exists() == False:
+
+                shift.to_be_taken = False
+                shift.employee_set.clear()
+                shift.save()
+                employee.Shifts.add(shift)
+                already_have_shift_error = False
+            else:
+                already_have_shift_error = True
+
 
     all_to_be_taken_shifts = Shift.objects.filter(to_be_taken=True)
     shifts = []
@@ -771,19 +791,7 @@ def shift_switch(request, employee_id):
             shifts.append(shift)
 
     # This works
-    if request.method=='POST':
-        shift_pk = request.POST['button']
-        
-        shift = Shift.objects.get(pk=shift_pk)
-        date = shift.date
-        
-        # checking if employee already has a shift on that day
-        if employee.Shifts.filter(date=date).exists() == False:
-
-            shift.to_be_taken = False
-            shift.employee_set.clear()
-            shift.save()
-            employee.Shifts.add(shift)
+    
 
 
 
@@ -803,7 +811,8 @@ def shift_switch(request, employee_id):
     return render(request, 'shift_switch.html', {
         'employee' : employee,
         'shifts' : shifts,
-        'shift_employee_dict':shift_employee_dict
+        'shift_employee_dict':shift_employee_dict,
+        'already_have_shift_error':already_have_shift_error
     })
 
 def swap_shifts(request, employee_id, shift_id):

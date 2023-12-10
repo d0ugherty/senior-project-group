@@ -26,6 +26,11 @@
     
     
     <h3>Shifts Available:</h3>
+    <br>
+        {%if already_have_shift_error %}
+            <h6>The shift you have selected cannot be taken, you are already scheduled for that day</h6>
+        {% endif %}
+
     {% for s, emp in shift_employee_dict.items %} 
         <div class="card">
             <div class="tab-content p-4">
