@@ -26,7 +26,7 @@
     
     
     <h3>Shifts Available:</h3>
-    {% for s in shifts %}
+    {% for s, emp in shift_employee_dict.items %} 
         <div class="card">
             <div class="tab-content p-4">
             <div class="tab-pane active show" id="description-tab" role="tabpanel">
@@ -37,7 +37,12 @@
                 <h6>Start: {{ s.start }}</h6>
                 <h6>End: {{ s.end }}</h6>
                 <br>
-                <h6>Assigned Employee: {{ s.user.first_name }}</h6>
+                <h6>Assigned Employee: </h6>
+                {%for name in emp%}
+                <h6>{{name}}</h6>
+                {% endfor %}
+
+
                 <br>
                 <button class="btn btn-primary swap" name="button" value="{{s.pk}}">Pick Up Shift</button>
             </div></div></div></div>

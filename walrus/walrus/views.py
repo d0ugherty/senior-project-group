@@ -21,6 +21,7 @@ from datetime import datetime,timezone
 
 from django.contrib import messages
 
+import re
 
 
 
@@ -260,7 +261,8 @@ class CalendarView(generic.ListView):
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
-        
+      
+
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
@@ -762,7 +764,11 @@ def shift_switch(request, employee_id):
     employee = Employee.objects.get(pk=employee_id)
     eShifts = employee.Shifts.filter()
 
-    shifts = Shift.objects.filter(to_be_taken=True)
+    all_to_be_taken_shifts = Shift.objects.filter(to_be_taken=True)
+    shifts = []
+    for shift in all_to_be_taken_shifts:
+        if employee not in shift.employee_set.all():
+            shifts.append(shift)
 
     # This works
     if request.method=='POST':
@@ -789,11 +795,15 @@ def shift_switch(request, employee_id):
                 #shifts.exclude(s) #I will not be able to test this very well until we have a lot of data
                 ""
     
-
-
+    shift_employee_dict = {}
+    for x in shifts:
+       emp = x.employee_set.all()
+       shift_employee_dict[x] = emp
+    print(shift_employee_dict)
     return render(request, 'shift_switch.html', {
         'employee' : employee,
-        'shifts' : shifts
+        'shifts' : shifts,
+        'shift_employee_dict':shift_employee_dict
     })
 
 def swap_shifts(request, employee_id, shift_id):
