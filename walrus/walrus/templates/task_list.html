@@ -49,7 +49,7 @@
         {% csrf_token %}
         {{ form.as_p }}
     
-        <input type="Submit"  class = "btn btn-primary px-4" value="Search" >
+        <input type="Submit" name="search" class = "btn btn-primary px-4" value="Search" >
      
     </form>
     </div>
@@ -90,6 +90,8 @@
                 <td><i class="mdi font-size-16 align-middle text-primary me-2"></i> {{t.task_name}}
                 <br>
                 <a href = "/task_detail/{{ t.pk }}">Description </a>
+                <br>
+                <button  type="submit" class = notification_read value = {{t.pk}} name="delete"> Delete </button>
                 </td>
                 <!-- Project Name -->
                 <td>{{t.project.project_name}}</td>

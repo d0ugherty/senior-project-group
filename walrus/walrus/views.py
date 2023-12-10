@@ -143,15 +143,23 @@ def list_tasks(request):
 
 
     if request.method == "POST":
-        task_name = request.POST.get('task_name')
-        project_name = request.POST.get('project_name')
-        status = request.POST.get('status')
-        due_date = request.POST.get('date')
-        #print(due_date)
-        # Getting the list of tasks that 
-        tasks = find_tasks(task_name, project_name, due_date, status)
+
+        if "search" in request.POST:
+            task_name = request.POST.get('task_name')
+            project_name = request.POST.get('project_name')
+            status = request.POST.get('status')
+            due_date = request.POST.get('date')
+            #print(due_date)
+            # Getting the list of tasks that 
+            tasks = find_tasks(task_name, project_name, due_date, status)
         #if (tasks == None) :
             #print(tasks[0].due_date)
+        if "delete" in request.POST:
+
+            task_pk = request.POST.get('delete')
+            task = Task.objects.get(pk=task_pk)
+            print(task)
+            task.delete()
 
     form = taskSearchForm()
         
