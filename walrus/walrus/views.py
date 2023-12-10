@@ -147,11 +147,11 @@ def list_tasks(request):
         project_name = request.POST.get('project_name')
         status = request.POST.get('status')
         due_date = request.POST.get('date')
-        print(due_date)
+        #print(due_date)
         # Getting the list of tasks that 
         tasks = find_tasks(task_name, project_name, due_date, status)
-        if (tasks == None) :
-            print(tasks[0].due_date)
+        #if (tasks == None) :
+            #print(tasks[0].due_date)
 
     form = taskSearchForm()
         

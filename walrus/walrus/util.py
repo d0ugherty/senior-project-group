@@ -5,12 +5,19 @@ import datetime
 from datetime import datetime,timezone, timedelta
 
 def find_tasks(task_name, project_name, due_date, status):
+    wont_complete = ""
     if status == "complete":
            status = True
+           wont_complete = False
     elif status == "incomplete":
            status = False
+           wont_complete = False
+    elif status == "failed":
+          status = ""
+          wont_complete = True
     else: 
             status = ""
+            wont_complete = ""
 
      
    
@@ -20,11 +27,16 @@ def find_tasks(task_name, project_name, due_date, status):
          project_object = Project.objects.get(project_name=project_name)
     else: project_object = ""
          
+
+    print(status)
+
+
     fields ={
                     'task_name': task_name,
                     'project': project_object,
                     'is_complete': status,
-                    'due_date': due_date
+                    'due_date': due_date,
+                    'wont_complete':wont_complete
             }
          #print(fields)
          
@@ -35,8 +47,8 @@ def find_tasks(task_name, project_name, due_date, status):
         #this is a test
 
          #print(fields)
-    print(nonEmptyFields)
-    print(Task.objects.filter(**nonEmptyFields))
+    #print(nonEmptyFields)
+    #print(Task.objects.filter(**nonEmptyFields))
     tasks = Task.objects.filter(**nonEmptyFields)
     return tasks
   

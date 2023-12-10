@@ -44,7 +44,9 @@ class DateInput(forms.DateInput):
 STATUS_CHOICES = (
 ('n/a', 'n/a'),
 ('incomplete', 'incomplete'),
-('complete', 'complete'),)
+('complete', 'complete'),
+('failed','failed')
+)
 
 EDIT_TASK_STATUS = (
 ('incomplete', 'incomplete'),
@@ -58,7 +60,6 @@ class taskSearchForm(forms.Form):
     project_name = forms.CharField(label="Project name", max_length=100, required=False)
     
     date = forms.DateField(label="Due Date", widget=DateInput, required=False)
-    #Change Due_date to be a calander selection at some point
     status = forms.ChoiceField(choices=STATUS_CHOICES)
 
 class addTask(forms.Form):
