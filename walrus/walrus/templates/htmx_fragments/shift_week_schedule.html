@@ -1,6 +1,8 @@
 {% load static %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="stylesheet" href="{% static '/css/form.css' %}">
+</link>
+</link>
  
  <div id="create-shift-form-container" >
         <form hx-post="{%url 'schedule_employee' %}"
@@ -8,7 +10,7 @@
         hx-swap="outerHTML">
             <br> 
                         <h3>schedule an employee</h3>
-                    
+                     
                     {{ schedule_form.as_p }}
                     <button name="save_shift" class = "btn btn-primary px-4"> Submit </button>
   

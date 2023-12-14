@@ -689,7 +689,6 @@ def schedule_employee(request):
     dict = {}
 
     if request.method == "POST":
-        print(request.POST)
         # Employee Avilability was searched
         
         if "search" in request.POST:
@@ -699,9 +698,7 @@ def schedule_employee(request):
                 
                 if employee != None:
                     avil = employee.availability
-                    print(datetime.today())
                     requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
-                    print(requests_off)
                 context = {'search_form':form,'avil':avil, 'requests_off':requests_off}
                 return render(request, 'htmx_fragments/avil_s.html', context)
 
@@ -730,7 +727,6 @@ def schedule_employee(request):
             if "delete" in request.POST:
                 shift_pk = request.POST.get('delete')
                 shift = Shift.objects.filter(pk=shift_pk)
-                print(shift)
                 shift.delete()
 
             if 'week_date' in request.POST:
@@ -742,9 +738,7 @@ def schedule_employee(request):
 
                         
                         shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
-                    
                         dict = create_shift_table(shiftsThisWeek)
-
 
             schedule_form = scheduleEmployee()              
             select_week_form = selectWeek(initial={'week_date': date})
