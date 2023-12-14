@@ -30,7 +30,7 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'home' %}" class="back_button">Go Back</a>
+    <a href="{% url 'manager_tools' %}" class="back_button">Go Back</a>
   </div>
   </div>
   </div>
@@ -47,13 +47,14 @@
     <div class="flex-1">
         
         <body>
+                {% if msg %}
+                   <p> {{ msg }}</p>
+                {% endif %}
             <form action="" method="post">
                 {% csrf_token %}
                 <!-- TO DO: Finish this-->
                 {{ create_role_form }}
-                {% if msg %}
-                   <p> {{ msg }}</p>
-                {% endif %}
+                
            
                 <button type="submit" class="btn btn-primary px-4" name="submit_role" value="submit">SUBMIT</button>
             

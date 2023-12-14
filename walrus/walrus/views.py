@@ -133,7 +133,7 @@ def home_redirect(request):
     return render(request, 'home.html')
 
 def python_test(request):
-    user = datetime.d
+    user = datetime.ass
     
 def list_tasks(request):
     try:
