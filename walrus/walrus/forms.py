@@ -64,7 +64,7 @@ class taskSearchForm(forms.Form):
 
 class addTask(forms.Form):
     task_name = forms.CharField(max_length=100)
-    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
+    description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"4", "style":"width:100%;"}))
     project = forms.ModelChoiceField(queryset=Project.objects.all(),required=False)
     employee = forms.ModelChoiceField(queryset=Employee.objects.all())
     due_date = forms.DateField(label="Due Date", widget=DateInput, required=False)

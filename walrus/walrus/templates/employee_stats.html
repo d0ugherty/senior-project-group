@@ -83,7 +83,7 @@
     <th scope="col">Task Name</th>
     <th scope="col">Task Status</th>
     <th scope="col">Date Assigned</th>
-    <th scope="col">Date Completed</th>
+    <th scope="col">Due Date</th>
     <th scope="col">Time on Task</th>
     </tr>
     </thead>
@@ -100,7 +100,9 @@
                 <td>
                   {% if t.is_complete %}
                       Complete
-                  {% else %}
+                  {% elif t.wont_complete %}
+                  failed
+                  {%else%}
                       Incomplete
                   {% endif %}
               </td>
