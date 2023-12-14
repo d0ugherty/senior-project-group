@@ -40,19 +40,22 @@
  
   <div class="card">
     <div class="tab-content p-4">
+      {{form.description}}
+      <h6 class="mb-0 text-muted">
+        <button class="btn btn-primary  ">{{ form.image }}</button> 
+        <input type="submit" class="btn btn-primary px-4 submit_task_update" value="submit Update">
+
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
     <div class="d-flex align-items-center">
     <div class="flex-1">
-      <textarea type="text" class="form-control update_textbox" id="description" name="description" value=""></textarea>
-    <h6 class="mb-0 text-muted">
+     
      
     <div></div>
-            <button class="btn btn-primary  ">{{ form.image }}</button> 
+            
 
         </div>
 
       </h6>
-      <input type="submit" class="btn btn-primary px-4 submit_task_update" value="submit Update">
     </div>
     </div>
   </div>

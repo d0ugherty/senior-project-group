@@ -44,15 +44,16 @@
 
   <div class="card">
     <div class="tab-content p-4">
-    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
-    <div class="d-flex align-items-center">
-    <div class="flex-1">
-        
       <form method="POST" action="{% url 'employee_stats' %}">
         {% csrf_token %}
         {{ form.as_p }}
     
         <input type="Submit"  class = "btn btn-primary px-4" name="id_search" value="Search"></button>
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+        
+      
 
      
     </form>
