@@ -28,7 +28,7 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'home' %}" class="back_button">Go Back</a>
+   
   </div>
   </div>
   </div>
@@ -40,12 +40,13 @@
 
   <div class="card">
     <div class="tab-content p-4">
+      <a href="{% url 'home' %}" class="btn btn-primary px-4 back_button">Go Back</a>
       <input type="Submit"  name="delete" class = "btn btn-primary px-4 delete-task" value="delete" >
 
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-    
+     
         <input type="Submit"  name="edit" class = "btn btn-primary px-4" value="Complete Edit" >
     <div class="tab-pane active show" id="projects-tab" role="tabpanel">
     <div class="d-flex align-items-center">

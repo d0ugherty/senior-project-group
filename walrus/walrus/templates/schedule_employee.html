@@ -27,7 +27,6 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'manager_tools' %}" class="back_button">Go Back</a>
   </div>
   </div>
   </div>
@@ -40,6 +39,8 @@
   <div class="card">
     
     <div class="tab-content p-4">
+      <a href="{% url 'manager_tools' %}" class="btn btn-primary px-4 back_button">Go Back</a>
+
       {%include 'htmx_fragments/avil_s.html'%}
       {%include 'htmx_fragments/shift_week_schedule.html'%}
       

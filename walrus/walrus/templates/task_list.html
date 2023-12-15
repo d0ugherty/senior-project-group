@@ -37,10 +37,11 @@
   </div>
   </div>
   <h4>Task Search</h4>
-  <a href="{% url 'manager_tools' %}" class="back_button">Go Back</a>
 
   <div class="card">
     <div class="tab-content p-4">
+      <a href="{% url 'manager_tools' %}" class= "btn btn-primary px-4 back_button">Go Back</a>
+
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
