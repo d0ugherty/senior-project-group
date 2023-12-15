@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     
     
-    <title>profile edit data and skills - Bootdey.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static '/css/profile.css' %}">
+ 
     <style type="text/css">
           
         </style>
@@ -16,7 +16,6 @@
     <body style="">
     <div class="container">
     <div class="main-body">
- <a href="{% url 'home' %}" class="button buttonGB go_back">Go Back</a>
     <br>
     <div class="row">
     <div class="col-lg-4">
@@ -46,9 +45,15 @@
     </div>
     </div>
     <div class="col-lg-8">
+
     <div class="card">
+
     <div class="card-body">
+        <a href="{% url 'home' %}" class="btn btn-primary px-4 back_button">Go To Home</a>
+<br>
+<br>
     <div class="row mb-3">
+
     <div class="col-sm-3">
     <h6 class="mb-0">First Name</h6>
     </div>

@@ -14,6 +14,7 @@
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="{% static '/css/task_update.css' %}">
+  <link rel="stylesheet" href="{% static '/css/form.css' %}">
   <div class="container">
   <div class="row">
   <div class="col-xl-9">
@@ -24,7 +25,6 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'home' %}" class="return ">Go Back</a>
 
   </div>
   </div>
@@ -40,6 +40,8 @@
  
   <div class="card">
     <div class="tab-content p-4">
+      <a href="{% url 'home' %}" class="btn btn-primary px-4 back_button">Go To Home</a>
+
       {{form.description}}
       <h6 class="mb-0 text-muted">
         <button class="btn btn-primary  ">{{ form.image }}</button> 
