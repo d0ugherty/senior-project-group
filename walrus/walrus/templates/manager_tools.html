@@ -5,14 +5,14 @@
    
   <link rel="stylesheet" href="{% static '/css/manager_tools.css' %}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{% static '/css/form.css' %}">
 
 </head>
-
+ 
 {% block content %}
 <title>Manager Tools</title>
+
 <body class="parent-container">
-  <a href="{% url 'home' %}" class= "btn btn-primary px-4 manager_back_button">Go To Home</a>
+  <a href="{% url 'home' %}" class= "btn btn-primary px-4 back_button">Go To Home</a>
 
         <form class="button-container" action="{% url 'manager_tools_redirect' %}" method="post">
 
@@ -28,4 +28,5 @@
           <button class="btn btn-primary btn-lg btn-block" type="submit" name="destination" value="/manage_roles/">Manage Employee Roles and Positions</button>
       </form>
 </body>
+
 {% endblock %}

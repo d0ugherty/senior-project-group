@@ -14,6 +14,7 @@
   <body style="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="{% static '/css/task_description.css' %}">
+
   
   <div class="container">
   <div class="row">
@@ -32,15 +33,15 @@
 </div>
 
   <h3>{{task.task_name}}</h3>
-  <a href="{% url 'home' %}" class="go_back">Go Back</a>
 
   <div class="card">
     <div class="tab-content p-4">
-    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
-    <div class="d-flex align-items-center">
-    <div class="flex-1">
+        <a href="{% url 'home' %}" class="btn btn-primary px-4 go_back">Go To Home</a>
         {%if user.employee.is_manager == 'Yes' %}
-        <a  href="/manager_tools/edit_task/{{ task.pk }}" class ="btn btn-primary px-4 clock_in" type="submit" name="{{x}} clock"> Edit Task </a>
+        <br>
+        <br>
+        <br>
+        <a  href="/manager_tools/edit_task/{{ task.pk }}" class ="btn btn-primary px-4 edit_task" type="submit" > Edit Task </a>
         {%endif%}
         <h4>Description</h4>
         <div class="card description_card">
@@ -87,6 +88,12 @@
     <br>
    
 {% endfor %}
+        
+
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+    
 
     </div>
     </div>
