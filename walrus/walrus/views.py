@@ -785,7 +785,7 @@ def task_failure(request, task_id):
                 update = Task_Update(description=description,task=task)
                 update.save()
         task.save()
-        return HttpResponseRedirect(reverse('list_tasks'))
+        return redirect('home')
      
     form = failureForm()
     return render(request, 'task_failure.html',
