@@ -246,7 +246,7 @@ def home_page(request, employee_id, day, month, year):
         if "to_be_taken" in request.POST:
             shift_pk = request.POST['to_be_taken']
             shift = Shift.objects.get(pk=shift_pk)
-            
+             
             if shift.to_be_taken == False:
                  shift.to_be_taken = True
             else:
