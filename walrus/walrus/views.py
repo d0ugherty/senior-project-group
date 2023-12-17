@@ -755,7 +755,7 @@ def schedule_employee(request):
                         
                         shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
                         dict = create_shift_table(shiftsThisWeek)
-
+ 
             schedule_form = scheduleEmployee()              
             select_week_form = selectWeek(initial={'week_date': date})
             context = { 'select_week_form':select_week_form,'dict':dict, 'schedule_form':schedule_form }
