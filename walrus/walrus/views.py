@@ -383,9 +383,14 @@ def employee_stats(request):
                 else:
                     if status == "complete":
                         status = True
+                        wont_complete = False
                     elif status == "incomplete":
                         status = False
-                    tasks = employee.Tasks.filter(is_complete=status)
+                        wont_complete = False
+                    elif status=='failed':
+                        status = False
+                        wont_complete = True
+                    tasks = employee.Tasks.filter(is_complete=status, wont_complete=wont_complete)
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
 
                 # looping through all of the time_spent objects associated with the tasks
