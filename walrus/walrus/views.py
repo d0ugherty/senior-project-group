@@ -401,13 +401,12 @@ def employee_stats(request):
 def manage_roles(request):
     context = {}
     if request.method == 'POST':
-        # Role creation/deletion
         if "submit_role" in request.POST:
             handle_role_submission(request, context)
-       # Employee assignment 
         if "assign_role" in request.POST:
             handle_role_assignment(request, context)
-        # Role removal
+        if "unassign_role" in request.POST:
+            handle_role_unassignment(request, context)
         if "delete_role" in request.POST:
             handle_role_removal(request, context)
 
@@ -424,6 +423,7 @@ def blank_role_form(request, template, context):
     context['create_role_form'] = CreateRoleForm()
     context['assign_role_form'] = AssignRoleForm()
     context['delete_role_form'] = DeleteRoleForm()
+    context['unassign_role_form'] = UnassignRoleForm()
     return render(request, template, context)
 
 """
@@ -475,14 +475,32 @@ def handle_role_assignment(request,context):
         role = assign_role_form.cleaned_data['roles']
         employee = assign_role_form.cleaned_data['assign_employee']
             
-        msg = get_assign_msg(employee, role)
+        request.session['msg'] = get_assign_msg(employee, role)
 
         employee.role = role
         employee.save()
-        request.session['msg'] = msg
         return redirect('manage_roles')
     else:
         return blank_role_form(request, 'manage_roles.html', context)
+
+def handle_role_unassignment(request, context):
+    unassign_role_form = UnassignRoleForm(request.POST)
+    context['unassign_role_form'] = unassign_role_form
+
+    if unassign_role_form.is_valid():
+        employee = unassign_role_form.cleaned_data['unassign_employee']
+        request.session['msg'] = get_unassign_msg(employee, employee.role)
+        employee.role = None
+        employee.save()
+        return redirect('manage_roles')
+    else:
+        return blank_role_form(request, 'manage_roles.html', context)
+
+def get_unassign_msg(employee, role):
+    if role == None:
+        return f'{employee} is currently not assigned to any position!'
+    else:
+        return f'{employee} is no longer assigned to {role}'
 
 def get_assign_msg(employee, role):
     if employee.role_id == role.id:

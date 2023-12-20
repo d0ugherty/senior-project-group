@@ -121,6 +121,10 @@ class AssignRoleForm(forms.Form):
     assign_employee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",
                                             required=False)
+class UnassignRoleForm(forms.Form):
+    unassign_employee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
+                                               label="Remove Employee from Current Position",
+                                               required=False)
 class DeleteRoleForm(forms.Form):
     role = forms.ModelChoiceField(queryset=(Role.objects.all()),
                                    label="Roles/Positions")

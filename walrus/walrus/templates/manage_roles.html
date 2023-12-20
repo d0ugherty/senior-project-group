@@ -65,6 +65,11 @@
                 {{ assign_role_form }}
             <button type="submit" class="btn btn-primary px-4" name="assign_role" value="assign">Assign Position</button>
             </form> 
+            <form action="" method="post"> 
+                {% csrf_token %}
+                {{ unassign_role_form }}
+            <button type="submit" class="btn btn-primary px-4" name="unassign_role" value="unassign">Remove Employee from Position</button>
+            </form> 
             <form method="post">
                 {% csrf_token %}
                 {{ delete_role_form }}
