@@ -202,6 +202,7 @@ def task_detail (request, task_id):
         'employees':employees
     })
 
+# This is the worst code I have ever wrote
 def home_page(request, employee_id, day, month, year):
     
     screen_date = date(year,month,day)
@@ -215,6 +216,9 @@ def home_page(request, employee_id, day, month, year):
     tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
     
     if request.method == 'POST':
+        print(request.POST)
+        if  'shift_in' in request.POST:
+            print("HERE")
         # go through the tasks and find the object that was selected and clock in or out
         # I just have the buttons named as the task object they are associated with       
         for x in tasks:
@@ -242,11 +246,13 @@ def home_page(request, employee_id, day, month, year):
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
-            tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
-            context = {'tasks':tasks,'employee_id':employee_id,
-                                                'day':day, 'month':month, 'year':year}
-            return render(request, 'htmx_fragments/home_page_tasks.html', context)
+                tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
+                context = {'tasks':tasks,'employee_id':employee_id,
+                                                    'day':day, 'month':month, 'year':year}
+                return render(request, 'htmx_fragments/home_page_tasks.html', context)
+
         if "to_be_taken" in request.POST:
+            print("hello")
             shift_pk = request.POST['to_be_taken']
             shift = Shift.objects.get(pk=shift_pk)
              
@@ -256,10 +262,10 @@ def home_page(request, employee_id, day, month, year):
                 shift.to_be_taken = False
             print(shift.to_be_taken)
             shift.save()   
-            context={'shift':shift,'day':day, 'month':month, 'year':year}
+            
             #return render(request, 'htmx_fragments/home_shift.html', context)
             #return redirect('home')
-            context = {'employee_id':employee_id,
+            context = {'employee_id':employee_id, 'shift':shift,
                                                 'day':day, 'month':month, 'year':year}
             return render(request, 'htmx_fragments/home_shift.html', context)
         if "shift_in" in request.POST:
@@ -268,11 +274,13 @@ def home_page(request, employee_id, day, month, year):
             shift.clocked_in = True
             shift.save()
             context = {'shift':shift, 'day':day, 'month':month, 'year':year}
-            #return render(request, 'htmx_fragments/home_shift.html', context)
-            #return redirect('home')
-            context = {'employee_id':employee_id,'day':day, 'month':month, 'year':year}
+           
+            context = {'employee_id':employee_id, 'shift':shift,
+                                                'day':day, 'month':month, 'year':year}
             return render(request, 'htmx_fragments/home_shift.html', context)
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift, 'employee_id':employee_id,
+    else:
+
+        return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift, 'employee_id':employee_id,
                                              'day':day, 'month':month, 'year':year})
 
 
