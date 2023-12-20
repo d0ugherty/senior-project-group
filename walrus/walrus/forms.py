@@ -120,11 +120,11 @@ class AssignRoleForm(forms.Form):
     roles = forms.ModelChoiceField(queryset=Role.objects.all())
     assign_employee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                             label="Assign role to an employee",
-                                            required=False)
+                                            required=True)
 class UnassignRoleForm(forms.Form):
     unassign_employee = forms.ModelChoiceField(queryset=(Employee.objects.all()),
                                                label="Remove Employee from Current Position",
-                                               required=False)
+                                               required=True)
 class DeleteRoleForm(forms.Form):
     role = forms.ModelChoiceField(queryset=(Role.objects.all()),
                                    label="Roles/Positions")
@@ -132,6 +132,7 @@ class DeleteRoleForm(forms.Form):
 class failureForm(forms.Form):
     failure = forms.BooleanField(label="Task Failed")
     description = forms.CharField(max_length=250, required=False, widget=forms.Textarea(attrs={"rows":"5", "style":"width:100%;"}))
+
 class change_profile_image_Form(forms.Form):
     profile_pic = forms.ImageField(label="image",required=False)
 

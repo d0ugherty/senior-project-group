@@ -16,7 +16,6 @@ from calendar import HTMLCalendar
 from .models import Task, Shift
 from .forms import *
 from .util import *
-from .multiforms import MultiFormView
 from datetime import datetime,timezone
 
 from django.contrib import messages
@@ -489,20 +488,27 @@ def handle_role_unassignment(request, context):
 
     if unassign_role_form.is_valid():
         employee = unassign_role_form.cleaned_data['unassign_employee']
-        request.session['msg'] = get_unassign_msg(employee, employee.role)
-        employee.role = None
-        employee.save()
+        if employee is not None:
+            request.session['msg'] = get_unassign_msg(employee)
+            employee.role = None
+            employee.save()
+        else:
+            request.session['msg'] = get_unassign_msg(employee)
         return redirect('manage_roles')
     else:
         return blank_role_form(request, 'manage_roles.html', context)
 
-def get_unassign_msg(employee, role):
-    if role == None:
+def get_unassign_msg(employee):
+    if employee is None:
+        return f'No employee selected!'
+    if employee.role == None:
         return f'{employee} is currently not assigned to any position!'
     else:
-        return f'{employee} is no longer assigned to {role}'
+        return f'{employee} is no longer assigned to {employee.role}'
 
 def get_assign_msg(employee, role):
+    if employee is None:
+        return f'No employee selected!'
     if employee.role_id == role.id:
         return  f'Employee {employee} is already assigned to {role}!'
     else:
