@@ -238,10 +238,10 @@ def home_page(request, employee_id, day, month, year):
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
-                tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
-                context = {'tasks':tasks,'employee_id':employee_id,
+        tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
+        context = {'tasks':tasks,'employee_id':employee_id,
                                              'day':day, 'month':month, 'year':year}
-                return render(request, 'htmx_fragments/home_page_tasks.html', context)
+        return render(request, 'htmx_fragments/home_page_tasks.html', context)
         if "to_be_taken" in request.POST:
             shift_pk = request.POST['to_be_taken']
             shift = Shift.objects.get(pk=shift_pk)
@@ -844,8 +844,8 @@ def shift_switch(request, employee_id):
             else:
                 already_have_shift_error = True
 
-
-    all_to_be_taken_shifts = Shift.objects.filter(to_be_taken=True)
+    today = datetime.today()
+    all_to_be_taken_shifts = Shift.objects.filter(to_be_taken=True, date__range=(today+timedelta(1), (datetime.today()+ timedelta(10000)) ))
     shifts = []
     for shift in all_to_be_taken_shifts:
         if employee not in shift.employee_set.all():
