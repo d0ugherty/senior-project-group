@@ -9,17 +9,6 @@ class Project(models.Model):
     def __str__(self):
         return self.project_name
     
-"""
-
-    date_created = models.DateTimeField()
-    is_complete = models.BooleanField()
-    date_completed = models.DateTimeField()
-   # tasks = models.ManyToOne()
-"""
-
-   # Image = models.ImageField()
-
-
 
 class Task(models.Model):
     task_name = models.CharField(max_length=255)
@@ -32,9 +21,7 @@ class Task(models.Model):
     due_date = models.DateField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     wont_complete = models.BooleanField(default=False, null=True)
-    # Calculates how long an employee has spend on a task
-    # Might use the time_spent model instead
-
+   
 
 class Task_Update(models.Model):
     description = models.CharField(max_length=255, blank=True)
@@ -44,8 +31,6 @@ class Task_Update(models.Model):
 
  
     
-    #Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
-
 class Shift(models.Model):
      date = models.DateField(null=True)
      start = models.CharField(max_length=255, blank=True, null=True)  
@@ -83,15 +68,12 @@ class Request_Off(models.Model):
     end = models.CharField(max_length=255, blank=True, null=True)
 
 
-
 class Notification (models.Model):
      message = models.TextField()
      created_at = models.DateTimeField(auto_now_add=True)
      marked_as_read = models.BooleanField(default=False)
      def __str__(self):
           return self.message
-
-
 
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)

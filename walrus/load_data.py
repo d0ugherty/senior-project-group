@@ -35,7 +35,7 @@ task.task_name="set up entrance display"
 task.task_description="At the entrance of the store, prepare the new seasonal display."
 task.project = project
 task.date_assigned_to = '2023-12-05 09:30:59'
-task.due_date = '2023-12-07'
+task.due_date = '2023-12-19'
 
 task.save()
 
@@ -63,7 +63,7 @@ task3.task_name = "Setup Christmas light display"
 task3.is_complete = True
 task3.date_created = '2023-12-05 11:25:20'
 task3.date_assigned_to = '2023-12-05 09:30:59'
-task3.due_date = '2023-12-07'
+task3.due_date = '2023-12-21'
 task3.date_completed = '2023-12-05 14:13:27'
 task3.save()
 
@@ -73,7 +73,7 @@ task4 = Task()
 task4.task_name = "Setup reindeer display"
 task4.date_created = '2023-12-05 11:25:20'
 task4.date_assigned_to = '2023-12-05 09:30:59'
-task4.due_date = '2023-12-07'
+task4.due_date = '2023-12-20'
 task4.date_completed = None
 task4.is_complete = False
 task4.save()
@@ -83,7 +83,7 @@ task5 = Task()
 task5.task_name = "Setup Santa Clause display"
 task5.date_created = '2023-12-02 1:25:20'
 task5.date_assigned_to = '2023-12-05 09:30:59'
-task5.due_date = '2023-12-07'
+task5.due_date = '2023-12-20'
 task5.date_completed = None
 task5.is_complete = False
 task5.to_be_taken= True
@@ -93,7 +93,7 @@ task5.save()
 task6 = Task()
 task6.task_name="Update Registers"
 task6.task_description="Registers have a new update. Please restart the systems."
-task6.date_assigned_to = '2023-10-25 09:30:59'
+task6.date_assigned_to = '2023-12-10 09:30:59'
 task6.due_date = '2023-12-23'
 
 task6.save()
@@ -175,8 +175,11 @@ user.first_name = "Matt"
 user.last_name = "Smith"
 user.save()
 e = Employee(user=user, employee_id = 2)
-e.save()
 
+e.save()
+e.Tasks.add(task3)
+e.Tasks.add(task4)
+e.Tasks.add(task5)
 # User/Employee 3
 
 user20 = User.objects.create_user(username="walker", 
@@ -190,9 +193,7 @@ user20.save()
 
 e20 = Employee(user=user20, employee_id = 2)
 e20.save()
-e20.Tasks.add(task3)
-e20.Tasks.add(task4)
-e20.Tasks.add(task5)
+
 
 user1 = User.objects.create_user(username="user1", 
                                 email="doughe38@students.rowan.edu", 

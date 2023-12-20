@@ -40,19 +40,21 @@
   </div>
   <title>Employee Statistics</title>
   <h3>Let's do some micromanaging!</h3>
-    <a href="{% url 'manager_tools' %}" class="back_button">Go Back</a>
 
   <div class="card">
     <div class="tab-content p-4">
-    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
-    <div class="d-flex align-items-center">
-    <div class="flex-1">
-        
+      <a href="{% url 'manager_tools' %}" class="btn btn-primary px-4 back_button">Go Back</a>
+
       <form method="POST" action="{% url 'employee_stats' %}">
         {% csrf_token %}
         {{ form.as_p }}
     
         <input type="Submit"  class = "btn btn-primary px-4" name="id_search" value="Search"></button>
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+        
+      
 
      
     </form>
@@ -83,7 +85,7 @@
     <th scope="col">Task Name</th>
     <th scope="col">Task Status</th>
     <th scope="col">Date Assigned</th>
-    <th scope="col">Date Completed</th>
+    <th scope="col">Due Date</th>
     <th scope="col">Time on Task</th>
     </tr>
     </thead>
@@ -100,7 +102,9 @@
                 <td>
                   {% if t.is_complete %}
                       Complete
-                  {% else %}
+                  {% elif t.wont_complete %}
+                  failed
+                  {%else%}
                       Incomplete
                   {% endif %}
               </td>

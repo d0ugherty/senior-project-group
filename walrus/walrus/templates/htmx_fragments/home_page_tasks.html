@@ -1,0 +1,51 @@
+{% load static %}
+<div id="home-task-container" hx-get="{%url 'home_page_tasks' employee_id=employee_id day=day month=month year=year%}"  hx-trigger="every 1s">
+    <form hx-post="{%url 'home_page' employee_id=employee_id day=day month=month year=year%}" 
+    hx-target="#home-task-container"
+    hx-swap="outerHTML">
+    <div class="card">
+        <div class="tab-content p-4">
+        <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+        <div class="d-flex align-items-center">
+        <div class="flex-1">
+        <h4 class="card-title mb-4">My Tasks</h4>
+        </div>
+        </div>
+        <div class="row" id="all-projects">
+          {% for x in tasks %}
+        <div class="col-md-6" id="project-items-1">
+        <div class="card">
+        <div class="card-body">
+        <div class="d-flex mb-3">
+        <div class="flex-grow-1 align-items-start">
+        <div>
+        <h6 class="mb-0 text-muted">
+        <h5 class="mb-1 font-size-17 team-title">{{x.task_name}}  
+        <button class ="btn btn-primary px-4 clock_in" type="submit" name="{{x}} clock"> Clock-in </button>
+        </h5>
+        <span class="team-date">Due: {{x.due_date}}</span>
+        </h6>
+        </div>
+        </div>
+        </div>
+        <div class="mb-4">
+          <a href = "/task_detail/{{ x.pk }}">Description </a>
+          <br> 
+        </div>
+           <button class="btn btn-primary px-4 task_completion_button" type="submit" name="{{x}} complete"> Complete </button> <br><br>
+           <a class="btn btn-primary px-4 task_update_button" href= {% url 'update_task_status' task_id=x.pk %}>Update 
+           </a> 
+           <a class="btn btn-primary px-4 task_cannot_be_completed" href= {% url "task_failure" task_id=x.pk %}>Cannot be completed 
+          </a><br><br>
+      
+        </div>
+        </div>
+        </div>
+        {% endfor %} 
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+    </form>
+</div>

@@ -238,11 +238,14 @@ def home_page(request, employee_id, day, month, year):
                 print(str(x) + " complete")
                 x.is_complete = True
                 x.save()
-                return redirect('home')
+                tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
+                context = {'tasks':tasks,'employee_id':employee_id,
+                                             'day':day, 'month':month, 'year':year}
+                return render(request, 'htmx_fragments/home_page_tasks.html', context)
         if "to_be_taken" in request.POST:
             shift_pk = request.POST['to_be_taken']
             shift = Shift.objects.get(pk=shift_pk)
-            
+             
             if shift.to_be_taken == False:
                  shift.to_be_taken = True
             else:
@@ -256,7 +259,20 @@ def home_page(request, employee_id, day, month, year):
             shift.clocked_in = True
             shift.save()
             return redirect('home')
-    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift})
+    return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift, 'employee_id':employee_id,
+                                             'day':day, 'month':month, 'year':year})
+
+
+def home_page_tasks(request, employee_id, day, month, year):
+    screen_date = date(year,month,day)
+    employee = Employee.objects.get(pk=employee_id)
+    
+    # should filter all tasks that have not been completed
+    # date from url
+    tasks =  employee.Tasks.filter(is_complete=False, date_assigned_to__range=( date.min, screen_date), wont_complete = False).order_by('due_date') | employee.Tasks.filter(is_complete=False, date_assigned_to=None, wont_complete = False).order_by('due_date')
+    context = {'tasks':tasks,'employee_id':employee_id,
+                                             'day':day, 'month':month, 'year':year}
+    return render(request, 'htmx_fragments/home_page_tasks.html', context)
 
 class CalendarView(generic.ListView):
     model = Task
@@ -366,9 +382,14 @@ def employee_stats(request):
                 else:
                     if status == "complete":
                         status = True
+                        wont_complete = False
                     elif status == "incomplete":
                         status = False
-                    tasks = employee.Tasks.filter(is_complete=status)
+                        wont_complete = False
+                    elif status=='failed':
+                        status = False
+                        wont_complete = True
+                    tasks = employee.Tasks.filter(is_complete=status, wont_complete=wont_complete)
                 name = f'{employee.user.first_name} {employee.user.last_name}' 
 
                 # looping through all of the time_spent objects associated with the tasks
@@ -713,7 +734,6 @@ def schedule_employee(request):
     dict = {}
 
     if request.method == "POST":
-        print(request.POST)
         # Employee Avilability was searched
         
         if "search" in request.POST:
@@ -723,9 +743,7 @@ def schedule_employee(request):
                 
                 if employee != None:
                     avil = employee.availability
-                    print(datetime.today())
                     requests_off = employee.Request_Offs.filter(start__range=(datetime.today(), (datetime.today()+ timedelta(10000))))
-                    print(requests_off)
                 context = {'search_form':form,'avil':avil, 'requests_off':requests_off}
                 return render(request, 'htmx_fragments/avil_s.html', context)
 
@@ -754,7 +772,6 @@ def schedule_employee(request):
             if "delete" in request.POST:
                 shift_pk = request.POST.get('delete')
                 shift = Shift.objects.filter(pk=shift_pk)
-                print(shift)
                 shift.delete()
 
             if 'week_date' in request.POST:
@@ -766,10 +783,8 @@ def schedule_employee(request):
 
                         
                         shiftsThisWeek = Shift.objects.filter(date__range=(start_date, end_date)).order_by('date')
-                    
                         dict = create_shift_table(shiftsThisWeek)
-
-
+ 
             schedule_form = scheduleEmployee()              
             select_week_form = selectWeek(initial={'week_date': date})
             context = { 'select_week_form':select_week_form,'dict':dict, 'schedule_form':schedule_form }
@@ -799,7 +814,7 @@ def task_failure(request, task_id):
                 update = Task_Update(description=description,task=task)
                 update.save()
         task.save()
-        return HttpResponseRedirect(reverse('list_tasks'))
+        return redirect('home')
      
     form = failureForm()
     return render(request, 'task_failure.html',

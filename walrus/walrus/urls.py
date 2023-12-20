@@ -56,6 +56,7 @@ urlpatterns = [
     
     path('manage_roles/', views.manage_roles, name='manage_roles'),
 
+    path('home_page_tasks/<int:employee_id>/<int:day>/<int:month>/<int:year>', views.home_page_tasks, name='home_page_tasks'),
 
     path('notifications/', views.notifications, name='notifications')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -28,7 +28,7 @@
   <div class="row my-4">
   <div class="col-md-12">
   <div>
-    <a href="{% url 'manager_tools' %}" class="back_button">Go Back</a>
+    
   </div>
   </div>
   </div>
@@ -40,15 +40,17 @@
   
   <div class="card">
     <div class="tab-content p-4">
-    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
-    <div class="d-flex align-items-center">
-    <div class="flex-1">
-        
+      <a href="{% url 'manager_tools' %}" class="btn btn-primary px-4 back_button">Go Back</a>
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
     
         <input type="Submit"  class = "btn btn-primary px-4" value="Create Task" >
+    <div class="tab-pane active show" id="projects-tab" role="tabpanel">
+    <div class="d-flex align-items-center">
+    <div class="flex-1">
+        
+      
      
     </form>
     </div>
