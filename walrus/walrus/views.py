@@ -262,16 +262,15 @@ def home_page(request, employee_id, day, month, year):
             context = {'employee_id':employee_id,
                                                 'day':day, 'month':month, 'year':year}
             return render(request, 'htmx_fragments/home_shift.html', context)
-        if "shift_clock_in" in request.POST:
-            shift_pk = request.POST['shift_clock_in']
+        if "shift_in" in request.POST:
+            shift_pk = request.POST['shift_in']
             shift = Shift.objects.get(pk=shift_pk)
             shift.clocked_in = True
             shift.save()
             context = {'shift':shift, 'day':day, 'month':month, 'year':year}
             #return render(request, 'htmx_fragments/home_shift.html', context)
             #return redirect('home')
-            context = {'employee_id':employee_id,
-                                                'day':day, 'month':month, 'year':year}
+            context = {'employee_id':employee_id,'day':day, 'month':month, 'year':year}
             return render(request, 'htmx_fragments/home_shift.html', context)
     return render(request, 'home_page.html',{ 'employee':employee, 'tasks':tasks, 'shift':shift, 'employee_id':employee_id,
                                              'day':day, 'month':month, 'year':year})
